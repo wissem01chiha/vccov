@@ -1,5 +1,5 @@
-![](https://github.com/OpenCppCoverage/OpenCppCoverage/workflows/Unit%20tests/badge.svg)
-# OpenCppCoverage
+<!-- omit in toc -->
+# VSCOV
 
 OpenCppCoverage is an open source code coverage tool for C++ under Windows.
 
