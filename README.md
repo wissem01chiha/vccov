@@ -1,10 +1,17 @@
 <!-- omit in toc -->
-# VSCOV
+# vccov
 
-OpenCppCoverage is an open source code coverage tool for C++ under Windows.
+- [Features:](#features)
+- [Requirements](#requirements)
+- [Download](#download)
+- [Usage](#usage)
+
+vccov is an open‑source code coverage tool for C++ on Windows, actively maintained as a fork of [OpenCppCoverage](https://github.com/OpenCppCoverage/OpenCppCoverage) project.
 
 The main usage is for unit testing coverage, but you can also use it to know the executed lines in a program for debugging purpose.
+
 ## Features:
+
 - **Visual Studio support**: Support compiler with program database file (.pdb).
 - **Non intrusive**: Just run your program with OpenCppCoverage, no need to recompile your application.
 - **HTML reporting**
@@ -17,13 +24,16 @@ The main usage is for unit testing coverage, but you can also use it to know the
 - **Coverage aggregation**: Run several code coverages and merge them into a single report.
  
 ## Requirements
+
 - Windows Vista or higher.
 - Microsoft Visual Studio 2008 or higher all editions **including Express edition**. It should also work with previous version of Visual Studio.
 
 ## Download
+
 OpenCppCoverage can be downloaded from [here](../../releases).
 
 ## Usage
+
 You can simply run the following command:
 
 ```OpenCppCoverage.exe --sources MySourcePath* -- YourProgram.exe arg1 arg2```
