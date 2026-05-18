@@ -1,6 +1,6 @@
 <!-- omit in toc -->
 # Vccov
-
+[![cmake-build](https://github.com/wissem01chiha/vccov/actions/workflows/cmake.yaml/badge.svg?branch=master)](https://github.com/wissem01chiha/vccov/actions/workflows/cmake.yaml)
 ![GitHub License](https://img.shields.io/github/license/wissem01chiha/vccov)
 [![CodeFactor](https://www.codefactor.io/repository/github/wissem01chiha/vccov/badge/master)](https://www.codefactor.io/repository/github/wissem01chiha/vccov/overview/master)
 

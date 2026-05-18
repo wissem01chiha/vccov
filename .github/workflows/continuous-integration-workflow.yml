@@ -10,7 +10,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Install third party libraries
-        run: ./InstallThirdPartyLibraries.ps1
+        run: ./Scripts/InstallThirdPartyLibraries.ps1
 
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.0.0
