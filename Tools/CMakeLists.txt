@@ -1,0 +1,14 @@
+set(vccov_tools_sources
+    dllmain.cpp 
+    ExceptionBase.cpp
+    Log.cpp
+    MappedFile.cpp
+    MiniDump.cpp
+    PEFileHeader.cpp
+    ProcessMemory.cpp
+    ScopedAction.cpp
+    stdafx.cpp
+    Tool.cpp
+    UniquePath.cpp
+    WarningManager.cpp
+)

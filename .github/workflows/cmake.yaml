@@ -1,0 +1,20 @@
+name: cmake-build
+on: [push, pull_request]
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            preset: windows-ci
+          - os: ubuntu-latest
+            preset: linux-ci
+          - os: ubuntu-latest-arm
+            preset: linux-arm64-ci
+          - os: macos-latest
+            preset: macos-ci
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4

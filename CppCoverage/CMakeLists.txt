@@ -1,0 +1,11 @@
+set(vccov_sources 
+    Address.cpp
+    BreakPoint.cpp
+    CodeCoverageRunner.cpp
+    CoverageDataMerger.cpp
+    CoverageFilterManager.cpp
+    CoverageFilterSettings.cpp
+    CoverageRate.cpp
+    CoverageRateComputer.cpp
+    CppCoverageException.cpp
+)
