@@ -1,87 +1,78 @@
 # SPDX-FileCopyrightText: Copyright (C) 2019 OpenCppCoverage
 # SPDX-FileCopyrightText: Copyright (c) 2026, Wissem Chiha
-# SPDX-License-Identifier: GPl-3.0 license
-cmake_minimum_required(VERSION 3.12...3.31)
+# SPDX-License-Identifier: GPL-3.0 license
+cmake_minimum_required(VERSION 3.20...3.31)
 
-project(vccov LANGUAGES C CXX)
-
-
-# ============================================================================
-# Properties
-# ============================================================================
-set(PROJECT_VERSION "0.9.9.0")
-set(PROJECT_HOMEPAGE_URL "https://github.com/wissem01chiha/vccov")
-set(PROJECT_DESCRIPTION "Open‑Source Code Coverage for Visual C++ on Windows")
+project(vccov 
+    VERSION 0.9.9.0
+    DESCRIPTION "Open‑Source Code Coverage for Visual C++ on Windows"
+    HOMEPAGE_URL "https://github.com/wissem01chiha/vccov"
+    LANGUAGES C CXX
+)
 
 # ============================================================================
-# CPack
-# ============================================================================
-set(CPACK_PACKAGE_VENDOR "vccov-project")
-set(CPACK_PACKAGE_DESCRIPTION_FILE ${CMAKE_SOURCE_DIR}/README.md)
-set(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE)
-set(CPACK_RESOURCE_FILE_README ${CMAKE_SOURCE_DIR}/README.md)
-set(CPACK_COMPONENTS_ALL Development Documentation Runtime)
-
-
-# ============================================================================
-# CTest
-# ============================================================================
-set (CTEST_OUTPUT_ON_FAILURE TRUE)
-
-
-# ============================================================================
-# CMake
+# Build Configuration
 # ============================================================================
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-set(CMAKE_C_VISIBILITY_PRESET hidden)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-set(CMAKE_C_EXTENSIONS ON)
-set(CMAKE_C_STANDARD 17)
+set(CMAKE_CXX_VISIBILITY_PRESET hidden)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# ============================================================================
-# Configuration
-# ============================================================================
-option(VCCOV_BUILD_TESTING "Enable vccov examples as tests" OFF)
-option(BUILD_SHARED_LIBS "Enable building vccov shared library" OFF)
-option(VCCOV_INSTALL "Enable installation of vccov" ON)
-option(VCCOV_BUILD_SAMPLES "Enable building vccov sample scripts" ON)
-option(VCCOV_BUILD_TOOLS "Enable building vccov tools in tools folder" OFF)
-option(VCCOV_ASAN "Enable AddressSanitizer (ASan)" OFF)
-
-# ============================================================================
-# Build type
-# ============================================================================
-get_property(IS_MULTI GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if(NOT DEFINED CMAKE_BUILD_TYPE AND NOT IS_MULTI)
-    message(STATUS "No CMAKE_BUILD_TYPE set -- using Release")
-    set(CMAKE_BUILD_TYPE Release)
-endif(NOT DEFINED CMAKE_BUILD_TYPE AND NOT IS_MULTI)
-
-# ============================================================================
-# Install prefix
-# ============================================================================
-if (CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    set(CMAKE_INSTALL_PREFIX "${CMAKE_CURRENT_BINARY_DIR}/install" CACHE PATH "Default install path" FORCE)
+# ulti-config generators 
+get_property(IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+if(NOT IS_MULTI_CONFIG AND NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
+    message(STATUS "No build type specified, using Release")
 endif()
 
 # ============================================================================
-# Include
+# Install Configuration
 # ============================================================================
-include(CheckCSourceCompiles)
-include(CheckFunctionExists)
-include(CheckIncludeFile)
-include(CMakePackageConfigHelpers)
-include(CheckTypeSize)
-include(CheckCCompilerFlag)
-include(CMakeDependentOption)
+if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+    set(CMAKE_INSTALL_PREFIX "${CMAKE_BINARY_DIR}/install" CACHE PATH "Installation prefix" FORCE)
+endif()
+
 include(GNUInstallDirs)
 
 # ============================================================================
-# Flags
+# Project Options
 # ============================================================================
-
-
+option(VCCOV_BUILD_TESTS "Build unit tests" ON)
+option(VCCOV_BUILD_EXAMPLES "Build example programs" OFF)
+option(VCCOV_INSTALL "Enable installation targets" ON)
+option(VCCOV_ENABLE_ASAN "Enable AddressSanitizer" OFF)
+option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 
 # ============================================================================
-# Dependencies
+# Project Setup
 # ============================================================================
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+
+enable_testing()
+
+# ============================================================================
+# Subdirectories
+# ============================================================================
+add_subdirectory(src)
+if(VCCOV_BUILD_TESTS)
+    add_subdirectory(test)
+endif()
+if(VCCOV_BUILD_EXAMPLES)
+    add_subdirectory(examples)
+endif()
+
+# ============================================================================
+# Summary
+# ============================================================================
+message(STATUS "")
+message(STATUS "vccov v${PROJECT_VERSION} Configuration Summary")
+message(STATUS "================================================")
+message(STATUS "Build Type:        ${CMAKE_BUILD_TYPE}")
+message(STATUS "Build Tests:       ${VCCOV_BUILD_TESTS}")
+message(STATUS "Build Examples:    ${VCCOV_BUILD_EXAMPLES}")
+message(STATUS "Install:           ${VCCOV_INSTALL}")
+message(STATUS "Shared Libraries:  ${BUILD_SHARED_LIBS}")
+message(STATUS "Install Prefix:    ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "================================================")
+message(STATUS "")

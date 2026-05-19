@@ -10,8 +10,8 @@ jobs:
             preset: windows-ci
           - os: ubuntu-latest
             preset: linux-ci
-          - os: ubuntu-latest-arm
-            preset: linux-arm64-ci
+          - os: ubuntu-latest
+            preset: linux-ci
           - os: macos-latest
             preset: macos-ci
     runs-on: ${{ matrix.os }}
