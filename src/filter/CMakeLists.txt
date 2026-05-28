@@ -1,55 +1,51 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026, Vccov Project
-# SPDX-License-Identifier: GPL-3.0 license
-# src/filter/CMakeLists.txt - Coverage filtering system
-
-add_library(vccov_filter)
-
-target_sources(vccov_filter
-    PRIVATE
-        CoverageFilterManager.cpp
-        CoverageFilterManager.hpp
-        CoverageFilterSettings.cpp
-        CoverageFilterSettings.hpp
-        ICoverageFilterManager.hpp
-        FilterAssistant.cpp
-        FilterAssistant.hpp
-        UnifiedDiffCoverageFilterManager.cpp
-        UnifiedDiffCoverageFilterManager.hpp
-        UnifiedDiffSettings.cpp
-        UnifiedDiffSettings.hpp
-        WildcardCoverageFilter.cpp
-        WildcardCoverageFilter.hpp
-        # Additional files from FileFilter module
-        AmbiguousPathException.cpp
-        AmbiguousPathException.hpp
-        File.cpp
-        File.hpp
-        FileFilterException.hpp
-        FileInfo.hpp
-        IRelocationsExtractor.hpp
-        LineFilter.cpp
-        LineFilter.hpp
-        LineInfo.hpp
-        ModuleInfo.hpp
-        PathMatcher.cpp
-        PathMatcher.hpp
-        ReleaseCoverageFilter.cpp
-        ReleaseCoverageFilter.hpp
-        RelocationsExtractor.cpp
-        RelocationsExtractor.hpp
-        UnifiedDiffCoverageFilter.cpp
-        UnifiedDiffCoverageFilter.hpp
-        UnifiedDiffParser.cpp
-        UnifiedDiffParser.hpp
-        UnifiedDiffParserException.cpp
-        UnifiedDiffParserException.hpp
+set(classes
+    CoverageFilterManager.cpp
+    CoverageFilterSettings.cpp
+    CoverageFilterSettings.hpp
+    FilterAssistant.cpp
+    UnifiedDiffCoverageFilterManager.cpp
+    UnifiedDiffSettings.cpp
+    WildcardCoverageFilter.cpp
+    AmbiguousPathException.cpp
+    File.cpp
+    IRelocationsExtractor.hpp
+    LineFilter.cpp
+    PathMatcher.cpp
+    ReleaseCoverageFilter.cpp
+    RelocationsExtractor.cpp
+    UnifiedDiffCoverageFilter.cpp
+    UnifiedDiffParser.cpp
+    UnifiedDiffParserException.cpp
 )
 
-target_include_directories(vccov_filter
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/..
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
+set(headers
+    CoverageFilterManager.hpp
+    CoverageFilterSettings.hpp
+    ICoverageFilterManager.hpp
+    FilterAssistant.hpp
+    UnifiedDiffCoverageFilterManager.hpp
+    UnifiedDiffSettings.hpp
+    WildcardCoverageFilter.hpp
+    AmbiguousPathException.hpp
+    File.hpp
+    FileFilterException.hpp
+    FileInfo.hpp
+    IRelocationsExtractor.hpp
+    LineFilter.hpp
+    LineInfo.hpp
+    ModuleInfo.hpp
+    PathMatcher.hpp
+    ReleaseCoverageFilter.hpp
+    RelocationsExtractor.hpp
+    UnifiedDiffCoverageFilter.hpp
+    UnifiedDiffParser.hpp
+    UnifiedDiffParserException.hpp
 )
 
-target_compile_features(vccov_filter PRIVATE cxx_std_17)
+vccov_module_add_module(filter CLASSES ${classes} HEADERS ${headers})
+vccov_module_add_dependencies(filter 
+    DEPENDENCIES 
+        vccov::core 
+        vccov::options
+        vccov::common
+)

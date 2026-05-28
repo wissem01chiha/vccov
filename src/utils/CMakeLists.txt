@@ -1,24 +1,18 @@
-# SPDX-FileCopyrightText: Copyright (c) 2026, Vccov Project
-# SPDX-License-Identifier: GPL-3.0 license
-
-add_library(vccov_utils)
-
-target_sources(vccov_utils
-    PRIVATE
-        filesystem/FileSystem.cpp
-        filesystem/FileSystem.hpp
-        filesystem/IFileSystem.hpp
-        patterns/Patterns.cpp
-        patterns/Patterns.hpp
-        patterns/Wildcards.cpp
-        patterns/Wildcards.hpp
+set(classes
+    FileSystem.cpp
+    Patterns.cpp
+    Wildcards.cpp
 )
 
-target_include_directories(vccov_utils
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/..
-    PRIVATE
-        ${CMAKE_CURRENT_SOURCE_DIR}
+set(headers
+    FileSystem.hpp
+    IFileSystem.hpp
+    Patterns.hpp
+    Wildcards.hpp
 )
 
-target_compile_features(vccov_utils PRIVATE cxx_std_17)
+vccov_module_add_module(utils CLASSES ${classes} HEADERS ${headers})
+vccov_module_add_dependencies(utils
+    DEPENDENCIES    
+        tools
+)

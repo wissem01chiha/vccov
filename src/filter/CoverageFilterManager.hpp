@@ -22,7 +22,7 @@
 #include "WildcardCoverageFilter.hpp"
 #include "ICoverageFilterManager.hpp"
 #include "UnifiedDiffCoverageFilterManager.hpp"
-#include "FileFilter/LineFilter.hpp"
+#include "LineFilter.hpp"
 
 namespace FileFilter
 {

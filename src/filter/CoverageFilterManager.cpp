@@ -20,10 +20,9 @@
 
 #include "CoverageFilterManager.hpp"
 #include "UnifiedDiffCoverageFilterManager.hpp"
-
-#include "FileFilter/FileInfo.hpp"
-#include "FileFilter/LineInfo.hpp"
-#include "FileFilter/ReleaseCoverageFilter.hpp"
+#include "FileInfo.hpp"
+#include "LineInfo.hpp"
+#include "ReleaseCoverageFilter.hpp"
 
 namespace CppCoverage
 {

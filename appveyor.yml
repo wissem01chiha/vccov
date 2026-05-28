@@ -1,0 +1,6 @@
+clone_depth: 10
+version: 1.0.{build}
+
+platform:
+  - x64
+  - Win32

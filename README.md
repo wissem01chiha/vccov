@@ -1,17 +1,19 @@
 <!-- omit in toc -->
 # Vccov
+
 [![cmake-build](https://github.com/wissem01chiha/vccov/actions/workflows/cmake.yaml/badge.svg?branch=master)](https://github.com/wissem01chiha/vccov/actions/workflows/cmake.yaml)
 ![GitHub License](https://img.shields.io/github/license/wissem01chiha/vccov)
 [![CodeFactor](https://www.codefactor.io/repository/github/wissem01chiha/vccov/badge/master)](https://www.codefactor.io/repository/github/wissem01chiha/vccov/overview/master)
+[![pre-commit.ci status](https://results.pre-commit.ci/badge/github/wissem01chiha/vccov/master.svg)](https://results.pre-commit.ci/latest/github/wissem01chiha/vccov/master)
 
 ## Overview
  
-Vccov is a free and open‑source C/C++ code coverage tool for Visual Studio solutions on Windows. It is actively maintained as a fork of the [OpenCppCoverage](https://github.com/OpenCppCoverage/OpenCppCoverage) project.
+Vccov is a free and open‑source C/C++ code coverage tool for [Visual Studio](https://learn.microsoft.com/en-us/visualstudio/ide/solutions-and-projects-in-visual-studio?view=visualstudio) solutions on Windows. It is actively maintained as a fork of the [OpenCppCoverage](https://github.com/OpenCppCoverage/OpenCppCoverage) project.
 Since the original project is no longer actively maintained, Vccov continues its development and improvement.
 
 Its primary use case is unit test coverage, but it can also be used to track executed lines in a program for debugging purposes.
 
-This tool is constantly evolving, and contributions are always welcome! Learn how to get started with our [packaging tutorial]( ) and [maintainer guide]().
+This tool is constantly evolving, and contributions are always welcome! Learn how to get started with our [packaging tutorial]() and [maintainer guide]().
 
 ## Get Started
 

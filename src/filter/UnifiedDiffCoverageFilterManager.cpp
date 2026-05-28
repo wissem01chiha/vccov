@@ -20,7 +20,7 @@
 #include "UnifiedDiffCoverageFilterManager.hpp"
 #include "UnifiedDiffSettings.hpp"
 #include "ProgramOptions.hpp"
-#include "FileFilter/UnifiedDiffCoverageFilter.hpp"
+#include "UnifiedDiffCoverageFilter.hpp"
 #include "FileFilter/FileInfo.hpp"
 #include "FileFilter/LineInfo.hpp"
 

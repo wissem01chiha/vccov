@@ -1,5 +1,5 @@
 // OpenCppCoverage is an open source code coverage for C++.
-// Copyright (C) 2014 OpenCppCoverage
+// Copyright (C) 2018 OpenCppCoverage
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,11 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once
+#include "stdafx.h"
+#include "WarningManager.hpp"
+#include "Log.hpp"
 
-#include "Tools/ExceptionBase.hpp"
+namespace Tools
+{
+	//-------------------------------------------------------------------------
+	void WarningManager::AddWarning(const std::wstring& warning)
+	{
+		warnings_.push_back(warning);
+	}
 
-GENERATE_EXCEPTION_CLASS(Tools, ToolsException);
-
-#define THROW(message) THROW_BASE(Tools, ToolsException, message)
-
+	//-------------------------------------------------------------------------
+	void WarningManager::DisplayWarnings() const
+	{
+		for (const auto& warning : warnings_)
+			LOG_WARNING << warning;
+	}
+}

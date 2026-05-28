@@ -1,0 +1,13 @@
+{
+  "name": "vccov",
+  "version-string": "0.9.10.0",
+  "dependencies": [
+    { "name": "boost-filesystem", "version>=": "1.83.0" },
+    { "name": "boost-program-options", "version>=": "1.83.0" },
+    { "name": "boost-algorithm", "version>=": "1.83.0" },
+    { "name": "boost-log", "version>=": "1.83.0" },
+    { "name": "boost-iostreams", "version>=": "1.83.0" },
+    { "name": "boost-locale", "version>=": "1.83.0" },
+    { "name": "gtest" }
+  ]
+}

@@ -21,6 +21,7 @@ build/**
 Build/Installer/VCRedist/*
 Build/Dependencies/Dependencies-vs*.zip
 Build/ThirdParty/vcpkg
+vcpkg_installed/**
 
 
 # Template file / unmanaged dll for the plugin

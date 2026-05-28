@@ -16,12 +16,11 @@
 
 #include "stdafx.h"
 #include "LineFilter.hpp"
-
-#include "FileFilter/FileInfo.hpp"
-#include "FileFilter/LineInfo.hpp"
-#include "Tools/Log.hpp"
-#include "Tools/Tool.hpp"
-#include "Tools/MappedFile.hpp"
+#include "FileInfo.hpp"
+#include "LineInfo.hpp"
+#include "tools/log/Log.hpp"
+#include "tools/core/Tool.hpp"
+#include "tools/io/MappedFile.hpp"
 
 namespace FileFilter
 {

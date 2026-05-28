@@ -1,0 +1,43 @@
+#[==[.rst:
+.. _vccov_module_add_module:
+#]==]
+function (vccov_module_add_module name)
+    cmake_parse_arguments(PARSE_ARGV 1 _vccov "" "" "CLASSES;SOURCES;HEADERS")
+    if(NOT _vccov_SOURCES AND NOT _vccov_CLASSES AND NOT _vccov_HEADERS)
+        message(FATAL_ERROR "No sources, classes, or headers provided for module ${name}")
+    endif()
+    if (_vccov_SOURCES OR _vccov_CLASSES)
+        set(_vccov_SOURCES ${_vccov_SOURCES} ${_vccov_CLASSES})
+        if(BUILD_SHARED_LIBS)
+            add_library(${name} SHARED)
+        else()
+            add_library(${name} STATIC)
+        endif()
+        target_sources(${name} PRIVATE ${_vccov_SOURCES} ${_vccov_HEADERS})
+        target_include_directories(${name} PRIVATE ${Boost_INCLUDE_DIRS})
+        target_link_libraries(${name} PRIVATE ${Boost_LIBRARIES})
+    else()
+        add_library(${name} INTERFACE)
+        target_sources(${name} INTERFACE ${_vccov_HEADERS})
+        target_include_directories(${name} INTERFACE ${Boost_INCLUDE_DIRS})
+    endif()
+    add_library(vccov::${name} ALIAS ${name})
+endfunction()
+
+#[==[.rst:
+.. _vccov_module_add_dependencies:
+#]==]
+function (vccov_module_add_dependencies module)
+    cmake_parse_arguments(PARSE_ARGV 1 _vccov "" "" "DEPENDENCIES")
+    if(NOT _vccov_DEPENDENCIES)
+        message(FATAL_ERROR "No dependencies provided for module ${module}")
+    endif()
+    add_dependencies(${module} ${_vccov_DEPENDENCIES})
+    target_link_libraries(${module} PRIVATE ${_vccov_DEPENDENCIES})
+    foreach(dep ${_vccov_DEPENDENCIES})
+    get_target_property(dep_includes ${dep} INTERFACE_INCLUDE_DIRECTORIES)
+    if(dep_includes)
+        target_include_directories(${module} PRIVATE ${dep_includes})
+        endif()
+    endforeach()
+endfunction()
