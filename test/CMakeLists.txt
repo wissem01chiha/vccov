@@ -1,7 +1,0 @@
-add_subdirectory(core)
-add_subdirectory(coverage)
-add_subdirectory(filter)
-add_subdirectory(options)
-add_subdirectory(export)
-add_subdirectory(utils)
-add_subdirectory(cli)

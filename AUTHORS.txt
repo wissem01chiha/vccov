@@ -1,10 +1,9 @@
-   394	OpenCppCoverage <OpenCppCoverage@gmail.com>
-    56	Olivier <Olivier@email.com>
-     6	wissem <chihawissem08@gmail.com>
-     2	wissem chiha <chihawissem08@gmail.com>
-     1	Marvin Wunderlich <opidopiopi@gmail.com>
-     1	Patan Amrulla Khan <pamrulla@gmail.com>
-     1	Wolfgang Kleinschmit <wolfgang@kleinschmit.info>
-     1	Zoltan Demeter <demeter@volumegraphics.com>
-     1	amai2012 <amai2012@users.noreply.github.com>
-     1	jkoppenw <jkoppenw@hotmail.com>
+OpenCppCoverage <OpenCppCoverage@gmail.com>
+Olivier <Olivier@email.com>
+wissem chiha <chihawissem08@gmail.com>
+Marvin Wunderlich <opidopiopi@gmail.com>
+Patan Amrulla Khan <pamrulla@gmail.com>
+Wolfgang Kleinschmit <wolfgang@kleinschmit.info>
+Zoltan Demeter <demeter@volumegraphics.com>
+amai2012 <amai2012@users.noreply.github.com>
+jkoppenw <jkoppenw@hotmail.com>

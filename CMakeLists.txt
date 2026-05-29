@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: GPL-3.0 license
 cmake_minimum_required(VERSION 3.20...3.31 FATAL_ERROR)
 
-project(vccov LANGUAGES C CXX)
+project(vccov LANGUAGES CXX)
 
 if(POLICY CMP0167)
   cmake_policy(SET CMP0167 NEW)
@@ -28,7 +28,7 @@ set(CPACK_COMPONENTS_ALL Development Documentation Runtime)
 # ============================================================================
 # CTest
 # ============================================================================
-set (CTEST_OUTPUT_ON_FAILURE TRUE)
+set(CTEST_OUTPUT_ON_FAILURE TRUE)
 
 # ============================================================================
 # CMake Configuration
