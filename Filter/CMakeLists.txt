@@ -1,0 +1,52 @@
+set(classes
+    CoverageFilterManager.cpp
+    CoverageFilterSettings.cpp
+    CoverageFilterSettings.hpp
+    FilterAssistant.cpp
+    UnifiedDiffCoverageFilterManager.cpp
+    UnifiedDiffSettings.cpp
+    WildcardCoverageFilter.cpp
+    AmbiguousPathException.cpp
+    File.cpp
+    IRelocationsExtractor.hpp
+    LineFilter.cpp
+    PathMatcher.cpp
+    ReleaseCoverageFilter.cpp
+    RelocationsExtractor.cpp
+    UnifiedDiffCoverageFilter.cpp
+    UnifiedDiffParser.cpp
+    UnifiedDiffParserException.cpp
+)
+
+set(headers
+    CoverageFilterManager.hpp
+    CoverageFilterSettings.hpp
+    ICoverageFilterManager.hpp
+    FilterAssistant.hpp
+    UnifiedDiffCoverageFilterManager.hpp
+    UnifiedDiffSettings.hpp
+    WildcardCoverageFilter.hpp
+    AmbiguousPathException.hpp
+    File.hpp
+    FileFilterException.hpp
+    FileInfo.hpp
+    IRelocationsExtractor.hpp
+    LineFilter.hpp
+    LineInfo.hpp
+    ModuleInfo.hpp
+    PathMatcher.hpp
+    ReleaseCoverageFilter.hpp
+    RelocationsExtractor.hpp
+    UnifiedDiffCoverageFilter.hpp
+    UnifiedDiffParser.hpp
+    UnifiedDiffParserException.hpp
+)
+
+vcov_module_add_module(Filter CLASSES ${classes} HEADERS ${headers})
+vcov_module_add_dependencies(Filter 
+    DEPENDENCIES 
+        vcov::Core 
+        vcov::Option
+        vcov::Common
+)
+vcov_add_test(Filter)

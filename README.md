@@ -1,5 +1,5 @@
 <!-- omit in toc -->
-# Vccov
+# Vcov
 
 [![cmake-build](https://github.com/wissem01chiha/vccov/actions/workflows/cmake.yaml/badge.svg?branch=master)](https://github.com/wissem01chiha/vccov/actions/workflows/cmake.yaml)
 ![GitHub License](https://img.shields.io/github/license/wissem01chiha/vccov)
@@ -8,8 +8,8 @@
 
 ## Overview
  
-Vccov is a free and open‑source C/C++ code coverage tool for [Visual Studio](https://learn.microsoft.com/en-us/visualstudio/ide/solutions-and-projects-in-visual-studio?view=visualstudio) solutions on Windows. It is actively maintained as a fork of the [OpenCppCoverage](https://github.com/OpenCppCoverage/OpenCppCoverage) project.
-Since the original project is no longer actively maintained, Vccov continues its development and improvement.
+Vcov is a free and open‑source C/C++ code coverage tool for [Visual Studio](https://learn.microsoft.com/en-us/visualstudio/ide/solutions-and-projects-in-visual-studio?view=visualstudio) solutions on Windows. It is actively maintained as a fork of the [OpenCppCoverage](https://github.com/OpenCppCoverage/OpenCppCoverage) project.
+Since the original project is no longer actively maintained, Vcov continues its development and improvement.
 
 Its primary use case is unit test coverage, but it can also be used to track executed lines in a program for debugging purposes.
 
@@ -22,12 +22,12 @@ First, follow one of our quick start guides.
 - Windows Vista or higher
 - Microsoft Visual Studio 2008 or higher (all editions, **including Express edition**) , It may also work with earlier versions of Visual Studio.
 
-## Use Vccov
+## Use Vcov
 
-You can run Vccov with the following command:
+You can run Vcov with the following command:
 
 ```bash
-OpenCppCoverage.exe --sources MySourcePath* -- YourProgram.exe arg1 arg2
+vcov.exe --sources MySourcePath* -- YourProgram.exe arg1 arg2
 ```
 
 For example, *MySourcePath* can be *MyProject*, if your sources are located in *C:\Dev\MyProject*.
@@ -55,7 +55,7 @@ You can also have a look at [Command-line reference](https://github.com/OpenCppC
   
 ## Resources
 
-* Docs: [Wiki](https://github.com/wissem01chiha/vccov/wiki)
+* Docs: [Wiki](https://github.com/wissem01chiha/vcov/wiki)
 * Source code: [vccov](../../releases)
 
 ## License

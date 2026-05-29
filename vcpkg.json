@@ -1,5 +1,5 @@
 {
-  "name": "vccov",
+  "name": "vcov",
   "version-string": "0.9.10.0",
   "dependencies": [
     { "name": "boost-filesystem", "version>=": "1.83.0" },
@@ -8,6 +8,16 @@
     { "name": "boost-log", "version>=": "1.83.0" },
     { "name": "boost-iostreams", "version>=": "1.83.0" },
     { "name": "boost-locale", "version>=": "1.83.0" },
-    { "name": "gtest" }
+    { "name": "boost-optional", "version>=": "1.83.0" },
+    { "name": "boost-container", "version>=": "1.83.0" },
+    { "name": "boost-regex", "version>=": "1.83.0" },
+    { "name": "boost-range", "version>=": "1.83.0" },
+    { "name": "boost-property-tree", "version>=": "1.83.0" },
+    { "name": "boost-spirit", "version>=": "1.83.0" },
+    { "name": "boost-uuid", "version>=": "1.83.0" },
+    "poco",
+    "protobuf",
+    "gtest",
+    "ctemplate"
   ]
 }

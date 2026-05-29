@@ -1,8 +1,8 @@
-# 
+# Vcov Contributaing Guide
 
 
 
-vccov naming convetion :
+vcov naming convetion :
 
 folder naming :lowercase with hyphens eg core , third-party
 
