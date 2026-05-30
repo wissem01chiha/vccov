@@ -19,7 +19,7 @@
 
 #include <boost/algorithm/string.hpp>
 
-#include "Tools/Tool.hpp"
+#include "Tool.hpp"
 
 namespace CppCoverage
 {

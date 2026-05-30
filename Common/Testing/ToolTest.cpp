@@ -15,7 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "stdafx.h"
-#include "Tools/Tool.hpp"
+#include "Tool.hpp"
 
 namespace ToolsTests
 {

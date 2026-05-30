@@ -14,17 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-#include "Debugger.hpp"
-
-#include "tools/Log.hpp"
-#include "tools/ScopedAction.hpp"
-
-#include "Process.hpp"
 #include "CppCoverageException.hpp"
+#include "Debugger.hpp"
 #include "IDebugEventsHandler.hpp"
-
-#include "Tools/Tool.hpp"
+#include "Log.hpp"
+#include "Process.hpp"
+#include "ScopedAction.hpp"
+#include "stdafx.h"
+#include "Tool.hpp"
 
 namespace CppCoverage
 {

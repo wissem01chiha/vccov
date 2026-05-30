@@ -14,31 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
+#include "Patterns.hpp"
+#include "CppCoverageException.hpp"
+#include "IOptionParser.hpp"
+#include "Log.hpp"
+#include "Options.hpp"
+#include "OptionsExport.hpp"
 #include "OptionsParser.hpp"
-
+#include "OptionsParserException.hpp"
+#include "ProgramOptions.hpp"
+#include "ProgramOptionsVariablesMap.hpp"
+#include "stdafx.h"
+#include "Tool.hpp"
+#include "WarningManager.hpp"
+#include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <filesystem>
+#include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
-#include <sstream>
-#include <fstream>
-#include <filesystem>
-
-#include <boost/algorithm/string/split.hpp>
-#include <boost/algorithm/string/classification.hpp>
-
-#include "Tools/Tool.hpp"
-#include "CppCoverage/Patterns.hpp"
-
-#include "Options.hpp"
-#include "CppCoverageException.hpp"
-#include "ProgramOptions.hpp"
-#include "OptionsExport.hpp"
-#include "ProgramOptionsVariablesMap.hpp"
-
-#include "Tools/WarningManager.hpp"
-#include "Tools/Log.hpp"
-#include "IOptionParser.hpp"
-#include "Plugin/OptionsParserException.hpp"
 
 namespace po = boost::program_options;
 namespace cov = CppCoverage;

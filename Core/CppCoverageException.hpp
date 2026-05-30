@@ -16,8 +16,8 @@
 
 #pragma once
 
-#include "tools/ExceptionBase.hpp"
 #include "CppCoverageExport.hpp"
+#include "ExceptionBase.hpp"
 #include <string>
 
 namespace CppCoverage

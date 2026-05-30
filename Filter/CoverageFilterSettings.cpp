@@ -14,33 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "CoverageFilterSettings.hpp"
 
-#include "Tools/Log.hpp"
+namespace CppCoverage {
+//-------------------------------------------------------------------------
+CoverageFilterSettings::CoverageFilterSettings(const Patterns &modulePatterns,
+                                               const Patterns &sourcePatterns)
+    : modulePatterns_(modulePatterns), sourcePatterns_(sourcePatterns) {}
 
-namespace CppCoverage
-{
-	//-------------------------------------------------------------------------
-	CoverageFilterSettings::CoverageFilterSettings(
-		const Patterns& modulePatterns,
-		const Patterns& sourcePatterns)
-		: modulePatterns_(modulePatterns)
-		, sourcePatterns_(sourcePatterns)
-	{
-	}
-
-	//-------------------------------------------------------------------------
-	const Patterns& CoverageFilterSettings::GetModulePatterns() const
-	{
-		return modulePatterns_;
-	}
-	
-	//-------------------------------------------------------------------------
-	const Patterns& CoverageFilterSettings::GetSourcePatterns() const
-	{
-		return sourcePatterns_;
-	}
-
+//-------------------------------------------------------------------------
+const Patterns &CoverageFilterSettings::GetModulePatterns() const {
+  return modulePatterns_;
 }
 
+//-------------------------------------------------------------------------
+const Patterns &CoverageFilterSettings::GetSourcePatterns() const {
+  return sourcePatterns_;
+}
+
+} // namespace CppCoverage

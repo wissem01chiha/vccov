@@ -21,11 +21,10 @@
 #include "UnifiedDiffSettings.hpp"
 #include "ProgramOptions.hpp"
 #include "UnifiedDiffCoverageFilter.hpp"
-#include "FileFilter/FileInfo.hpp"
-#include "FileFilter/LineInfo.hpp"
-
-#include "Tools/Tool.hpp"
-#include "Tools/Log.hpp"
+#include "FileInfo.hpp"
+#include "LineInfo.hpp"
+#include "Tool.hpp"
+#include "Log.hpp"
 
 namespace CppCoverage
 {

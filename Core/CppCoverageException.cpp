@@ -14,34 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "CppCoverageException.hpp"
-
+#include "stdafx.h"
 #include <sstream>
+#include <string>
+#include <vector>
 
-#include "Tools/Tool.hpp"
+namespace CppCoverage {
+//-------------------------------------------------------------------------
+std::wstring GetErrorMessage(int lastErrorCode) {
+  std::vector<wchar_t> sysMsg(64 * 1024);
+  std::wostringstream ostr;
 
-namespace CppCoverage
-{	
-	//-------------------------------------------------------------------------
-	std::wstring GetErrorMessage(int lastErrorCode)
-	{			
-		std::vector<wchar_t> sysMsg(64 * 1024);
-		std::wostringstream ostr;
-			
-		if (FormatMessage(
-				FORMAT_MESSAGE_FROM_SYSTEM,
-				NULL, lastErrorCode,
-				MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL),
-				&sysMsg[0], static_cast<int>(sysMsg.size()), NULL))
-		{
-			ostr << &sysMsg[0];
-		}
-		else
-		{
-			ostr << "Last error code:" << lastErrorCode;
-		}
+  if (FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, NULL, lastErrorCode,
+                    MAKELANGID(LANG_NEUTRAL, SUBLANG_NEUTRAL), &sysMsg[0],
+                    static_cast<int>(sysMsg.size()), NULL)) {
+    ostr << &sysMsg[0];
+  } else {
+    ostr << "Last error code:" << lastErrorCode;
+  }
 
-		return ostr.str();
-	}
+  return ostr.str();
 }
+} // namespace CppCoverage

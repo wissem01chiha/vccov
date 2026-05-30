@@ -16,10 +16,9 @@
 
 #pragma once
 
-#include "tools/Log.hpp"
-#include "tools/Tool.hpp"
-
 #include "CppCoverageException.hpp"
+#include "Log.hpp"
+#include "Tool.hpp"
 #include <boost/optional/optional.hpp>
 
 namespace CppCoverage

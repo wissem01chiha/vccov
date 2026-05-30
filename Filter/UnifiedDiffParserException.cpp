@@ -17,7 +17,7 @@
 #include "stdafx.h"
 #include "UnifiedDiffParserException.hpp"
 #include "UnifiedDiffParser.hpp"
-#include "Tools/Tool.hpp"
+#include "Tool.hpp"
 
 namespace FileFilter
 {

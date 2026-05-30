@@ -14,14 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-#include "ProgramOptions.hpp"
-
-#include "Tools/Tool.hpp"
-
 #include "CppCoverageException.hpp"
-#include "OptionsParser.hpp"
 #include "ExportOptionParser.hpp"
+#include "OptionsParser.hpp"
+#include "OpenCppCoverageVersion.hpp"
+#include "ProgramOptions.hpp"
+#include "stdafx.h"
+#include "Tool.hpp"
 
 namespace po = boost::program_options;
 

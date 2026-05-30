@@ -9,8 +9,8 @@ set(headers
 vcov_module_add_module(Platform CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Platform
     DEPENDENCIES    
-        vcov::Tools
         vcov::Common
+        vcov::Core
 )
 if(WIN32)
     target_link_libraries(Platform PRIVATE diaguids.lib)

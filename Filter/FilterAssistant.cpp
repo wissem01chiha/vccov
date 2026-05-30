@@ -17,13 +17,12 @@
 #include "stdafx.h"
 #include "FilterAssistant.hpp"
 #include "IFileSystem.hpp"
-
 #include <ctime>
 #include <boost/optional/optional.hpp>
 #include <filesystem>
 #include <memory>
 #include "ProgramOptions.hpp"
-#include "Tools/Tool.hpp"
+#include "Tool.hpp"
 
 namespace CppCoverage
 {

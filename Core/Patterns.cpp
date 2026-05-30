@@ -16,7 +16,6 @@
 
 #include "stdafx.h"
 #include "Patterns.hpp"
-
 #include <iostream>
 
 namespace CppCoverage

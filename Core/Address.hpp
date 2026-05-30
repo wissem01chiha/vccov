@@ -16,8 +16,9 @@
 
 #pragma once
 
-#include <Windows.h>
 #include "CppCoverageExport.hpp"
+#include <ostream>
+#include <Windows.h>
 
 namespace CppCoverage
 {

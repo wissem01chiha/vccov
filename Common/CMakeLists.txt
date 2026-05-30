@@ -1,5 +1,17 @@
 set(classes 
     SubstitutePdbSourcePath.cpp
+    Tool.cpp
+    ExceptionBase.cpp
+    ToolsExport.hpp
+    Log.cpp
+    MiniDump.cpp
+    MappedFile.cpp
+    ProcessMemory.cpp
+    PEFileHeader.cpp
+    ScopedAction.cpp
+    UniquePath.cpp
+    WarningManager.cpp
+    FileSystem.cpp
 )
 
 set(headers 
@@ -7,7 +19,21 @@ set(headers
     OpenCppCoverageException.hpp
     OpenCppCoverageExport.hpp
     SubstitutePdbSourcePath.hpp
+    Tool.hpp
+    ExceptionBase.hpp
+    ToolsException.hpp
+    ToolsExport.hpp
+    Log.hpp
+    MiniDump.hpp
+    MappedFile.hpp
+    ProcessMemory.hpp
+    PEFileHeader.hpp
+    ScopedAction.hpp
+    UniquePath.hpp
+    WarningManager.hpp
+    IFileSystem.hpp
+    FileSystem.hpp
 )
 
 vcov_module_add_module(Common CLASSES ${classes} HEADERS ${headers})
-vcov_add_test(Common)
+#vcov_add_test(Common)

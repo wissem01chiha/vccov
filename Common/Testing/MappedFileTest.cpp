@@ -15,7 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "stdafx.h"
-#include "Tools/MappedFile.hpp"
+#include "MappedFile.hpp"
 #include <fstream>
 
 #include "TestHelper/TemporaryPath.hpp"

@@ -15,6 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
+#define FILEFILTER_EXPORTS
 
 #ifdef FILEFILTER_EXPORTS
 #define FILEFILTER_DLL __declspec(dllexport)

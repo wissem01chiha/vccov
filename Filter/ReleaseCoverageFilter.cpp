@@ -14,16 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-#include "ReleaseCoverageFilter.hpp"
-
-#include "Tools/Log.hpp"
-
-#include "IRelocationsExtractor.hpp"
-#include "RelocationsExtractor.hpp"
-#include "ModuleInfo.hpp"
 #include "FileInfo.hpp"
+#include "IRelocationsExtractor.hpp"
 #include "LineInfo.hpp"
+#include "Log.hpp"
+#include "ModuleInfo.hpp"
+#include "ReleaseCoverageFilter.hpp"
+#include "RelocationsExtractor.hpp"
+#include "stdafx.h"
 
 namespace FileFilter
 {
@@ -108,7 +106,7 @@ namespace FileFilter
 			auto lineNumber = lineData.lineNumber_;
 
 			auto it = addressesBySymboleIndex.emplace(symbolIndex, 0).first;
-			it->second = std::max(it->second, lineAddress);	
+			it->second = max(it->second, lineAddress);	
 			++fileData->addressCountByLine_[lineNumber];
 		}
 

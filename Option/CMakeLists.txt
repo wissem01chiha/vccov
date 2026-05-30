@@ -4,6 +4,7 @@ set(classes
     ProgramOptions.cpp
     ExportOptionParser.cpp
     OptionsExport.cpp
+    UnifiedDiffSettings.cpp
 )
 
 set(headers
@@ -13,12 +14,14 @@ set(headers
     ProgramOptionsVariablesMap.hpp
     ExportOptionParser.hpp
     OptionsExport.hpp
+    UnifiedDiffSettings.hpp
 )
 
 vcov_module_add_module(Option CLASSES ${classes})
 vcov_module_add_dependencies(Option
     DEPENDENCIES    
-        vcov::Tools
         vcov::Common
+        vcov::Core
+        vcov::Export
 )
 vcov_add_test(Option)

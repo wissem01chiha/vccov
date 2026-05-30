@@ -16,12 +16,12 @@
 
 #pragma once
 
-#include <Windows.h>
-#include <iosfwd>
-#include <unordered_map>
-#include <map>
-
 #include "CppCoverageExport.hpp"
+#include <iosfwd>
+#include <map>
+#include <string>
+#include <unordered_map>
+#include <Windows.h>
 
 namespace CppCoverage
 {	

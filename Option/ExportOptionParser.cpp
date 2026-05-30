@@ -14,14 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "ExportOptionParser.hpp"
-#include <boost/program_options/options_description.hpp>
-#include "ProgramOptionsVariablesMap.hpp"
-#include "Options.hpp"
-#include "Plugin/OptionsParserException.hpp"
 #include "ExportPluginDescription.hpp"
-#include "Tools/Tool.hpp"
+#include "Options.hpp"
+#include "OptionsParserException.hpp"
+#include "ProgramOptionsVariablesMap.hpp"
+#include "stdafx.h"
+#include "Tool.hpp"
+#include <boost/program_options/options_description.hpp>
 
 namespace CppCoverage
 {

@@ -14,17 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-#include "Process.hpp"
-
-#include <Windows.h>
-#include <boost/optional.hpp>
-
-#include "Tools/Log.hpp"
-#include "Tools/Tool.hpp"
-
-#include "StartInfo.hpp"
 #include "CppCoverageException.hpp"
+#include "Log.hpp"
+#include "Process.hpp"
+#include "StartInfo.hpp"
+#include "stdafx.h"
+#include <vector>
+#include "Tool.hpp"
+#include <boost/optional.hpp>
+#include <Windows.h>
 
 namespace CppCoverage
 {
@@ -86,7 +84,7 @@ namespace CppCoverage
 		if (processInformation_)
 			THROW(L"Process already started");
 
-		STARTUPINFO lpStartupInfo;
+		STARTUPINFOW lpStartupInfo;
 
 		ZeroMemory(&lpStartupInfo, sizeof(lpStartupInfo));
 		const auto* workindDirectory = startInfo_.GetWorkingDirectory();
@@ -94,7 +92,7 @@ namespace CppCoverage
 		auto commandLine = (optionalCommandLine) ? &(*optionalCommandLine)[0] : nullptr;
 
 		processInformation_ = PROCESS_INFORMATION{};
-		if (!CreateProcess(
+		if (!CreateProcessW(
 			nullptr,
 			commandLine,
 			nullptr,

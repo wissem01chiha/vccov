@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "HandleInformation.hpp"
-
-#include <Psapi.h>
-#include <boost/algorithm/string.hpp>
-#include "CppCoverageException.hpp"
+#include "stdafx.h"
+//#include "CppCoverageException.hpp"
 #include "Handle.hpp"
+#include <boost/algorithm/string.hpp>
+#include <Psapi.h>
+#include <vector>
 
 namespace CppCoverage
 {
@@ -32,9 +32,9 @@ namespace CppCoverage
 			std::vector<wchar_t> logicalDriveStrings(PathBufferSize);
 			std::vector<std::wstring> logicalDrives;
 
-			auto size = GetLogicalDriveStrings(
-				static_cast<int>(logicalDriveStrings.size()), 
-				&logicalDriveStrings[0]);
+			auto size = GetLogicalDriveStringsW(
+                static_cast<DWORD>(logicalDriveStrings.size()), 
+				logicalDriveStrings.data());
 
 			if (!size)
 				THROW(L"Cannot GetLogicalDriveStrings");
@@ -65,7 +65,9 @@ namespace CppCoverage
 				auto pos = logicalDrive.find('\\');
 				std::wstring drive = (pos != std::string::npos) ? logicalDrive.substr(0, pos) : logicalDrive;
 
-				if (QueryDosDevice(drive.c_str(), &dosDevice[0], static_cast<int>(dosDevice.size())))
+				if (QueryDosDeviceW(
+                                        drive.c_str(), dosDevice.data(),
+                                        static_cast<DWORD>(dosDevice.size())))
 				{
 					std::wstring dosDeviceName{ &dosDevice[0] };
 					queryDosDevicesMapping.emplace_back(dosDeviceName, drive);
@@ -94,9 +96,9 @@ namespace CppCoverage
 				MapViewOfFile(fileMappingHandle.GetValue(), FILE_MAP_READ, 0, 0, 1),
 				UnmapViewOfFile);
 
-			TCHAR pszFilename[MAX_PATH + 1];
+			WCHAR pszFilename[MAX_PATH + 1];
 
-			if (!GetMappedFileName(GetCurrentProcess(),
+			if (!GetMappedFileNameW(GetCurrentProcess(),
 				mapViewOfFile.GetValue(),
 				pszFilename,
 				MAX_PATH))
@@ -104,7 +106,7 @@ namespace CppCoverage
 				THROW(L"Cannot GetMappedFileName");
 			}
 
-			return pszFilename;
+			return std::wstring(pszFilename);
 		}
 
 		//-------------------------------------------------------------------------
@@ -112,7 +114,7 @@ namespace CppCoverage
 		{
 			std::vector<wchar_t> buffer(PathBufferSize);
 
-			if (GetFinalPathNameByHandle(hfile, &buffer[0], static_cast<int>(buffer.size()) - 1, VOLUME_NAME_NT))
+			if (GetFinalPathNameByHandleW(hfile, &buffer[0], static_cast<int>(buffer.size()) - 1, VOLUME_NAME_NT))
 				return &buffer[0];
 
 			return GetMappedFileNameStr(hfile);

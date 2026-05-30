@@ -8,6 +8,8 @@ set(classes
     Address.cpp
     ExceptionHandler.cpp
     CppCoverageException.cpp
+    Patterns.cpp
+    Wildcards.cpp
 )
 
 set(headers
@@ -21,12 +23,15 @@ set(headers
     Handle.hpp
     ExceptionHandler.hpp
     CppCoverageException.hpp
+    Patterns.hpp
+    Wildcards.hpp
 )
 
 vcov_module_add_module(Core CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Core
     DEPENDENCIES    
-        vcov::Tools
         vcov::Common
 )
+target_link_libraries(Core PUBLIC diaguids)
+target_include_directories(Core PUBLIC ${DIA_INCLUDE_DIRS})
 vcov_add_test(Core)

@@ -1,7 +1,7 @@
 #[=======================================================================[.rst:
 Findvcov
 -----------
-Find the vcov library
+Find the Vcov library
 
 .. code-block:: cmake
 

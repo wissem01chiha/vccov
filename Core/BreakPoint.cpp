@@ -16,12 +16,10 @@
 
 #include "stdafx.h"
 #include "BreakPoint.hpp"
-
 #include "CppCoverageException.hpp"
 #include "Address.hpp"
-
-#include "Tools/Log.hpp"
-#include "Tools/ProcessMemory.hpp"
+#include "Log.hpp"
+#include "ProcessMemory.hpp"
 
 namespace CppCoverage
 {

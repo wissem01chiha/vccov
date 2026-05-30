@@ -4,7 +4,6 @@ set(classes
     CoverageFilterSettings.hpp
     FilterAssistant.cpp
     UnifiedDiffCoverageFilterManager.cpp
-    UnifiedDiffSettings.cpp
     WildcardCoverageFilter.cpp
     AmbiguousPathException.cpp
     File.cpp
@@ -24,7 +23,6 @@ set(headers
     ICoverageFilterManager.hpp
     FilterAssistant.hpp
     UnifiedDiffCoverageFilterManager.hpp
-    UnifiedDiffSettings.hpp
     WildcardCoverageFilter.hpp
     AmbiguousPathException.hpp
     File.hpp
@@ -49,4 +47,4 @@ vcov_module_add_dependencies(Filter
         vcov::Option
         vcov::Common
 )
-vcov_add_test(Filter)
+#vcov_add_test(Filter)

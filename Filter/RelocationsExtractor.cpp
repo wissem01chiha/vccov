@@ -18,8 +18,8 @@
 #include "RelocationsExtractor.hpp"
 #include <memory>
 #include "FileFilterException.hpp"
-#include "Tools/ProcessMemory.hpp"
-#include "Tools/PEFileHeader.hpp"
+#include "ProcessMemory.hpp"
+#include "PEFileHeader.hpp"
 
 namespace FileFilter
 {

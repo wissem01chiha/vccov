@@ -16,15 +16,13 @@
 
 #pragma once
 
-#include <string>
-
-#include <Windows.h>
+#include "CppCoverageExport.hpp"
+#include "Plugin/Exporter/CoverageData.hpp"
+#include <boost/optional.hpp>
 #include <map>
 #include <set>
-#include <boost/optional.hpp>
-
-#include "Plugin/Exporter/CoverageData.hpp"
-#include "CppCoverageExport.hpp"
+#include <string>
+#include <Windows.h>
 
 namespace CppCoverage
 {

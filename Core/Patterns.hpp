@@ -18,7 +18,6 @@
 
 #include <vector>
 #include <string>
-
 #include "CppCoverageExport.hpp"
 
 namespace CppCoverage

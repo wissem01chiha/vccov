@@ -77,7 +77,7 @@ namespace Tools
 			minidumpInfo.ClientPointers = FALSE;
 
 			const auto dmpFilename = L"OpenCppCoverage.dmp";
-			HANDLE hFile = CreateFile(dmpFilename, GENERIC_WRITE, 0, nullptr,
+			HANDLE hFile = CreateFileW(dmpFilename, GENERIC_WRITE, 0, nullptr,
 				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
 			
 			if (hFile != INVALID_HANDLE_VALUE)

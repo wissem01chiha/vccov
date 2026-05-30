@@ -1,5 +1,5 @@
 // OpenCppCoverage is an open source code coverage for C++.
-// Copyright (C) 2016 OpenCppCoverage
+// Copyright (C) 2014 OpenCppCoverage
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,28 +17,34 @@
 #pragma once
 
 #include <filesystem>
-#include <boost/optional/optional.hpp>
 
-#include "CppCoverageExport.hpp"
+#include "TestHelperExport.hpp"
 
-namespace CppCoverage
+namespace TestHelper
 {
-	class CPPCOVERAGE_DLL UnifiedDiffSettings
+	enum class TemporaryPathOption
+	{
+		DoNotCreate,
+		CreateAsFile,
+		CreateAsFolder
+	};
+
+	class TEST_HELPER_DLL TemporaryPath
 	{
 	public:
-		UnifiedDiffSettings(
-			const std::filesystem::path& unifiedDiffPath,
-			const boost::optional<std::filesystem::path>& rootDiffFolder);
-		UnifiedDiffSettings(const UnifiedDiffSettings&) = default;
-		UnifiedDiffSettings(UnifiedDiffSettings&&) = default;
+		 
+		explicit TemporaryPath(TemporaryPathOption = TemporaryPathOption::DoNotCreate);
+		~TemporaryPath();
 
-		const std::filesystem::path& GetUnifiedDiffPath() const;
-		const boost::optional<std::filesystem::path>& GetRootDiffFolder() const;
-
-		UnifiedDiffSettings& operator=(const UnifiedDiffSettings&) = default;
+		operator const std::filesystem::path& () const;
+		const std::filesystem::path& GetPath() const;
+		const std::filesystem::path* operator->() const;
 
 	private:
-		std::filesystem::path unifiedDiffPath_;
-		boost::optional<std::filesystem::path> rootDiffFolder_;
+		TemporaryPath(const TemporaryPath&) = delete;
+		TemporaryPath& operator=(const TemporaryPath&) = delete;
+
+	private:
+		std::filesystem::path path_;
 	};
 }

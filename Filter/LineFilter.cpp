@@ -14,13 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-#include "LineFilter.hpp"
 #include "FileInfo.hpp"
+#include "LineFilter.hpp"
 #include "LineInfo.hpp"
-#include "tools/log/Log.hpp"
-#include "tools/core/Tool.hpp"
-#include "tools/io/MappedFile.hpp"
+#include "Log.hpp"
+#include "MappedFile.hpp"
+#include "stdafx.h"
+#include "Tool.hpp"
 
 namespace FileFilter
 {

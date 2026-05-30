@@ -18,6 +18,7 @@
 
 #include <string>
 #include <functional>
+#include <optional>
 
 namespace CppCoverage
 {

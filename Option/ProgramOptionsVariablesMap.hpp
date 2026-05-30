@@ -17,7 +17,7 @@
 #pragma once
 
 #include <boost/program_options/variables_map.hpp>
-#include "Tools/Tool.hpp"
+#include "Tool.hpp"
 #include "CppCoverageException.hpp"
 
 namespace CppCoverage

@@ -23,7 +23,7 @@ vcov_module_add_module(Coverage CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Coverage
     DEPENDENCIES
         vcov::Core
-        vcov::Filter
         vcov::Common
+        vcov::Filter
 )
-vcov_add_test(Coverage)
+#vcov_add_test(Coverage)

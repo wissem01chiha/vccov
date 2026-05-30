@@ -16,10 +16,10 @@
 
 #include "stdafx.h"
 #include "ExceptionHandler.hpp"
-#include "ProgramOptions.hpp"
-
-#include "Tools/ScopedAction.hpp"
-#include "Tools/Tool.hpp"
+//#include "ProgramOptions.hpp"
+#include "ScopedAction.hpp"
+#include "Tool.hpp"
+#include <vector>
 
 namespace CppCoverage
 {
@@ -128,8 +128,8 @@ namespace CppCoverage
 		if (it != exceptionCode_.end())
 			return it->second;
 		
-		LPTSTR message = nullptr;
-		HMODULE ntDllModule = LoadLibrary(L"NTDLL.DLL");
+		LPWSTR message = nullptr;
+		HMODULE ntDllModule = LoadLibraryW(L"NTDLL.DLL");
 		Tools::ScopedAction closeLibrary{ [=](){ FreeLibrary(ntDllModule); } };
 	
 		FormatMessage(
@@ -145,7 +145,7 @@ namespace CppCoverage
 		Tools::ScopedAction freeMessage{ [=](){ LocalFree(message); } };
 
 		if (message)
-			return message;
+             return std::wstring(message);
 
 		return ExceptionUnknown;
 	}

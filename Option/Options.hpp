@@ -16,15 +16,14 @@
 
 #pragma once
 
-#include <boost/optional.hpp>
-#include <filesystem>
-
 #include "CppCoverageExport.hpp"
+#include "OptionsExport.hpp"
 #include "Patterns.hpp"
 #include "StartInfo.hpp"
-#include "UnifiedDiffSettings.hpp"
 #include "SubstitutePdbSourcePath.hpp"
-#include "OptionsExport.hpp"
+#include "UnifiedDiffSettings.hpp"
+#include <boost/optional.hpp>
+#include <filesystem>
 
 namespace CppCoverage
 {

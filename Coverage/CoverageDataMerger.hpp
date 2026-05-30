@@ -17,6 +17,7 @@
 #pragma once
 
 #include "CppCoverageExport.hpp"
+#include <vector>
 
 namespace Plugin
 {

@@ -37,7 +37,7 @@ namespace Tools
 			const int PathBufferSize = 40 * 1000;
 			std::vector<wchar_t> filename(PathBufferSize);
 
-			if (!GetModuleFileName(nullptr, &filename[0], static_cast<int>(filename.size())))
+			if (!GetModuleFileNameW(nullptr, &filename[0], static_cast<int>(filename.size())))
 				THROW("Cannot get current executable path.");
 
 			return fs::path{ &filename[0] };

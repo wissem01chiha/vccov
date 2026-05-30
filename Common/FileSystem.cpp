@@ -1,5 +1,5 @@
 // OpenCppCoverage is an open source code coverage for C++.
-// Copyright (C) 2014 OpenCppCoverage
+// Copyright (C) 2018 OpenCppCoverage
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,12 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#pragma once
+#include "stdafx.h"
+#include <system_error>
+#include "FileSystem.hpp"
+#include <boost/optional/optional.hpp>
 
-#ifdef TOOLS_EXPORTS
-#define TOOLS_DLL __declspec(dllexport)
-#else
-#define TOOLS_DLL _declspec(dllimport)
-#endif
+namespace CppCoverage
+{
+	//----------------------------------------------------------------------------
+	boost::optional<std::filesystem::file_time_type>
+	FileSystem::GetLastWriteTime(const std::filesystem::path& path) const
+	{
+		std::error_code error;
+		auto time = std::filesystem::last_write_time(path, error);
 
-#pragma warning (disable: 4251)
+		return error ? boost::optional<std::filesystem::file_time_type>{} : time;
+	}
+}

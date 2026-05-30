@@ -16,13 +16,12 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
-#include <iosfwd>
+#include "CppCoverageExport.hpp"
 #include <boost/optional.hpp>
 #include <filesystem>
-
-#include "CppCoverageExport.hpp"
+#include <iosfwd>
+#include <string>
+#include <vector>
 
 namespace CppCoverage
 {
