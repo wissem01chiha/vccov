@@ -20,7 +20,6 @@
 #include "StartInfo.hpp"
 #include "UnifiedDiffSettings.hpp"
 #include "CoverageFilterSettings.hpp"
-
 #include "CppCoverageExport.hpp"
 #include "SubstitutePdbSourcePath.hpp"
 

@@ -25,5 +25,8 @@ vcov_module_add_dependencies(Coverage
         vcov::Core
         vcov::Common
         vcov::Filter
+        vcov::Plugin
+        vcov::Binary
+        vcov::Platform
 )
-#vcov_add_test(Coverage)
+vcov_add_test(Coverage)

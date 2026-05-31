@@ -17,20 +17,17 @@
 #include "stdafx.h"
 
 #include "MonitoredLineRegister.hpp"
-
 #include "ICoverageFilterManager.hpp"
 #include "Address.hpp"
 #include "BreakPoint.hpp"
 #include "ExecutedAddressManager.hpp"
 #include "CppCoverageException.hpp"
 #include "FilterAssistant.hpp"
-
-#include "FileFilter/ModuleInfo.hpp"
-#include "FileFilter/FileInfo.hpp"
-#include "FileFilter/LineInfo.hpp"
-
-#include "Tools/PEFileHeader.hpp"
-#include "Tools/Log.hpp"
+#include "ModuleInfo.hpp"
+#include "FileInfo.hpp"
+#include "LineInfo.hpp"
+#include "PEFileHeader.hpp"
+#include "Log.hpp"
 
 namespace CppCoverage
 {

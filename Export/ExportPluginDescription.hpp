@@ -46,22 +46,13 @@ namespace CppCoverage
 		ExportPluginDescription& operator=(ExportPluginDescription&&) = default;
 
 		//-------------------------------------------------------------------------------
-		const std::wstring& GetPluginName() const
-		{
-			return pluginName_;
-		}
+		const std::wstring& GetPluginName() const;
 
 		//-------------------------------------------------------------------------------
-		const std::wstring& GetParameterDescription() const
-		{
-			return parameterDescription_;
-		};
+		const std::wstring& GetParameterDescription() const;
 
 		//-------------------------------------------------------------------------------
-		void CheckArgument(const std::optional<std::wstring>& parameter) const
-		{
-			checkArgumentFct_(parameter);
-		}
+		void CheckArgument(const std::optional<std::wstring>& parameter) const;
 
 	  private:
 		std::wstring pluginName_;

@@ -14,31 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-#include "CodeCoverageRunner.hpp"
-
-#include <sstream>
-#include <boost/optional.hpp>
-
-#include "tools/Log.hpp"
-
-#include "Plugin/Exporter/CoverageData.hpp"
-#include "Debugger.hpp"
-#include "ExecutedAddressManager.hpp"
-#include "HandleInformation.hpp"
-#include "BreakPoint.hpp"
-#include "CoverageFilterManager.hpp"
-#include "StartInfo.hpp"
-#include "ExceptionHandler.hpp"
-#include "CppCoverageException.hpp"
 #include "Address.hpp"
-#include "RunCoverageSettings.hpp"
-#include "MonitoredLineRegister.hpp"
-#include "FilterAssistant.hpp"
+#include "BreakPoint.hpp"
+#include "CodeCoverageRunner.hpp"
+#include "CoverageData.hpp"
+#include "CoverageFilterManager.hpp"
+#include "CppCoverageException.hpp"
+#include "Debugger.hpp"
+#include "ExceptionHandler.hpp"
+#include "ExecutedAddressManager.hpp"
 #include "FileSystem.hpp"
-
-#include "Tools/WarningManager.hpp"
-#include "Tools/Tool.hpp"
+#include "FilterAssistant.hpp"
+#include "HandleInformation.hpp"
+#include "Log.hpp"
+#include "MonitoredLineRegister.hpp"
+#include "RunCoverageSettings.hpp"
+#include "StartInfo.hpp"
+#include "stdafx.h"
+#include "Tool.hpp"
+#include "WarningManager.hpp"
+#include <boost/optional.hpp>
+#include <sstream>
 
 namespace CppCoverage
 {

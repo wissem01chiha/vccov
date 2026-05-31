@@ -14,18 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-#include "ExecutedAddressManager.hpp"
-
-#include <unordered_map>
-#include <boost/container/small_vector.hpp>
-
-#include "tools/Log.hpp"
-
-#include "CppCoverageException.hpp"
-#include "Plugin/Exporter/ModuleCoverage.hpp"
-#include "Plugin/Exporter/FileCoverage.hpp"
 #include "Address.hpp"
+#include "CppCoverageException.hpp"
+#include "ExecutedAddressManager.hpp"
+#include "FileCoverage.hpp"
+#include "Log.hpp"
+#include "ModuleCoverage.hpp"
+#include "stdafx.h"
+#include <boost/container/small_vector.hpp>
+#include <unordered_map>
 
 namespace CppCoverage
 {

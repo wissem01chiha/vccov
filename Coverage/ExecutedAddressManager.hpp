@@ -16,8 +16,8 @@
 
 #pragma once
 
+#include "CoverageData.hpp"
 #include "CppCoverageExport.hpp"
-#include "Plugin/Exporter/CoverageData.hpp"
 #include <boost/optional.hpp>
 #include <map>
 #include <set>

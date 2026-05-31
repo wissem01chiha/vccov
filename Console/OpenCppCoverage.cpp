@@ -15,32 +15,27 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "stdafx.h"
+#include "BinaryExporter.hpp"
+#include "CoberturaExporter.hpp"
+#include "CodeCoverageRunner.hpp"
+#include "CoverageDataDeserializer.hpp"
+#include "CoverageDataMerger.hpp"
+#include "CoverageFilterSettings.hpp"
+#include "ExporterPluginManager.hpp"
+#include "ExportOptionParser.hpp"
+#include "HtmlExporter.hpp"
+#include "IExportPlugin.hpp"
+#include "Log.hpp"
 #include "OpenCppCoverage.hpp"
-
+#include "Options.hpp"
+#include "OptionsExport.hpp"
+#include "OptionsParser.hpp"
+#include "PluginLoader.hpp"
+#include "ProgramOptions.hpp"
+#include "RunCoverageSettings.hpp"
+#include "Tool.hpp"
+#include "WarningManager.hpp"
 #include <iostream>
-
-#include "CppCoverage/CodeCoverageRunner.hpp"
-#include "CppCoverage/CoverageFilterSettings.hpp"
-#include "CppCoverage/OptionsParser.hpp"
-#include "CppCoverage/Options.hpp"
-#include "CppCoverage/ProgramOptions.hpp"
-#include "CppCoverage/CoverageDataMerger.hpp"
-#include "CppCoverage/OptionsExport.hpp"
-#include "CppCoverage/RunCoverageSettings.hpp"
-#include "CppCoverage/ExportOptionParser.hpp"
-
-#include "Exporter/Html/HtmlExporter.hpp"
-#include "Exporter/CoberturaExporter.hpp"
-#include "Exporter/Binary/BinaryExporter.hpp"
-#include "Exporter/Binary/CoverageDataDeserializer.hpp"
-#include "Exporter/Plugin/ExporterPluginManager.hpp"
-#include "Exporter/Plugin/PluginLoader.hpp"
-
-#include "Plugin/Exporter/IExportPlugin.hpp"
-
-#include "Tools/Tool.hpp"
-#include "Tools/Log.hpp"
-#include "Tools/WarningManager.hpp"
 
 namespace cov = CppCoverage;
 namespace logging = boost::log;

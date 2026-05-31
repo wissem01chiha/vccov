@@ -14,15 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
+#include "CoverageData.hpp"
 #include "CoverageDataMerger.hpp"
-
+#include "FileCoverage.hpp"
+#include "LineCoverage.hpp"
+#include "ModuleCoverage.hpp"
+#include "stdafx.h"
 #include <functional>
-
-#include "Plugin/Exporter/CoverageData.hpp"
-#include "Plugin/Exporter/ModuleCoverage.hpp"
-#include "Plugin/Exporter/FileCoverage.hpp"
-#include "Plugin/Exporter/LineCoverage.hpp"
 
 namespace fs = std::filesystem;
 

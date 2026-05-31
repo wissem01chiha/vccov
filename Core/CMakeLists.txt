@@ -32,6 +32,7 @@ vcov_module_add_dependencies(Core
     DEPENDENCIES    
         vcov::Common
 )
-target_link_libraries(Core PUBLIC diaguids)
+message(STATUS "this are DIA libs ${DIA_LIBRARIES}")
+#target_link_libraries(Core PUBLIC ${DIA_LIBRARIES})
 target_include_directories(Core PUBLIC ${DIA_INCLUDE_DIRS})
 vcov_add_test(Core)

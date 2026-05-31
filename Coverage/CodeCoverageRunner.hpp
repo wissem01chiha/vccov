@@ -16,11 +16,10 @@
 
 #pragma once
 
-#include <memory>
-
-#include "Plugin/Exporter/CoverageData.hpp"
-#include "IDebugEventsHandler.hpp"
+#include "CoverageData.hpp"
 #include "CppCoverageExport.hpp"
+#include "IDebugEventsHandler.hpp"
+#include <memory>
 
 namespace Tools
 {

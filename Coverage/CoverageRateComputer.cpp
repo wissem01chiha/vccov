@@ -14,13 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-#include "CoverageRateComputer.hpp"
-
-#include "Plugin/Exporter/CoverageData.hpp"
-#include "Plugin/Exporter/ModuleCoverage.hpp"
-#include "Plugin/Exporter/FileCoverage.hpp"
+#include "CoverageData.hpp"
 #include "CoverageRate.hpp"
+#include "CoverageRateComputer.hpp"
+#include "FileCoverage.hpp"
+#include "ModuleCoverage.hpp"
+#include "stdafx.h"
 
 namespace CppCoverage
 {

@@ -18,11 +18,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "stdafx.h"
-
 #include <iostream>
-
-#include "Tools/MiniDump.hpp"
-
+#include "MiniDump.hpp"
 #include "OpenCppCoverage.hpp"
 
 //-----------------------------------------------------------------------------

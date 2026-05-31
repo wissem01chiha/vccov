@@ -16,6 +16,8 @@
 
 #pragma once
 
+#define PLATFORM_EXPORTS
+
 #ifdef PLATFORM_EXPORTS
 #define PLATFORM_DLL __declspec(dllexport)
 #else

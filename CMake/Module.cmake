@@ -1,5 +1,13 @@
 #[==[.rst:
-.. _vcov_module_add_module
+.. cmake:command:: vcov_module_add_module
+
+  .. code-block:: cmake
+
+    vcov_module_add_module(<name> 
+        CLASSES [<class>...] 
+        SOURCES [<source>...] 
+        HEADERS [<header>...] 
+    )
 #]==]
 function (vcov_module_add_module name)
     cmake_parse_arguments(PARSE_ARGV 1 _vcov "" "" "CLASSES;SOURCES;HEADERS")
@@ -14,18 +22,31 @@ function (vcov_module_add_module name)
             add_library(${name} STATIC)
         endif()
         target_sources(${name} PRIVATE ${_vcov_SOURCES} ${_vcov_HEADERS})
-        target_include_directories(${name} PUBLIC ${Boost_INCLUDE_DIRS} ${CMAKE_CURRENT_SOURCE_DIR})
+        target_include_directories(${name} PUBLIC 
+            ${Boost_INCLUDE_DIRS} 
+            ${CMAKE_CURRENT_SOURCE_DIR} 
+            ${CMAKE_CURRENT_BINARY_DIR}
+        )
         target_link_libraries(${name} PUBLIC ${Boost_LIBRARIES})
     else()
         add_library(${name} INTERFACE)
         target_sources(${name} INTERFACE ${_vcov_HEADERS})
-        target_include_directories(${name} INTERFACE ${Boost_INCLUDE_DIRS})
+        target_include_directories(${name} INTERFACE 
+            ${Boost_INCLUDE_DIRS} 
+            ${CMAKE_CURRENT_BINARY_DIR}
+        )
     endif()
     add_library(vcov::${name} ALIAS ${name})
 endfunction()
 
 #[==[.rst:
-.. _vcov_module_add_dependencies
+.. cmake:command:: vcov_module_add_dependencies
+
+  .. code-block:: cmake
+
+    vcov_module_add_dependencies(<name> 
+        DEPENDENCIES [<name>...] 
+    )
 #]==]
 function (vcov_module_add_dependencies module)
     cmake_parse_arguments(PARSE_ARGV 1 _vcov "" "" "DEPENDENCIES")
@@ -44,7 +65,7 @@ function (vcov_module_add_dependencies module)
         endif()
         get_target_property(dep_includes ${_vcov_dep} INCLUDE_DIRECTORIES)
         if(dep_includes)
-            target_include_directories(${module} PRIVATE ${dep_includes})
+            target_include_directories(${module} PUBLIC ${dep_includes})
         endif()
     endforeach()
 
@@ -57,7 +78,11 @@ function (vcov_module_add_dependencies module)
 endfunction()
 
 #[==[.rst:
-.. vcov_add_test
+.. cmake:command:: vcov_add_test
+
+  .. code-block:: cmake
+
+    vcov_add_test(<name>)
 #]==]
 function (vcov_add_test module)
     enable_testing()
@@ -65,7 +90,14 @@ function (vcov_add_test module)
 endfunction()
 
 #[==[.rst:
-.. vcov_add_test_sources
+.. cmake:command:: vcov_add_test_sources
+
+  .. code-block:: cmake
+
+    vcov_add_test_sources(<name>
+        SOURCES [<source>...] 
+        DEPENDENCIES [<name>...] 
+    )
 #]==]
 function (vcov_add_test_sources module)
     cmake_parse_arguments(PARSE_ARGV 1 _vcov "" "" "SOURCES;DEPENDENCIES")
@@ -80,15 +112,11 @@ function (vcov_add_test_sources module)
         add_executable(${_vcov_source_name} ${_vcov_source})
         if(module_includes)
             target_include_directories(${_vcov_source_name}  PRIVATE 
-                    ${module_includes} 
-                    ${GTEST_INCLUDE_DIRS}
-                )
+                    ${module_includes} ${GTEST_INCLUDE_DIRS})
         endif()
         if(module_deps)
             target_link_libraries(${_vcov_source_name} PRIVATE 
-                    ${module_deps} 
-                    GTest::gtest GTest::gtest_main
-                )
+                    ${module_deps} GTest::gtest GTest::gtest_main)
         endif()
         add_dependencies(${_vcov_source_name}  ${module})
         gtest_discover_tests(${_vcov_source_name})
