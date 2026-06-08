@@ -15,13 +15,14 @@ set(headers
     ExportOptionParser.hpp
     OptionsExport.hpp
     UnifiedDiffSettings.hpp
+    OptionExport.h
 )
 
-vcov_module_add_module(Option CLASSES ${classes})
+vcov_module_add_module(Option CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Option
     DEPENDENCIES    
-        vcov::Common
-        vcov::Core
-        vcov::Export
+        Common
+        Core
+        Export
 )
 vcov_add_test(Option)

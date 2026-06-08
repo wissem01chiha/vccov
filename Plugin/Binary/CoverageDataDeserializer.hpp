@@ -17,7 +17,7 @@
 #pragma once
 
 #include <filesystem>
-#include "ExporterExport.hpp"
+#include "BinaryExport.h"
 
 namespace Plugin{
 
@@ -27,7 +27,7 @@ namespace Plugin{
 
 namespace Exporter
 {	
-	class EXPORTER_DLL CoverageDataDeserializer
+	class VCOV_BINARYEXPORT_DLL  CoverageDataDeserializer
 	{
 	public:		
 		CoverageDataDeserializer() = default;

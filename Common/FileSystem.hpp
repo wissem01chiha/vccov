@@ -17,10 +17,11 @@
 #pragma once
 
 #include "IFileSystem.hpp"
+#include "CommonExport.h"
 
 namespace CppCoverage
 {
-	class FileSystem : public IFileSystem
+	class VCOV_COMMONEXPORT_DLL FileSystem : public IFileSystem
 	{
 	  public:
 		boost::optional<std::filesystem::file_time_type>

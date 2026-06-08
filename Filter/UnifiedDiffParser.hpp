@@ -17,13 +17,13 @@
 #pragma once
 
 #include <filesystem>
-#include "FileFilterExport.hpp"
+#include "FilterExport.h"
 
 namespace FileFilter
 {
 	class File;
 
-	class FILEFILTER_DLL UnifiedDiffParser
+	class VCOV_FILTEREXPORT_DLL UnifiedDiffParser
 	{
 	public:
 		const static std::wstring FromFilePrefix;

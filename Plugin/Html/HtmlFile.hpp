@@ -17,11 +17,11 @@
 #pragma once
 
 #include <filesystem>
-#include "ExporterExport.hpp"
+#include "HtmlExport.h"
 
 namespace Exporter
 {
-	class EXPORTER_DLL HtmlFile
+	class VCOV_HTMLEXPORT_DLL HtmlFile
 	{
 	public:
 		HtmlFile(

@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "FileFilterExport.hpp"
+#include "FilterExport.h"
 #include <vector>
 #include <memory>
 #include <filesystem>
@@ -26,7 +26,7 @@ namespace FileFilter
 {
 	class File;
 
-	class FILEFILTER_DLL PathMatcher
+	class VCOV_FILTEREXPORT_DLL PathMatcher
 	{
 	public:
 		explicit PathMatcher(

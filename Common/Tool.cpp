@@ -16,12 +16,10 @@
 
 #include "stdafx.h"
 #include "Tool.hpp"
-
 #include <boost/optional/optional.hpp>
 #include <codecvt>
 #include <filesystem>
 #include <system_error>
-
 #include "Log.hpp"
 #include "ToolsException.hpp"
 

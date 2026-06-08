@@ -16,10 +16,8 @@
 
 #include "stdafx.h"
 #include "MappedFile.hpp"
-
 #include "ToolsException.hpp"
 #include "Tool.hpp"
-
 #include <boost/iostreams/device/mapped_file.hpp>
 
 namespace Tools

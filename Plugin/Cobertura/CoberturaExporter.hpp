@@ -18,7 +18,7 @@
 
 #include <iosfwd>
 #include <filesystem>
-#include "ExporterExport.hpp"
+#include "CoberturaExport.h"
 #include "IExporter.hpp"
 
 namespace Plugin
@@ -28,7 +28,7 @@ namespace Plugin
 
 namespace Exporter
 {
-	class EXPORTER_DLL CoberturaExporter: public IExporter
+	class VCOV_COBERTURAEXPORT_DLL CoberturaExporter: public IExporter
 	{
 	public:
 		CoberturaExporter() ;

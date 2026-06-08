@@ -11,12 +11,13 @@ set(headers
     BinaryExporter.hpp
     CoverageDataDeserializer.hpp
     ProtoBuff.hpp 
+    BinaryExport.h
 )
 vcov_module_add_module(Binary CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Binary
     DEPENDENCIES    
-        vcov::Common
-        vcov::Export
+        Common
+        Export
 )
 target_include_directories(Binary PUBLIC ${Protobuf_INCLUDE_DIRS})
 target_link_libraries(Binary PUBLIC 

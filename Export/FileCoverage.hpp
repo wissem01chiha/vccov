@@ -16,14 +16,14 @@
 
 #pragma once
 
-#include "ExporterExport.hpp"
+#include "ExportExport.h"
 #include "LineCoverage.hpp"
 #include <filesystem>
 #include <map>
 
 namespace Plugin
 {
-	class EXPORTER_DLL FileCoverage
+	class VCOV_EXPORTEXPORT_DLL FileCoverage
 	{
 	public:
 		explicit FileCoverage(const std::filesystem::path& path);

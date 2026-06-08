@@ -17,6 +17,8 @@
 #pragma once
 
 #include <string>
+#include <vector>
+#include "ExportExport.h"
 #include <filesystem>
 
 namespace Plugin
@@ -26,7 +28,7 @@ namespace Plugin
 
 namespace Exporter
 {
-	class EXPORTER_DLL IExporter
+	class  IExporter
 	{
 	public:
 		IExporter() = default;

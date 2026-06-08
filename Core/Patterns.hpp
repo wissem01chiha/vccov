@@ -18,11 +18,11 @@
 
 #include <vector>
 #include <string>
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL Patterns
+	class VCOV_COREEXPORT_DLL Patterns
 	{
 	public:
 		typedef std::vector<std::wstring> T_Patterns;
@@ -42,7 +42,7 @@ namespace CppCoverage
 
 		Patterns& operator=(const Patterns&) = default;
 		
-		CPPCOVERAGE_DLL friend std::wostream& operator<<(std::wostream&, const Patterns&);
+		VCOV_COREEXPORT_DLL friend std::wostream& operator<<(std::wostream&, const Patterns&);
 	
 	private:
 		T_Patterns selectedPatterns_;

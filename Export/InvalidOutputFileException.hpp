@@ -18,7 +18,7 @@
 
 #include <stdexcept>
 #include <filesystem>
-#include "ExporterExport.hpp"
+#include "ExportExport.h"
 
 namespace Exporter
 {
@@ -27,7 +27,7 @@ namespace Exporter
                                 // used as base for dll-interface class
                                 // 'Exporter::InvalidOutputFileException'
 
-	class EXPORTER_DLL InvalidOutputFileException : public std::runtime_error
+	class VCOV_EXPORTEXPORT_DLL InvalidOutputFileException : public std::runtime_error
 	{
 	  public:
 		InvalidOutputFileException(const std::filesystem::path& output,

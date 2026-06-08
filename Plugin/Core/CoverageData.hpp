@@ -20,14 +20,13 @@
 #include <vector>
 #include <memory>
 #include <filesystem>
-
-#include "../PluginExport.hpp"
+#include "PluginExport.h"
 
 namespace Plugin
 {
 	class ModuleCoverage;
 
-	class PLUGIN_DLL CoverageData
+	class VCOV_PLUGINEXPORT_DLL CoverageData
 	{
 	public:
 		typedef std::vector<std::unique_ptr<ModuleCoverage>> T_ModuleCoverageCollection;

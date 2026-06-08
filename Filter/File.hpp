@@ -16,13 +16,13 @@
 
 #pragma once
 
-#include "FileFilterExport.hpp"
+#include "FilterExport.h"
 #include <set>
 #include <filesystem>
 
 namespace FileFilter
 {
-	class FILEFILTER_DLL File
+	class VCOV_FILTEREXPORT_DLL File
 	{
 	public:
 		explicit File(const std::filesystem::path&);

@@ -16,11 +16,11 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "CoverageExport.h"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL CoverageRate
+	class VCOV_COVERAGEEXPORT_DLL CoverageRate
 	{
 	public:
 		CoverageRate();

@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "CoverageExport.h"
 #include <vector>
 
 namespace Plugin
@@ -26,7 +26,7 @@ namespace Plugin
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL CoverageDataMerger
+	class VCOV_COVERAGEEXPORT_DLL CoverageDataMerger
 	{
 	public:
 		CoverageDataMerger() = default;

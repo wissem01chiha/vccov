@@ -15,12 +15,13 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
-#define FILEFILTER_EXPORTS
 
-#ifdef FILEFILTER_EXPORTS
-#define FILEFILTER_DLL __declspec(dllexport)
+#include "VcovExport.h"
+
+#ifdef VCOV_COREEXPORT
+#define VCOV_COREEXPORT_DLL __declspec(dllexport)
 #else
-#define FILEFILTER_DLL _declspec(dllimport)
+#define VCOV_COREEXPORT_DLL __declspec(dllimport)
 #endif
 
 #pragma warning (disable: 4251)

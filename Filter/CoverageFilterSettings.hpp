@@ -18,13 +18,12 @@
 
 #include <string>
 #include <vector>
-
-#include "CppCoverageExport.hpp"
+#include "FilterExport.h"
 #include "Patterns.hpp"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL CoverageFilterSettings
+	class VCOV_FILTEREXPORT_DLL CoverageFilterSettings
 	{	
 	public:
 		CoverageFilterSettings(const Patterns& modulePatterns, const Patterns& sourcePatterns);

@@ -18,12 +18,11 @@
 
 #include <regex>
 #include <string>
-
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL Wildcards
+	class VCOV_COREEXPORT_DLL Wildcards
 	{
 	public:
 		static const std::vector<wchar_t> EscapedChars;
@@ -34,7 +33,7 @@ namespace CppCoverage
 
 		bool Match(const std::wstring& str) const;
 
-		friend CPPCOVERAGE_DLL std::wostream& operator<<(std::wostream&, const Wildcards&);
+		friend VCOV_COREEXPORT_DLL std::wostream& operator<<(std::wostream&, const Wildcards&);
 
 	private:
 		Wildcards(const Wildcards&) = delete;

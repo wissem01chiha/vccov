@@ -1,6 +1,7 @@
 # Vcov
 
 [![cmake-build](https://github.com/wissem01chiha/vccov/actions/workflows/cmake.yaml/badge.svg?branch=master)](https://github.com/wissem01chiha/vccov/actions/workflows/cmake.yaml)
+[![Build status](https://ci.appveyor.com/api/projects/status/yv33leemcnm7v5sq?svg=true)](https://ci.appveyor.com/project/wissem01chiha/vcov)
 ![GitHub License](https://img.shields.io/github/license/wissem01chiha/vccov)
 [![CodeFactor](https://www.codefactor.io/repository/github/wissem01chiha/vcov/badge)](https://www.codefactor.io/repository/github/wissem01chiha/vcov)
 [![pre-commit.ci status](https://results.pre-commit.ci/badge/github/wissem01chiha/vccov/master.svg)](https://results.pre-commit.ci/latest/github/wissem01chiha/vccov/master)

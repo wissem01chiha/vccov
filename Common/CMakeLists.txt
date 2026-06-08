@@ -2,7 +2,6 @@ set(classes
     SubstitutePdbSourcePath.cpp
     Tool.cpp
     ExceptionBase.cpp
-    ToolsExport.hpp
     Log.cpp
     MiniDump.cpp
     MappedFile.cpp
@@ -15,14 +14,11 @@ set(classes
 )
 
 set(headers 
-    CppCoverageExport.hpp
     OpenCppCoverageException.hpp
-    OpenCppCoverageExport.hpp
     SubstitutePdbSourcePath.hpp
     Tool.hpp
     ExceptionBase.hpp
     ToolsException.hpp
-    ToolsExport.hpp
     Log.hpp
     MiniDump.hpp
     MappedFile.hpp
@@ -33,7 +29,9 @@ set(headers
     WarningManager.hpp
     IFileSystem.hpp
     FileSystem.hpp
+    CommonExport.h
 )
 
 vcov_module_add_module(Common CLASSES ${classes} HEADERS ${headers})
-#vcov_add_test(Common)
+target_link_libraries(Common PRIVATE DbgHelp.lib)
+vcov_add_test(Common)

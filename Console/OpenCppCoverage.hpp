@@ -17,12 +17,13 @@
 #pragma once
 
 #include <iosfwd>
+#include "ConsoleExport.h"
 
 namespace OpenCppCoverage
 {
 	const int FailureExitCode = 0x9F8C8E5C;
 
-	class OpenCppCoverage
+	class VCOV_CONSOLEEXPORT_DLL OpenCppCoverage
 	{
 	public:
 		OpenCppCoverage() = default;

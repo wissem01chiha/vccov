@@ -17,12 +17,11 @@
 #pragma once
 
 #include <functional>
-
-#include "ToolsExport.hpp"
+#include "CommonExport.h"
 
 namespace Tools
 {
-	class TOOLS_DLL ScopedAction
+	class VCOV_COMMONEXPORT_DLL ScopedAction
 	{
 	public:
 		explicit ScopedAction(std::function<void ()>);

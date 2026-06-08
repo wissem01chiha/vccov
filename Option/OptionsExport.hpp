@@ -18,7 +18,7 @@
 
 #include <optional>
 #include <string>
-#include "CppCoverageExport.hpp"
+#include "OptionExport.h"
 
 namespace CppCoverage
 {
@@ -30,7 +30,7 @@ namespace CppCoverage
 		Plugin
 	};
 
-	class CPPCOVERAGE_DLL OptionsExport
+	class VCOV_OPTIONEXPORT_DLL OptionsExport
 	{
 	  public:
 		explicit OptionsExport(OptionsExportType type,

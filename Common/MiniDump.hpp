@@ -16,11 +16,11 @@
 
 #pragma once
 
-#include "ToolsExport.hpp"
+#include "CommonExport.h"
 
 namespace Tools
 {
-	TOOLS_DLL void CreateMiniDumpOnUnHandledException();
+	VCOV_COMMONEXPORT_DLL void CreateMiniDumpOnUnHandledException();
 }
 
 

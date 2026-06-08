@@ -22,7 +22,7 @@
 // Disable: This header is deprecated. Use <boost/integer/integer_log2.hpp> instead.
 #define BOOST_ALLOW_DEPRECATED_HEADERS
 #include <boost/uuid/uuid_generators.hpp>
-#include "ExporterExport.hpp"
+#include "HtmlExport.h"
 
 namespace CppCoverage
 {
@@ -38,9 +38,9 @@ namespace fs = std::filesystem;
 
 namespace Exporter
 {
-	class ITemplateExpander;
+	class VCOV_HTMLEXPORT_DLL ITemplateExpander;
 
-	class EXPORTER_DLL TemplateHtmlExporter
+	class VCOV_HTMLEXPORT_DLL TemplateHtmlExporter
 	{
 	public:
 		static const std::string ExecutedLineTemplate;

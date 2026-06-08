@@ -26,8 +26,6 @@ namespace fs = std::filesystem;
 
 namespace CppCoverage
 {
-	namespace
-	{
 		//---------------------------------------------------------------------
 		Plugin::CoverageData CreateCoverageData(const std::vector<Plugin::CoverageData>& coverageDataCollection)
 		{
@@ -130,7 +128,6 @@ namespace CppCoverage
 					*fileCoverage = *fileCoverageSum;
 			}
 		}
-	}
 
 	//-------------------------------------------------------------------------
 	Plugin::CoverageData CoverageDataMerger::Merge(

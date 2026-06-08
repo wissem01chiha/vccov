@@ -1,5 +1,5 @@
 // OpenCppCoverage is an open source code coverage for C++.
-// Copyright (C) 2014 OpenCppCoverage
+// Copyright (C) 2019 OpenCppCoverage
 //
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -16,15 +16,12 @@
 
 #pragma once
 
-#define EXPORTER_EXPORTS
+#include "VcovExport.h"
 
-#ifdef EXPORTER_EXPORTS
-#define EXPORTER_DLL __declspec(dllexport)
+#ifdef VCOV_OPTIONEXPORT
+#define VCOV_OPTIONEXPORT_DLL __declspec(dllexport)
 #else
-#define EXPORTER_DLL _declspec(dllimport)
+#define VCOV_OPTIONEXPORT_DLL __declspec(dllimport)
 #endif
 
 #pragma warning (disable: 4251)
-
-
-

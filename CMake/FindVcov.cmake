@@ -13,6 +13,7 @@ Imported Targets
 The following targets are imported into the project:
 
     - ``vcov::vcov``  
+        The main Vcov library target.
 
 Result Variables
 ^^^^^^^^^^^^^^^^

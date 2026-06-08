@@ -17,6 +17,7 @@
 #pragma once
 
 #include "ExporterException.hpp"
+#include "PluginExport.h"
 #include <Windows.h>
 
 namespace Exporter

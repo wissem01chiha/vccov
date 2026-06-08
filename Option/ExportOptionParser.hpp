@@ -17,15 +17,14 @@
 #pragma once
 
 #include <map>
-
-#include "CppCoverageExport.hpp"
 #include "IOptionParser.hpp"
+#include "OptionExport.h"
 #include "OptionsExport.hpp"
 #include "ExportPluginDescription.hpp"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL ExportOptionParser : public IOptionParser
+	class VCOV_OPTIONEXPORT_DLL ExportOptionParser : public IOptionParser
 	{
 	  public:
 		static const char ExportSeparator;

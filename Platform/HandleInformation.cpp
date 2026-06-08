@@ -24,8 +24,6 @@
 
 namespace CppCoverage
 {
-	namespace
-	{
 		//-------------------------------------------------------------------------
 		std::vector<std::wstring> GetLogicalDrives()
 		{
@@ -119,7 +117,6 @@ namespace CppCoverage
 
 			return GetMappedFileNameStr(hfile);
 		}
-	}
 
 	//-------------------------------------------------------------------------
 	HandleInformation::HandleInformation() = default;

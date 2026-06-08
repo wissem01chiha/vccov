@@ -16,12 +16,12 @@
 
 #pragma once
 
-#include "ExporterExport.hpp"
+#include "BinaryExport.h"
 #include "IExporter.hpp"
 
 namespace Exporter
 {
-	class EXPORTER_DLL BinaryExporter : public IExporter
+	class VCOV_BINARYEXPORT_DLL BinaryExporter : public IExporter
 	{
 	public:
 		BinaryExporter() = default;

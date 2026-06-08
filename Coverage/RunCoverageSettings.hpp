@@ -20,12 +20,12 @@
 #include "StartInfo.hpp"
 #include "UnifiedDiffSettings.hpp"
 #include "CoverageFilterSettings.hpp"
-#include "CppCoverageExport.hpp"
+#include "CoverageExport.h"
 #include "SubstitutePdbSourcePath.hpp"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL RunCoverageSettings
+	class VCOV_COVERAGEEXPORT_DLL RunCoverageSettings
 	{
 	public:
 		RunCoverageSettings(

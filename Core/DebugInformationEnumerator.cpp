@@ -27,10 +27,9 @@
 
 namespace CppCoverage
 {
-	namespace
-	{
+
 		//----------------------------------------------------------------------
-		class DiaString
+		class VCOV_COREEXPORT_DLL DiaString
 		{
 		  public:
 			DiaString() = default;
@@ -75,7 +74,7 @@ namespace CppCoverage
 
 		//----------------------------------------------------------------------
 		template <typename Value, typename Collection, typename Fct>
-		void EnumerateCollection(Collection& collection, Fct fct)
+		VCOV_COREEXPORT_DLL void EnumerateCollection(Collection& collection, Fct fct)
 		{
 			CComPtr<Value> value;
 			ULONG celtFetched;
@@ -88,7 +87,7 @@ namespace CppCoverage
 		}
 
 		//----------------------------------------------------------------------
-		CComPtr<IDiaEnumSourceFiles> GetEnumSourceFiles(IDiaSession& session)
+		VCOV_COREEXPORT_DLL CComPtr<IDiaEnumSourceFiles> GetEnumSourceFiles(IDiaSession& session)
 		{
 			CComPtr<IDiaEnumTables> tables;
 			if (session.getEnumTables(&tables) != S_OK || !tables)
@@ -113,7 +112,7 @@ namespace CppCoverage
 		}
 
 		//----------------------------------------------------------------------
-		struct DiaLoadCallback : public IDiaLoadCallback
+		struct VCOV_COREEXPORT_DLL DiaLoadCallback : public IDiaLoadCallback
 		{
 			//------------------------------------------------------------------
 			HRESULT STDMETHODCALLTYPE QueryInterface(
@@ -206,7 +205,6 @@ namespace CppCoverage
 			}
 			return sourcePtr;
 		}
-	}
 
 	//--------------------------------------------------------------------------
 	DebugInformationEnumerator::DebugInformationEnumerator(

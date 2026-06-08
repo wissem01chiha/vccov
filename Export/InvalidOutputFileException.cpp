@@ -19,8 +19,6 @@
 
 namespace Exporter
 {
-	namespace
-	{
 		//---------------------------------------------------------------------
 		std::string GetErrorMessage(const std::filesystem::path& output,
 		                            const std::string& outputKind)
@@ -35,8 +33,7 @@ namespace Exporter
 			}
 			return error;
 		}
-	}
-
+		
 	//-------------------------------------------------------------------------
 	InvalidOutputFileException::InvalidOutputFileException(
 	    const std::filesystem::path& output, const std::string& outputKind)

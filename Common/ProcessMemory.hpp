@@ -19,20 +19,19 @@
 #include <Windows.h>
 #include <memory>
 #include <vector>
-
-#include "ToolsExport.hpp"
+#include "CommonExport.h"
 
 namespace Tools
 {
-	TOOLS_DLL void WriteProcessMemory(HANDLE hProcess,
+	VCOV_COMMONEXPORT_DLL void WriteProcessMemory(HANDLE hProcess,
 	                                  void* address,
 	                                  void* buffer,
 	                                  size_t size);
 
-	TOOLS_DLL std::vector<unsigned char>
+	VCOV_COMMONEXPORT_DLL std::vector<unsigned char>
 	ReadProcessMemory(HANDLE hProcess, void* address, size_t size);
 
-	TOOLS_DLL void ReadProcessMemory(HANDLE hProcess,
+	VCOV_COMMONEXPORT_DLL void ReadProcessMemory(HANDLE hProcess,
 	                                 DWORD64 address,
 	                                 void* buffer,
 	                                 SIZE_T size);

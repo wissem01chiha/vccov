@@ -18,7 +18,7 @@
 
 #include <memory>
 
-#include "CppCoverageExport.hpp"
+#include "FilterExport.h"
 #include "WildcardCoverageFilter.hpp"
 #include "ICoverageFilterManager.hpp"
 #include "UnifiedDiffCoverageFilterManager.hpp"
@@ -34,7 +34,7 @@ namespace CppCoverage
 	class CoverageFilterSettings;
 	class UnifiedDiffSettings;
 
-	class CPPCOVERAGE_DLL CoverageFilterManager: public ICoverageFilterManager
+	class VCOV_FILTEREXPORT_DLL CoverageFilterManager: public ICoverageFilterManager
 	{
 	public:
 		explicit CoverageFilterManager(

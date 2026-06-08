@@ -17,11 +17,11 @@
 #pragma once
 
 #include <filesystem>
-#include "CppCoverageExport.hpp"
+#include "CommonExport.h"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL SubstitutePdbSourcePath
+	class VCOV_COMMONEXPORT_DLL SubstitutePdbSourcePath
 	{
 	  public:
 		//---------------------------------------------------------------------

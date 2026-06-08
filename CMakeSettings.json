@@ -4,7 +4,7 @@
       "name": "x64-Debug",
       "generator": "Visual Studio 17 2022",
       "configurationType": "Debug",
-      "inheritEnvironments": [ "msvc_arm" ],
+      "cmakeGeneratorPlatform": "x64",
       "buildRoot": "${projectDir}\\build\\${name}",
       "installRoot": "${projectDir}\\build\\install\\${name}",
       "cmakeCommandArgs": "",

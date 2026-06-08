@@ -19,10 +19,11 @@
 #include <string>
 #include <functional>
 #include <optional>
+#include "ExportExport.h"
 
 namespace CppCoverage
 {
-	class ExportPluginDescription
+	class VCOV_EXPORTEXPORT_DLL ExportPluginDescription
 	{
 	  public:
 		using CheckArgumentFct =

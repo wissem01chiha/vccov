@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 #include <vector>
 #include <Windows.h>
 
@@ -24,7 +24,7 @@ namespace CppCoverage
 {
 	class Address;
 
-	class CPPCOVERAGE_DLL BreakPoint
+	class VCOV_COREEXPORT_DLL BreakPoint
 	{
 	  public:
 		BreakPoint() = default;

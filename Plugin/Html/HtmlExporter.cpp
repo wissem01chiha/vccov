@@ -35,9 +35,6 @@ namespace cov = CppCoverage;
 
 namespace Exporter
 {		
-
-	namespace
-	{
 		//-------------------------------------------------------------------------
 		std::wstring GetMainMessage(const Plugin::CoverageData& coverageData)
 		{
@@ -47,7 +44,6 @@ namespace Exporter
 				return HtmlExporter::WarningExitCodeMessage + std::to_wstring(exitCode);
 			return L"";
 		}
-	}
 	
 	//-------------------------------------------------------------------------
 	const std::wstring HtmlExporter::WarningExitCodeMessage = L"Warning: Your program has exited with error code: ";

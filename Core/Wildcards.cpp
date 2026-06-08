@@ -16,9 +16,7 @@
 
 #include "stdafx.h"
 #include "Wildcards.hpp"
-
 #include <boost/algorithm/string.hpp>
-
 #include "Tool.hpp"
 
 namespace CppCoverage

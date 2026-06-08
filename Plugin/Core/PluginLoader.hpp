@@ -18,6 +18,7 @@
 
 #include "IPluginLoader.hpp"
 #include "LoadedPlugin.hpp"
+#include "PluginExport.h"
 #include "Tool.hpp"
 #include <Windows.h>
 

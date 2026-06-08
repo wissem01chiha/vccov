@@ -20,12 +20,11 @@
 #include <string>
 #include <memory>
 #include <filesystem>
-
-#include "ToolsExport.hpp"
+#include "CommonExport.h"
 
 namespace Tools
 {
-	class TOOLS_DLL MappedFile
+	class VCOV_COMMONEXPORT_DLL MappedFile
 	{
 	public:
 		static std::unique_ptr<MappedFile> TryCreate(const std::filesystem::path&);

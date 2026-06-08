@@ -2,7 +2,7 @@ set(classes
     HtmlExporter.cpp
     HtmlFileCoverageExporter.cpp
     HtmlFolderStructure.cpp
-    #TemplateHtmlExporter.cpp
+    TemplateHtmlExporter.cpp
     HtmlFile.cpp
 )
 
@@ -13,13 +13,17 @@ set(headers
     TemplateHtmlExporter.hpp
     CTemplate.hpp
     HtmlFile.hpp
+    HtmlExport.h
     stdafx.h
 )
 vcov_module_add_module(Html CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Html
     DEPENDENCIES    
-        vcov::Common
-        vcov::Export
-        vcov::Plugin
-        vcov::Coverage
+        Common
+        Export
+        Plugin
+        Coverage
 )
+target_include_directories(Html PUBLIC ${CTemplate_INCLUDE_DIRS})
+target_link_libraries(Html PUBLIC ${CTemplate_LIBRARIES})
+vcov_add_test(Html)

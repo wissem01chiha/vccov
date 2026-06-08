@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "CoverageExport.h"
 #include <unordered_map>
 #include "CoverageRate.hpp"
 
@@ -29,7 +29,7 @@ namespace Plugin
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL CoverageRateComputer
+	class VCOV_COVERAGEEXPORT_DLL CoverageRateComputer
 	{
 	public:
 		explicit CoverageRateComputer(const Plugin::CoverageData&);

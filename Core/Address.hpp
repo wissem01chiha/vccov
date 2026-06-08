@@ -16,13 +16,13 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 #include <ostream>
 #include <Windows.h>
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL Address
+	class VCOV_COREEXPORT_DLL Address
 	{
 	public:				
 		Address(HANDLE hProcess, void* value);
@@ -32,7 +32,7 @@ namespace CppCoverage
 		void* GetValue() const;
 
 		bool operator<(const Address& other) const;
-		friend std::wostream& operator<<(std::wostream&, const Address&);
+		friend VCOV_COREEXPORT_DLL std::wostream& operator<<(std::wostream&, const Address&);
 
 	private:		
 		Address& operator=(const Address&) = delete;

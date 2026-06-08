@@ -19,14 +19,13 @@
 #include <boost/optional/optional_fwd.hpp>
 #include <memory>
 #include <filesystem>
-
-#include "CppCoverageExport.hpp"
+#include "FilterExport.h"
 
 namespace CppCoverage
 {
 	class IFileSystem;
 
-	class CPPCOVERAGE_DLL FilterAssistant
+	class VCOV_FILTEREXPORT_DLL FilterAssistant
 	{
 	  public:
 		explicit FilterAssistant(std::shared_ptr<IFileSystem>);

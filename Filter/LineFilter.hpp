@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "FileFilterExport.hpp"
+#include "FilterExport.h"
 #include <filesystem>
 #include <vector>
 #include <string>
@@ -32,7 +32,7 @@ namespace FileFilter
 	class FileInfo;
 	class LineInfo;
 
-	class FILEFILTER_DLL LineFilter
+	class VCOV_FILTEREXPORT_DLL LineFilter
 	{
 	public:
 		explicit LineFilter(

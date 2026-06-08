@@ -16,6 +16,7 @@
 
 #include "stdafx.h"
 #include "TemplateHtmlExporter.hpp"
+#include "OpenCppCoverageVersion.hpp"
 #include <fstream>
 #include <filesystem>
 #include <boost/algorithm/string.hpp>
@@ -30,8 +31,6 @@ namespace fs = std::filesystem;
 
 namespace Exporter
 {
-	namespace
-	{
 		//-------------------------------------------------------------------------
 		std::string ToString(const std::wstring& str)
 		{
@@ -79,7 +78,6 @@ namespace Exporter
 			std::string content = GenerateTemplate(templateDictionary, templatePath);
 			WriteContentTo(content, output);
 		}
-	}
 	
 	//-------------------------------------------------------------------------
 	const std::string TemplateHtmlExporter::MainTemplateItemSection = "ITEMS";

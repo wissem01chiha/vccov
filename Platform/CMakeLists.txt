@@ -4,15 +4,14 @@ set(classes
 
 set(headers
     HandleInformation.hpp
+    PlatformExport.h
 )
 
 vcov_module_add_module(Platform CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Platform
     DEPENDENCIES    
-        vcov::Common
-        vcov::Core
+        Common
+        Core
 )
-if(WIN32)
-    target_link_libraries(Platform PRIVATE diaguids.lib)
-endif()
+target_link_libraries(Platform PRIVATE ${DIA_LIBRARIES})
 vcov_add_test(Platform)

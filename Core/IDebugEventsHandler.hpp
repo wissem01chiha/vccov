@@ -17,12 +17,11 @@
 #pragma once
 
 #include <Windows.h>
-
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL IDebugEventsHandler
+	class VCOV_COREEXPORT_DLL IDebugEventsHandler
 	{
 	public:
 		enum class ExceptionType

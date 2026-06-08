@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "FilterExport.h"
 #include <string>
 
 namespace FileFilter
@@ -30,7 +30,7 @@ namespace CppCoverage
 {
 	class CoverageFilterSettings;
 
-	class CPPCOVERAGE_DLL ICoverageFilterManager
+	class VCOV_FILTEREXPORT_DLL ICoverageFilterManager
 	{
 	public:
 		virtual ~ICoverageFilterManager() = default;

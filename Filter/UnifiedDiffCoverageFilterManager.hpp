@@ -19,10 +19,8 @@
 #include <vector>
 #include <memory>
 #include <set>
-
 #include <filesystem>
-
-#include "CppCoverageExport.hpp"
+#include "FilterExport.h"
 
 namespace FileFilter
 {
@@ -35,7 +33,7 @@ namespace CppCoverage
 {
 	class UnifiedDiffSettings;
 
-	class CPPCOVERAGE_DLL UnifiedDiffCoverageFilterManager
+	class VCOV_FILTEREXPORT_DLL UnifiedDiffCoverageFilterManager
 	{
 	public:
 		explicit UnifiedDiffCoverageFilterManager(

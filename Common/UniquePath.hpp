@@ -16,14 +16,13 @@
 
 #pragma once
 
-#include "ToolsExport.hpp"
-
+#include "CommonExport.h"
 #include <set>
 #include <filesystem>
 
 namespace Tools
 {
-	class TOOLS_DLL UniquePath
+	class VCOV_COMMONEXPORT_DLL UniquePath
 	{
 	public:
 		UniquePath() = default;

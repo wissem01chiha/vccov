@@ -16,7 +16,6 @@
 
 #include "stdafx.h"
 #include "MiniDump.hpp"
-
 #include <iostream>
 
 #pragma warning(push)
@@ -26,11 +25,9 @@
 
 namespace Tools
 {
-	namespace
-	{
 
 		//-----------------------------------------------------------------------------
-		MINIDUMP_TYPE GetMiniDumpDefaultType()
+		VCOV_COMMONEXPORT_DLL MINIDUMP_TYPE GetMiniDumpDefaultType()
 		{
 			return static_cast<MINIDUMP_TYPE>(MiniDumpWithDataSegs |
 				MiniDumpWithPrivateReadWriteMemory |
@@ -39,7 +36,7 @@ namespace Tools
 		}
 
 		//-----------------------------------------------------------------------------
-		void CreateMiniDump(
+		VCOV_COMMONEXPORT_DLL void CreateMiniDump(
 			MINIDUMP_EXCEPTION_INFORMATION& minidumpInfo, 
 			HANDLE hFile, 			
 			const wchar_t* dmpFilename)
@@ -66,7 +63,7 @@ namespace Tools
 		}
 		
 		//-----------------------------------------------------------------------------
-		LONG WINAPI CreateMiniDumpOnUnHandledException(PEXCEPTION_POINTERS exceptionInfo)
+		VCOV_COMMONEXPORT_DLL LONG WINAPI CreateMiniDumpOnUnHandledException(PEXCEPTION_POINTERS exceptionInfo)
 		{
 			MINIDUMP_EXCEPTION_INFORMATION minidumpInfo;
 
@@ -88,10 +85,9 @@ namespace Tools
 			abort();
 			return 0;
 		}	
-	}
 
 	//-------------------------------------------------------------------------
-	void CreateMiniDumpOnUnHandledException()
+	VCOV_COMMONEXPORT_DLL void CreateMiniDumpOnUnHandledException()
 	{
 		DWORD dwMode = GetErrorMode();
 		SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);

@@ -18,11 +18,12 @@
 
 #include <boost/optional/optional_fwd.hpp>
 #include <ctime>
+#include "CommonExport.h"
 #include <filesystem>
 
 namespace CppCoverage
 {
-	class IFileSystem
+	class VCOV_COMMONEXPORT_DLL IFileSystem
 	{
 	  public:
 		virtual ~IFileSystem() = default;

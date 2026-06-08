@@ -18,16 +18,14 @@
 #include "FilterAssistant.hpp"
 #include "IFileSystem.hpp"
 #include <ctime>
+#include "ProgramOptions.hpp"
 #include <boost/optional/optional.hpp>
 #include <filesystem>
 #include <memory>
-#include "ProgramOptions.hpp"
 #include "Tool.hpp"
 
 namespace CppCoverage
 {
-	namespace
-	{
 		//-------------------------------------------------------------------------
 		std::wstring
 		GetAdviceMessage(const std::wstring& noFileSelectedMessage,
@@ -49,10 +47,9 @@ namespace CppCoverage
 				L"For additional help, see " + 
 				L"https://github.com/OpenCppCoverage/OpenCppCoverage/wiki/FAQ#coverage-report-is-empty.";
 		}
-	}
 
 	//-------------------------------------------------------------------------
-	class FilterAssistant::SuggestedFilter
+	class VCOV_FILTEREXPORT_DLL FilterAssistant::SuggestedFilter
 	{
 	  public:
 		//---------------------------------------------------------------------

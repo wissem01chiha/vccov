@@ -19,7 +19,7 @@
 #include <vector>
 #include <memory>
 #include <filesystem>
-#include "ExporterExport.hpp"
+#include "ExportExport.h"
 
 namespace Plugin
 {
@@ -29,7 +29,7 @@ namespace Plugin
 namespace Plugin
 {
 
-	class EXPORTER_DLL ModuleCoverage
+	class VCOV_EXPORTEXPORT_DLL ModuleCoverage
 	{
 	public:
 		typedef std::vector<std::unique_ptr<FileCoverage>> T_FileCoverageCollection;

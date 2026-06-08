@@ -26,12 +26,10 @@ namespace po = boost::program_options;
 
 namespace CppCoverage
 {
-	namespace
-	{
 		using T_Strings = std::vector<std::string>;
 		
 		//---------------------------------------------------------------------
-		void FillGenericOptions(po::options_description& options)
+		VCOV_OPTIONEXPORT_DLL void FillGenericOptions(po::options_description& options)
 		{			
 			options.add_options()
 				((ProgramOptions::VerboseOption + "," + ProgramOptions::VerboseShortOption).c_str(), "Verbose mode.")
@@ -41,7 +39,7 @@ namespace CppCoverage
 		}
 
 		//---------------------------------------------------------------------
-		std::string GetUnifiedDiffHelp()
+		VCOV_OPTIONEXPORT_DLL std::string GetUnifiedDiffHelp()
 		{
 			return std::string("Format: <unifiedDiffPath>") +
 				OptionsParser::PathSeparator +
@@ -101,7 +99,6 @@ namespace CppCoverage
 				(ProgramOptions::ProgramToRunOption.c_str(), po::value<std::string>())
 				(ProgramOptions::ProgramToRunArgOption.c_str(), po::value<T_Strings>());
 		}
-	}
 
 	//-------------------------------------------------------------------------
 	const std::string ProgramOptions::SelectedModulesOption = "modules";

@@ -18,13 +18,12 @@
 
 #include <Windows.h>
 #include <boost/optional.hpp>
-
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 #include "StartInfo.hpp"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL Process
+	class VCOV_COREEXPORT_DLL Process
 	{
 	public:
 		static const std::wstring CannotFindPathMessage;

@@ -19,11 +19,11 @@
 #include <filesystem>
 #include <boost/optional/optional.hpp>
 #include <optional>
-#include "CppCoverageExport.hpp"
+#include "OptionExport.h"
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL UnifiedDiffSettings
+	class VCOV_OPTIONEXPORT_DLL UnifiedDiffSettings
 	{
 	public:
 		UnifiedDiffSettings(

@@ -19,10 +19,11 @@
 #include <boost/program_options/variables_map.hpp>
 #include "Tool.hpp"
 #include "CppCoverageException.hpp"
+#include "OptionExport.h"
 
 namespace CppCoverage
 {
-	class ProgramOptionsVariablesMap
+	class VCOV_OPTIONEXPORT_DLL ProgramOptionsVariablesMap
 	{
 	  public:
 		//---------------------------------------------------------------------

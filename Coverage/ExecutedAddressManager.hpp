@@ -17,7 +17,7 @@
 #pragma once
 
 #include "CoverageData.hpp"
-#include "CppCoverageExport.hpp"
+#include "CoverageExport.h"
 #include <boost/optional.hpp>
 #include <map>
 #include <set>
@@ -29,7 +29,7 @@ namespace CppCoverage
 	class FileCoverage;
 	class Address;
 
-	class CPPCOVERAGE_DLL ExecutedAddressManager
+	class VCOV_COVERAGEEXPORT_DLL ExecutedAddressManager
 	{
 	public:
 		ExecutedAddressManager();

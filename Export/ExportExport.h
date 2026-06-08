@@ -16,15 +16,12 @@
 
 #pragma once
 
-#define CPPCOVERAGE_EXPORTS
+#include "VcovExport.h"
 
-#ifdef CPPCOVERAGE_EXPORTS
-#define CPPCOVERAGE_DLL __declspec(dllexport)
+#ifdef VCOV_EXPORTEXPORT
+#define VCOV_EXPORTEXPORT_DLL __declspec(dllexport)
 #else
-#define CPPCOVERAGE_DLL _declspec(dllimport)
+#define VCOV_EXPORTEXPORT_DLL __declspec(dllimport)
 #endif
 
 #pragma warning (disable: 4251)
-
-
-

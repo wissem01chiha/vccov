@@ -19,15 +19,14 @@
 #include <string>
 #include <vector>
 #include <memory>
-
-#include "CppCoverageExport.hpp"
+#include "FilterExport.h"
 
 namespace CppCoverage
 {
 	class CoverageFilterSettings;
 	class Patterns;
 
-	class CPPCOVERAGE_DLL WildcardCoverageFilter
+	class VCOV_FILTEREXPORT_DLL WildcardCoverageFilter
 	{
 	public:
 		explicit WildcardCoverageFilter(const CoverageFilterSettings&);

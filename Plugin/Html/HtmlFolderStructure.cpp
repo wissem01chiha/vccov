@@ -26,7 +26,7 @@
 namespace fs = std::filesystem;
 
 namespace Exporter {
-namespace {
+
 //---------------------------------------------------------------------
 void CopyRecursiveDirectoryContent(const fs::path &from, const fs::path &to) {
   fs::create_directories(to);
@@ -44,7 +44,6 @@ void CopyRecursiveDirectoryContent(const fs::path &from, const fs::path &to) {
       fs::copy_file(path, destination, fs::copy_options::overwrite_existing);
   }
 }
-} // namespace
 
 //-------------------------------------------------------------------------
 struct HtmlFolderStructure::Hierarchy {

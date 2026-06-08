@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "ExporterExport.hpp"
+#include "PluginExport.h"
 #include <memory>
 #include <vector>
 #include <string>
@@ -39,7 +39,7 @@ namespace Exporter
 	template <typename T>
 	class LoadedPlugin;
 
-	class EXPORTER_DLL ExporterPluginManager
+	class VCOV_PLUGINEXPORT_DLL ExporterPluginManager
 	{
 	  public:
 		explicit ExporterPluginManager(const IPluginLoader<Plugin::IExportPlugin>&,

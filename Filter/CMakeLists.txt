@@ -38,13 +38,14 @@ set(headers
     UnifiedDiffCoverageFilter.hpp
     UnifiedDiffParser.hpp
     UnifiedDiffParserException.hpp
+    FilterExport.h
 )
 
 vcov_module_add_module(Filter CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Filter 
     DEPENDENCIES 
-        vcov::Core 
-        vcov::Option
-        vcov::Common
+        Common    
+        Core 
+        Option
 )
-#vcov_add_test(Filter)
+vcov_add_test(Filter)

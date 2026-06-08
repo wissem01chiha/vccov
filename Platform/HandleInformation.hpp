@@ -16,13 +16,13 @@
 
 #pragma once
 
-#include "PlatformExports.hpp"
+#include "PlatformExport.h"
 #include <string>
 #include <Windows.h>
 
 namespace CppCoverage
 {
-	class PLATFORM_DLL HandleInformation
+	class VCOV_PLATFORMEXPORT_DLL HandleInformation
 	{
 	public:
 		HandleInformation();

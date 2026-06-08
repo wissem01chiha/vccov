@@ -17,18 +17,16 @@
 #pragma once
 
 #include <boost/optional/optional.hpp>
-
 #include <unordered_map>
 #include <Windows.h>
-#include "CppCoverageExport.hpp"
-
+#include "CoreExport.h"
 
 namespace CppCoverage
 {
 	class StartInfo;
 	class IDebugEventsHandler;
 
-	class CPPCOVERAGE_DLL Debugger
+	class VCOV_COREEXPORT_DLL Debugger
 	{
 	public:
 		Debugger(

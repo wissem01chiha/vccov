@@ -16,11 +16,11 @@
 
 #pragma once
 
-#include "ExporterExport.hpp"
+#include "ExportExport.h"
 
 namespace Plugin
 {
-	class EXPORTER_DLL LineCoverage
+	class VCOV_EXPORTEXPORT_DLL LineCoverage
 	{
 	public:
 		LineCoverage(unsigned int lineNumber, bool hasBeenExecuted);

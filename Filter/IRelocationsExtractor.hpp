@@ -18,11 +18,11 @@
 
 #include <windows.h>
 #include <unordered_set>
-#include "FileFilterExport.hpp"
+#include "FilterExport.h"
 
 namespace FileFilter
 {
-	class FILEFILTER_DLL IRelocationsExtractor
+	class VCOV_FILTEREXPORT_DLL IRelocationsExtractor
 	{
 	public:
 		~IRelocationsExtractor() {}

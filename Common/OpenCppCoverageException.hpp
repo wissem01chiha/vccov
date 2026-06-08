@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "tools/ExceptionBase.hpp"
+#include "ExceptionBase.hpp"
 
 GENERATE_EXCEPTION_CLASS(CppCoverageConsole, CppCoverageConsoleException);
 

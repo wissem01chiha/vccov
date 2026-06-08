@@ -16,13 +16,12 @@
 
 #pragma once
 
-#include "ToolsExport.hpp"
-
+#include "CommonExport.h"
 #include <Windows.h>
 
 namespace Tools
 {
-	class IPEFileHeaderHandler
+	class VCOV_COMMONEXPORT_DLL IPEFileHeaderHandler
 	{
 	  public:
 		virtual ~IPEFileHeaderHandler() = default;
@@ -34,7 +33,7 @@ namespace Tools
 		                          const IMAGE_NT_HEADERS64&) = 0;
 	};
 
-	class TOOLS_DLL PEFileHeader
+	class VCOV_COMMONEXPORT_DLL PEFileHeader
 	{
 	  public:
 		void

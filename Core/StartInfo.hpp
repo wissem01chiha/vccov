@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 #include <boost/optional.hpp>
 #include <filesystem>
 #include <iosfwd>
@@ -25,7 +25,7 @@
 
 namespace CppCoverage
 {
-	class CPPCOVERAGE_DLL StartInfo
+	class VCOV_COREEXPORT_DLL StartInfo
 	{
 	public:
 		explicit StartInfo(const std::filesystem::path&);
@@ -42,7 +42,7 @@ namespace CppCoverage
 		const std::vector<std::wstring>& GetArguments() const;
 		const std::filesystem::path* GetWorkingDirectory() const;
 
-		friend CPPCOVERAGE_DLL std::wostream& operator<<(std::wostream& ostr, const StartInfo&);
+		friend VCOV_COREEXPORT_DLL std::wostream& operator<<(std::wostream& ostr, const StartInfo&);
 
 	private:
 		std::filesystem::path path_;

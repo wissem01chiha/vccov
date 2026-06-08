@@ -20,8 +20,7 @@
 #include <iosfwd>
 #include <map>
 #include <memory>
-
-#include "CppCoverageExport.hpp"
+#include "OptionExport.h"
 
 namespace Tools
 {
@@ -40,11 +39,11 @@ namespace CppCoverage
 {
 	class Options;
 	class ProgramOptions;
-	enum class OptionsExportType;
+	enum  class OptionsExportType;
 	class IOptionParser;
 	class ProgramOptionsVariablesMap;
 
-	class CPPCOVERAGE_DLL OptionsParser
+	class VCOV_OPTIONEXPORT_DLL OptionsParser
 	{
 	public:
 		static const char PathSeparator;

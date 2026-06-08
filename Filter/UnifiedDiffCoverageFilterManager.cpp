@@ -28,8 +28,6 @@
 
 namespace CppCoverage
 {
-	namespace
-	{
 		//---------------------------------------------------------------------
 		template <typename Container, typename Fct>
 		bool AnyOfOrTrueIfEmpty(const Container& container, Fct fct)
@@ -79,7 +77,6 @@ namespace CppCoverage
 				ostr << value << ' ';
 			return ostr.str();
 		}
-	}
 
 	//-------------------------------------------------------------------------
 	UnifiedDiffCoverageFilterManager::UnifiedDiffCoverageFilterManager(

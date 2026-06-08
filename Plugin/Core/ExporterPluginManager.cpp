@@ -26,8 +26,6 @@
 
 namespace Exporter
 {
-	namespace
-	{
 		//---------------------------------------------------------------------
 		std::string
 		InvalidPluginError(const std::optional<std::string>& functionName,
@@ -83,7 +81,6 @@ namespace Exporter
 				    InvalidPluginError(functionName, error, pluginPath));
 			}
 		}
-	}
 
 	//-------------------------------------------------------------------------
 	ExporterPluginManager::ExporterPluginManager(

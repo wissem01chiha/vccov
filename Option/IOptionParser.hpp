@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "OptionExport.h"
 
 namespace boost
 {
@@ -31,7 +31,7 @@ namespace CppCoverage
 	class Options;
 	class ProgramOptionsVariablesMap;
 
-	class CPPCOVERAGE_DLL IOptionParser
+	class VCOV_OPTIONEXPORT_DLL IOptionParser
 	{
 	  public:
 		virtual ~IOptionParser() = default;

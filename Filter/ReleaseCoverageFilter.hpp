@@ -16,10 +16,11 @@
 
 #pragma once
 
-#include "FileFilterExport.hpp"
+#include "FilterExport.h"
 #include <unordered_set>
 #include <unordered_map>
 #include <memory>
+#include <minwindef.h>
 #include <filesystem>
 
 namespace FileFilter
@@ -29,7 +30,7 @@ namespace FileFilter
 	class FileInfo;
 	class LineInfo;
 
-	class FILEFILTER_DLL ReleaseCoverageFilter
+	class VCOV_FILTEREXPORT_DLL ReleaseCoverageFilter
 	{
 	public:
 		ReleaseCoverageFilter();

@@ -17,7 +17,7 @@
 #pragma once
 
 #include "CoverageData.hpp"
-#include "CppCoverageExport.hpp"
+#include "CoverageExport.h"
 #include "IDebugEventsHandler.hpp"
 #include <memory>
 
@@ -39,7 +39,7 @@ namespace CppCoverage
 	class MonitoredLineRegister;
 	class FilterAssistant;
 
-	class CPPCOVERAGE_DLL CodeCoverageRunner : private IDebugEventsHandler
+	class VCOV_COVERAGEEXPORT_DLL CodeCoverageRunner : private IDebugEventsHandler
 	{
 	public:
 		explicit CodeCoverageRunner(std::shared_ptr<Tools::WarningManager>);

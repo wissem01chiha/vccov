@@ -16,10 +16,8 @@
 
 #pragma once
 
-#include "FileFilterExport.hpp"
-
+#include "FilterExport.h"
 #include <vector>
-
 #include <boost/optional/optional_fwd.hpp>
 #include <filesystem>
 #include "PathMatcher.hpp"
@@ -28,7 +26,7 @@ namespace FileFilter
 {
 	class File;
 
-	class FILEFILTER_DLL UnifiedDiffCoverageFilter
+	class VCOV_FILTEREXPORT_DLL UnifiedDiffCoverageFilter
 	{
 	public:
 		UnifiedDiffCoverageFilter(

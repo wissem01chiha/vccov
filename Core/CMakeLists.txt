@@ -25,14 +25,15 @@ set(headers
     CppCoverageException.hpp
     Patterns.hpp
     Wildcards.hpp
+    CoreExport.h
 )
 
 vcov_module_add_module(Core CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Core
     DEPENDENCIES    
-        vcov::Common
+        Common
 )
-message(STATUS "this are DIA libs ${DIA_LIBRARIES}")
-#target_link_libraries(Core PUBLIC ${DIA_LIBRARIES})
-target_include_directories(Core PUBLIC ${DIA_INCLUDE_DIRS})
+
+target_link_libraries(Core PUBLIC ${Dia_LIBRARIES})
+target_include_directories(Core PUBLIC ${Dia_INCLUDE_DIRS})
 vcov_add_test(Core)

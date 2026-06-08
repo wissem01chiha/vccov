@@ -18,6 +18,8 @@ function (vcov_module_add_module name)
         set(_vcov_SOURCES ${_vcov_SOURCES} ${_vcov_CLASSES})
         if(BUILD_SHARED_LIBS)
             add_library(${name} SHARED)
+            string(TOUPPER "${name}" _vcov_upper_name)
+            target_compile_definitions(${name} PRIVATE VCOV_${_vcov_upper_name}EXPORT)
         else()
             add_library(${name} STATIC)
         endif()
@@ -26,6 +28,7 @@ function (vcov_module_add_module name)
             ${Boost_INCLUDE_DIRS} 
             ${CMAKE_CURRENT_SOURCE_DIR} 
             ${CMAKE_CURRENT_BINARY_DIR}
+            ${CMAKE_BINARY_DIR}
         )
         target_link_libraries(${name} PUBLIC ${Boost_LIBRARIES})
     else()
@@ -34,6 +37,7 @@ function (vcov_module_add_module name)
         target_include_directories(${name} INTERFACE 
             ${Boost_INCLUDE_DIRS} 
             ${CMAKE_CURRENT_BINARY_DIR}
+            ${CMAKE_BINARY_DIR}
         )
     endif()
     add_library(vcov::${name} ALIAS ${name})

@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "FileFilterExport.hpp"
+#include "FilterExport.h"
 #include <filesystem>
 
 #pragma warning(push)
@@ -24,7 +24,7 @@
 
 namespace FileFilter
 {	
-	class FILEFILTER_DLL AmbiguousPathException : public std::runtime_error
+	class VCOV_FILTEREXPORT_DLL AmbiguousPathException : public std::runtime_error
 	{
 	public:		
 		AmbiguousPathException(

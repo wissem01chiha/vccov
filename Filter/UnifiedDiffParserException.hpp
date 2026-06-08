@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "FileFilterExport.hpp"
+#include "FilterExport.h"
 #include <string>
 #include <stdexcept>
 
@@ -25,7 +25,7 @@
 
 namespace FileFilter
 {
-	class FILEFILTER_DLL UnifiedDiffParserException : public std::runtime_error
+	class VCOV_FILTEREXPORT_DLL UnifiedDiffParserException : public std::runtime_error
 	{
 	public:
 		static const std::wstring ErrorContextHunks;

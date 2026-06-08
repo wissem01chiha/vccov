@@ -16,13 +16,13 @@
 
 #pragma once
 
-#include "ToolsExport.hpp"
+#include "CommonExport.h"
 #include <string>
 #include <vector>
 
 namespace Tools
 {
-	class TOOLS_DLL WarningManager
+	class VCOV_COMMONEXPORT_DLL WarningManager
 	{
 	public:
 		WarningManager() = default;

@@ -16,14 +16,14 @@
 
 #pragma once
 
-#include "ExporterExport.hpp"
+#include "HtmlExport.h"
 #include "HtmlFile.hpp"
 #include <filesystem>
 #include <memory>
 
 namespace Exporter
 {	
-	class EXPORTER_DLL HtmlFolderStructure
+	class VCOV_HTMLEXPORT_DLL HtmlFolderStructure
 	{
 	public:
 		static const std::wstring ThirdParty;

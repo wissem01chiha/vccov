@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 #include <iosfwd>
 #include <map>
 #include <string>
@@ -25,7 +25,7 @@
 
 namespace CppCoverage
 {	
-	enum class ExceptionHandlerStatus
+	enum class VCOV_COREEXPORT_DLL ExceptionHandlerStatus
 	{		
 		BreakPoint,
 		FirstChanceException,
@@ -33,7 +33,7 @@ namespace CppCoverage
 		CppError
 	};
 
-	class CPPCOVERAGE_DLL ExceptionHandler
+	class VCOV_COREEXPORT_DLL ExceptionHandler
 	{
 	public:
 		static const std::wstring UnhandledExceptionErrorMessage;

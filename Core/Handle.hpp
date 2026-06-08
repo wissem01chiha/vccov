@@ -19,6 +19,7 @@
 #include "CppCoverageException.hpp"
 #include "Log.hpp"
 #include "Tool.hpp"
+#include "CoreExport.h"
 #include <boost/optional/optional.hpp>
 
 namespace CppCoverage

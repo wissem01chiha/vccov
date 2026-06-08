@@ -30,7 +30,6 @@ namespace property_tree = boost::property_tree;
 namespace fs = std::filesystem;
 
 namespace Exporter {
-namespace {
 //-------------------------------------------------------------------------
 property_tree::wptree &AddChild(property_tree::wptree &tree,
                                 const std::wstring &name) {
@@ -141,7 +140,6 @@ void FillCoverageTree(property_tree::wptree &root,
     }
   }
 }
-} // namespace
 
 //-------------------------------------------------------------------------
 CoberturaExporter::CoberturaExporter() = default;

@@ -16,7 +16,6 @@
 
 #include "stdafx.h"
 #include "OptionsExport.hpp"
-
 #include <map>
 #include <iostream>
 

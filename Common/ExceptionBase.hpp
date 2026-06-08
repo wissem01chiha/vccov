@@ -19,22 +19,21 @@
 #include <exception>
 #include <string>
 #include <sstream>
-
-#include "ToolsExport.hpp"
+#include "CommonExport.h"
 
 #pragma warning(push)
-#pragma warning(disable: 4275) // warning C4275: non dll-interface class 'std::exception' used as base for dll-interface class
+//#pragma warning(disable: 4275) // warning C4275: non dll-interface class 'std::exception' used as base for dll-interface class
 
 namespace Tools
 {
 
-	class TOOLS_DLL ExceptionBase : public std::exception
+	class VCOV_COMMONEXPORT_DLL ExceptionBase : public std::exception
 	{
 	protected:
 		ExceptionBase(const std::wstring& message);
 	};
 
-	TOOLS_DLL std::wstring GetFilename(const char*);
+	VCOV_COMMONEXPORT_DLL std::wstring GetFilename(const char*);
 }
 
 #pragma warning(pop)

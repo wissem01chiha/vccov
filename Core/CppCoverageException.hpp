@@ -16,13 +16,13 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 #include "ExceptionBase.hpp"
 #include <string>
 
 namespace CppCoverage
 {
-	CPPCOVERAGE_DLL std::wstring GetErrorMessage(int errorCode);
+	VCOV_COREEXPORT_DLL std::wstring GetErrorMessage(int errorCode);
 }
 
 

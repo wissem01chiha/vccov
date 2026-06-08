@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include "CppCoverageExport.hpp"
+#include "OptionExport.h"
 #include "OptionsExport.hpp"
 #include "Patterns.hpp"
 #include "StartInfo.hpp"
@@ -36,7 +36,7 @@ namespace CppCoverage
 		Verbose
 	};
 
-	class CPPCOVERAGE_DLL Options
+	class VCOV_OPTIONEXPORT_DLL Options
 	{
 	public:
 		Options(
@@ -87,7 +87,7 @@ namespace CppCoverage
 		void AddSubstitutePdbSourcePath(SubstitutePdbSourcePath&&);
 		const std::vector<SubstitutePdbSourcePath>& GetSubstitutePdbSourcePaths() const;
 
-		friend CPPCOVERAGE_DLL std::wostream& operator<<(std::wostream&, const Options&);
+		friend VCOV_OPTIONEXPORT_DLL std::wostream& operator<<(std::wostream&, const Options&);
 
 	private:
 		Options(const Options&) = delete;

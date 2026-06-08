@@ -17,7 +17,8 @@
 #pragma once
 
 #include <filesystem>
-#include "ExporterExport.hpp"
+#include "HtmlExport.h"
+#include "CTemplate.hpp"
 #include "TemplateHtmlExporter.hpp"
 #include "HtmlFileCoverageExporter.hpp"
 #include "IExporter.hpp"
@@ -44,7 +45,7 @@ namespace Exporter
 {
 	class HtmlFolderStructure;
 
-	class EXPORTER_DLL HtmlExporter: public IExporter
+	class VCOV_HTMLEXPORT_DLL HtmlExporter: public IExporter
 	{
 	public:
 		static const std::wstring WarningExitCodeMessage;

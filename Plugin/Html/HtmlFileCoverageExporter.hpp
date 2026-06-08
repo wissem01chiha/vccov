@@ -18,7 +18,7 @@
 
 #include <iosfwd> 
 #include <string>
-#include "ExporterExport.hpp"
+#include "HtmlExport.h"
 
 namespace Plugin
 {
@@ -27,7 +27,7 @@ namespace Plugin
 
 namespace Exporter
 {
-	class EXPORTER_DLL HtmlFileCoverageExporter
+	class VCOV_HTMLEXPORT_DLL HtmlFileCoverageExporter
 	{
 	public:
 		static const std::wstring StyleBackgroundColorExecuted;

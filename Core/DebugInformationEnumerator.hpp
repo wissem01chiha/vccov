@@ -17,8 +17,7 @@
 #pragma once
 
 #include <filesystem>
-
-#include "CppCoverageExport.hpp"
+#include "CoreExport.h"
 #include "SubstitutePdbSourcePath.hpp"
 
 struct IDiaSession;
@@ -28,7 +27,7 @@ struct IDiaSourceFile;
 namespace CppCoverage
 {
 	//-------------------------------------------------------------------------
-	class IDebugInformationHandler
+	class VCOV_COREEXPORT_DLL IDebugInformationHandler
 	{
 	  public:
 		struct Line
@@ -57,7 +56,7 @@ namespace CppCoverage
 	};
 
 	//-------------------------------------------------------------------------
-	class CPPCOVERAGE_DLL DebugInformationEnumerator
+	class VCOV_COREEXPORT_DLL DebugInformationEnumerator
 	{
 	  public:
 		explicit DebugInformationEnumerator(const std::vector<SubstitutePdbSourcePath>&);

@@ -19,7 +19,6 @@
 #include <windows.h>
 #include <vector>
 #include <filesystem>
-
 #include "LineInfo.hpp"
 
 namespace FileFilter

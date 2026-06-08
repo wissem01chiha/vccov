@@ -17,14 +17,13 @@
 #pragma once
 
 #include <boost/program_options.hpp>
-
-#include "CppCoverageExport.hpp"
+#include "OptionExport.h"
 
 namespace CppCoverage
 {
 	class IOptionParser;
 
-	class CPPCOVERAGE_DLL ProgramOptions
+	class VCOV_OPTIONEXPORT_DLL ProgramOptions
 	{
 	public:
 		static const std::string SelectedModulesOption;
@@ -61,7 +60,7 @@ namespace CppCoverage
 
 		void FillVariableMap(std::istream&, boost::program_options::variables_map& variables) const;
 				
-		friend CPPCOVERAGE_DLL std::wostream& operator<<(std::wostream&, const ProgramOptions&);
+		friend VCOV_OPTIONEXPORT_DLL std::wostream& operator<<(std::wostream&, const ProgramOptions&);
 
 	private:
 		ProgramOptions(const ProgramOptions&) = delete;

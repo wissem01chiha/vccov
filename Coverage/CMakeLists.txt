@@ -17,16 +17,19 @@ set(headers
     CoverageDataMerger.hpp
     CodeCoverageRunner.hpp
     RunCoverageSettings.hpp
+    CoverageExport.h
 )
 
 vcov_module_add_module(Coverage CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Coverage
     DEPENDENCIES
-        vcov::Core
-        vcov::Common
-        vcov::Filter
-        vcov::Plugin
-        vcov::Binary
-        vcov::Platform
+        Core
+        Common
+        Filter
+        Plugin
+        Binary
+        Platform
+        Export
+        Option
 )
 vcov_add_test(Coverage)

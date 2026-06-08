@@ -19,6 +19,7 @@
 #include <string>
 #include <optional>
 #include <filesystem>
+#include "PluginExport.h"
 
 namespace Plugin
 {
@@ -27,7 +28,7 @@ namespace Plugin
 	//-------------------------------------------------------------------------
 	// This is the interface to implement a new export type.
 	//-------------------------------------------------------------------------
-	class IExportPlugin
+	class VCOV_PLUGINEXPORT_DLL IExportPlugin
 	{
 	  public:
 		virtual ~IExportPlugin() = default;

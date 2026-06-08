@@ -18,14 +18,14 @@
 
 #include <windows.h>
 #include <unordered_set>
-#include "FileFilterExport.hpp"
+#include "FilterExport.h"
 #include "IRelocationsExtractor.hpp"
 
 namespace FileFilter
 {
 	class IRelocationsExtractor;
 
-	class FILEFILTER_DLL RelocationsExtractor: public IRelocationsExtractor
+	class VCOV_FILTEREXPORT_DLL RelocationsExtractor: public IRelocationsExtractor
 	{
 	public:
 	  std::unordered_set<DWORD64> Extract(HANDLE hProcess,

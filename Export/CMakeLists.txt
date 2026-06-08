@@ -15,6 +15,7 @@ set(headers
     FileCoverage.hpp
     ModuleCoverage.hpp
     LineCoverage.hpp
+    ExportExport.h
     stdafx.h
 )
 

@@ -19,7 +19,7 @@
 #ifdef TEST_HELPER_EXPORTS
 #define TEST_HELPER_DLL __declspec(dllexport)
 #else
-#define TEST_HELPER_DLL _declspec(dllimport)
+#define TEST_HELPER_DLL __declspec(dllimport)
 #endif
 
 #pragma warning (disable: 4251)
