@@ -21,6 +21,7 @@
 #include <iostream>
 #include "MiniDump.hpp"
 #include "OpenCppCoverage.hpp"
+#include "Log.hpp"
 
 //-----------------------------------------------------------------------------
 int main(int argc, const char* argv[])

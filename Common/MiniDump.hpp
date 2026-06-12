@@ -17,9 +17,17 @@
 #pragma once
 
 #include "CommonExport.h"
+#include <DbgHelp.h>
 
 namespace Tools
-{
+{	
+	VCOV_COMMONEXPORT_DLL MINIDUMP_TYPE GetMiniDumpDefaultType();
+
+	VCOV_COMMONEXPORT_DLL void CreateMiniDump(MINIDUMP_EXCEPTION_INFORMATION& minidumpInfo, 
+			HANDLE hFile, const wchar_t* dmpFilename);
+	
+	VCOV_COMMONEXPORT_DLL LONG WINAPI CreateMiniDumpOnUnHandledException(PEXCEPTION_POINTERS exceptionInfo);
+
 	VCOV_COMMONEXPORT_DLL void CreateMiniDumpOnUnHandledException();
 }
 

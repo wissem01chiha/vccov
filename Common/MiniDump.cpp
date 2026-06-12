@@ -17,17 +17,15 @@
 #include "stdafx.h"
 #include "MiniDump.hpp"
 #include <iostream>
-
 #pragma warning(push)
 #pragma warning(disable: 4091) // 'typedef ': ignored on left of '' when no variable is declared
-#include <DbgHelp.h>
 #pragma warning(pop)
 
 namespace Tools
 {
 
 		//-----------------------------------------------------------------------------
-		VCOV_COMMONEXPORT_DLL MINIDUMP_TYPE GetMiniDumpDefaultType()
+		MINIDUMP_TYPE GetMiniDumpDefaultType()
 		{
 			return static_cast<MINIDUMP_TYPE>(MiniDumpWithDataSegs |
 				MiniDumpWithPrivateReadWriteMemory |
@@ -36,7 +34,7 @@ namespace Tools
 		}
 
 		//-----------------------------------------------------------------------------
-		VCOV_COMMONEXPORT_DLL void CreateMiniDump(
+		void CreateMiniDump(
 			MINIDUMP_EXCEPTION_INFORMATION& minidumpInfo, 
 			HANDLE hFile, 			
 			const wchar_t* dmpFilename)
@@ -63,7 +61,7 @@ namespace Tools
 		}
 		
 		//-----------------------------------------------------------------------------
-		VCOV_COMMONEXPORT_DLL LONG WINAPI CreateMiniDumpOnUnHandledException(PEXCEPTION_POINTERS exceptionInfo)
+		LONG WINAPI CreateMiniDumpOnUnHandledException(PEXCEPTION_POINTERS exceptionInfo)
 		{
 			MINIDUMP_EXCEPTION_INFORMATION minidumpInfo;
 
@@ -87,7 +85,7 @@ namespace Tools
 		}	
 
 	//-------------------------------------------------------------------------
-	VCOV_COMMONEXPORT_DLL void CreateMiniDumpOnUnHandledException()
+	void CreateMiniDumpOnUnHandledException()
 	{
 		DWORD dwMode = GetErrorMode();
 		SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);

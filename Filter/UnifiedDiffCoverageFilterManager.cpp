@@ -16,7 +16,6 @@
 
 #include "stdafx.h"
 #include <sstream>
-
 #include "UnifiedDiffCoverageFilterManager.hpp"
 #include "UnifiedDiffSettings.hpp"
 #include "ProgramOptions.hpp"

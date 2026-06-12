@@ -29,8 +29,13 @@ function (vcov_module_add_module name)
             ${CMAKE_CURRENT_SOURCE_DIR} 
             ${CMAKE_CURRENT_BINARY_DIR}
             ${CMAKE_BINARY_DIR}
+            ${Dia_INCLUDE_DIRS}
         )
-        target_link_libraries(${name} PUBLIC ${Boost_LIBRARIES})
+        target_link_libraries(${name} PUBLIC 
+            ${Boost_LIBRARIES} 
+            ${Dia_LIBRARIES}
+            DbgHelp.lib
+        )
     else()
         add_library(${name} INTERFACE)
         target_sources(${name} INTERFACE ${_vcov_HEADERS})
@@ -38,6 +43,7 @@ function (vcov_module_add_module name)
             ${Boost_INCLUDE_DIRS} 
             ${CMAKE_CURRENT_BINARY_DIR}
             ${CMAKE_BINARY_DIR}
+            ${Dia_INCLUDE_DIRS}
         )
     endif()
     add_library(vcov::${name} ALIAS ${name})

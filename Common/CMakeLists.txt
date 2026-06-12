@@ -31,7 +31,5 @@ set(headers
     FileSystem.hpp
     CommonExport.h
 )
-
 vcov_module_add_module(Common CLASSES ${classes} HEADERS ${headers})
-target_link_libraries(Common PRIVATE DbgHelp.lib)
 vcov_add_test(Common)

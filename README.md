@@ -50,13 +50,16 @@ You can also have a look at [Command-line reference](https://github.com/OpenCppC
 
 ## Contribute
 
-* [Submit issues](contributing:submit-issue)
-* [Submit fixes](contributing:submit-pr)
+* [Submit issues](https://github.com/wissem01chiha/vcov/issues)
+* [Submit fixes](https://github.com/wissem01chiha/vcov/pulls)
   
+Please refer to our [maintainer guide](.github/CONTRIBUTING.md) for more details.
+
 ## Resources
 
 * Docs: [Wiki](https://github.com/wissem01chiha/vcov/wiki)
-* Source code: [vccov](../../releases)
+* Source code: [vcov](../../releases)
+* Email: [Contact](chihawissem08@gmail.com)
 
 ## License
 

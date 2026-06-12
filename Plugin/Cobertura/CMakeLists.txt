@@ -15,3 +15,4 @@ vcov_module_add_dependencies(Cobertura
         Plugin
         Coverage
 )
+vcov_add_test(Cobertura)

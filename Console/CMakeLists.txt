@@ -4,18 +4,19 @@ set(classes
 set(headers
     OpenCppCoverage.hpp
     ConsoleExport.h
+    stdafx.h
 )
 
 vcov_module_add_module(Console CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Console
     DEPENDENCIES 
+        Common
         Core
         Coverage
         Filter
         Option
         Export
         Platform
-        Common
         Cobertura
         Plugin
         Binary
@@ -24,5 +25,16 @@ vcov_module_add_dependencies(Console
 vcov_add_test(Console)
 
 add_executable(vcov  main.cpp)
-target_link_libraries(vcov PRIVATE Console DbgHelp.lib)
-target_include_directories(vcov PRIVATE ${DIA_INCLUDE_DIRS} )
+target_link_libraries(vcov PRIVATE Console 
+    Common
+    Core
+    Coverage
+    Filter
+    Option
+    Export
+    Platform
+    Cobertura
+    Plugin
+    Binary
+    Html
+)

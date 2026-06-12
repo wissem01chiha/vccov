@@ -1,6 +1,6 @@
 OpenCppCoverage <OpenCppCoverage@gmail.com>
 Olivier <Olivier@email.com>
-wissem chiha <chihawissem08@gmail.com>
+Wissem Chiha <chihawissem08@gmail.com>
 Marvin Wunderlich <opidopiopi@gmail.com>
 Patan Amrulla Khan <pamrulla@gmail.com>
 Wolfgang Kleinschmit <wolfgang@kleinschmit.info>

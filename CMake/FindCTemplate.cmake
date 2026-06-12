@@ -15,13 +15,15 @@
 # Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
 # 02110-1301  USA
 
-# - Find ctemplate
+#=======================================================================]
+# Find CTemplate
+#
 # Find the native CTemplate includes and library
 #
 #  CTemplate_INCLUDE_DIRS - where to find template_annotator.h, etc.
 #  CTemplate_LIBRARIES    - List of libraries when using ctemplate.
 #  CTemplate_FOUND        - True if ctemplate found.
-
+#==========================================================================]
 
 if(CTemplate_INCLUDE_DIRS)
   # Already in cache, be silent
@@ -42,7 +44,6 @@ set(CTemplate_NAMES ctemplate)
 if(CTemplate_LIBRARIES)
   # Converto to a list of library argments
   string(REPLACE " " ";" CTemplate_LIB_ARGS ${CTemplate_LIBRARIES})
-
   # Parse the list in order to find the library path
   foreach(CTemplate_LIB_ARG ${CTemplate_LIB_ARGS})
     string(REPLACE "-L" "" CTemplate_LIB_ARG_CLEAR ${CTemplate_LIB_ARG})
@@ -102,7 +103,7 @@ find_package_handle_standard_args(CTemplate
                                   VERSION_VAR CTemplate_VERSION_STRING)
 
 if(CTemplate_FOUND)
-  set(CTemplate_LIBRARIES "-L${CTemplate_LIB_DIRECTORY} -l${CTemplate_NAMES}")
+  set(CTemplate_LIBRARIES "${CTemplate_LIB_DIRECTORY}/lib${CTemplate_NAMES}.lib")
   set(CTemplate_INCLUDE_DIRS ${CTemplate_INCLUDE_DIR})
 else(CTemplate_FOUND)
   unset(CTemplate_LIBRARIES)

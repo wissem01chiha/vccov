@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.20...3.31 FATAL_ERROR)
 
 project(vcov LANGUAGES C CXX)
 
+if(NOT WIN32)
+    message(FATAL_ERROR "vcov is only supported on Windows.")
+endif()
+
 set(PROJECT_VERSION "0.9.10.0")
 set(PROJECT_HOMEPAGE_URL "https://github.com/wissem01chiha/vccov")
 set(PROJECT_DESCRIPTION "Open-Source Code Coverage for Visual C++ on Windows")
@@ -19,20 +23,15 @@ option(VCOV_ASAN "Enable AddressSanitizer (ASan)" OFF)
 option(VCOV_MSAN "Enable MemorySanitizer (MSan)" OFF)
 option(VCOV_UBSAN "Enable UndefinedBehaviorSanitizer (UBSan)" OFF)
 
-get_property(IS_MULTI_CONFIG GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
-if(NOT IS_MULTI_CONFIG AND NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Build type" FORCE)
-    message(STATUS "No build type specified, using Release")
-endif()
-
-
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake")
 
-include(CTest)
 include(GNUInstallDirs)
 include(Module)
 include(Sanitizer)
-include(Testing)
+if(VCOV_BUILD_TESTS)
+    include(CTest)
+    include(Testing)
+endif()
 include(Install)
 
 find_package(Dia REQUIRED)
@@ -51,7 +50,9 @@ find_package(Boost 1.83 REQUIRED COMPONENTS
     property_tree 
     spirit 
     uuid)
-find_package(GTest 1.17.0 REQUIRED)
+if(VCOV_BUILD_TESTS)
+    find_package(GTest 1.17.0 REQUIRED)
+endif()
 find_package(Protobuf CONFIG REQUIRED)
 find_package(CTemplate REQUIRED)
 
@@ -64,6 +65,10 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/VcovExport.h.in
     ${CMAKE_CURRENT_BINARY_DIR}/VcovExport.h
 )
 
+if(VCOV_BUILD_TESTS)
+    add_subdirectory(Utilities/Testing) 
+endif()
+
 add_subdirectory(Common)
 add_subdirectory(Core)
 add_subdirectory(Platform)
@@ -75,10 +80,15 @@ add_subdirectory(Plugin/Binary)
 add_subdirectory(Coverage)
 add_subdirectory(Plugin/Cobertura)
 add_subdirectory(Plugin/Html)
-# add_subdirectory(Console)
-# add_subdirectory(Utilities) 
-# add_subdirectory(Testing)
-# add_subdirectory(Examples)
+add_subdirectory(Console)
+
+if(VCOV_BUILD_TESTS)
+   # add_subdirectory(Testing)
+endif()
+
+if(VCOV_BUILD_EXAMPLES)
+    add_subdirectory(Examples)
+endif()
 
 message(STATUS "")
 message(STATUS "Vcov Build Summary")
@@ -86,7 +96,7 @@ message(STATUS "================================================================
 message(STATUS "Project Version:   ${PROJECT_VERSION}")
 message(STATUS "Platfrom:          ${CMAKE_GENERATOR_PLATFORM}")
 message(STATUS "Architecture:      ${CMAKE_SYSTEM_PROCESSOR}")
-message(STATUS "Build Type:        ${CMAKE_BUILD_TYPE}")
+message(STATUS "Available Configs: ${CMAKE_CONFIGURATION_TYPES}")
 message(STATUS "CMake Version:     ${CMAKE_VERSION}")
 message(STATUS "Compiler:          ${CMAKE_CXX_COMPILER_ID} ${CMAKE_CXX_COMPILER_VERSION}")
 message(STATUS "Protobuf Compiler: ${Protobuf_VERSION}")

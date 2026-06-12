@@ -33,7 +33,4 @@ vcov_module_add_dependencies(Core
     DEPENDENCIES    
         Common
 )
-
-target_link_libraries(Core PUBLIC ${Dia_LIBRARIES})
-target_include_directories(Core PUBLIC ${Dia_INCLUDE_DIRS})
 vcov_add_test(Core)

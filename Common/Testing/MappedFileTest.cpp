@@ -17,8 +17,7 @@
 #include "stdafx.h"
 #include "MappedFile.hpp"
 #include <fstream>
-
-#include "TestHelper/TemporaryPath.hpp"
+#include "TemporaryPath.hpp"
 
 namespace ToolsTests
 {

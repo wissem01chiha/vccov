@@ -13,5 +13,4 @@ vcov_module_add_dependencies(Platform
         Common
         Core
 )
-target_link_libraries(Platform PRIVATE ${DIA_LIBRARIES})
 vcov_add_test(Platform)
