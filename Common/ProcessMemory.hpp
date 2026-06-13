@@ -16,34 +16,29 @@
 
 #pragma once
 
+#include "CommonExport.h"
 #include <Windows.h>
 #include <memory>
 #include <vector>
-#include "CommonExport.h"
 
 namespace Tools
 {
-	VCOV_COMMONEXPORT_DLL void WriteProcessMemory(HANDLE hProcess,
-	                                  void* address,
-	                                  void* buffer,
-	                                  size_t size);
+    VCOV_COMMONEXPORT_DLL void WriteProcessMemory(HANDLE hProcess, void* address, void* buffer,
+                                                  size_t size);
 
-	VCOV_COMMONEXPORT_DLL std::vector<unsigned char>
-	ReadProcessMemory(HANDLE hProcess, void* address, size_t size);
+    VCOV_COMMONEXPORT_DLL std::vector<unsigned char> ReadProcessMemory(HANDLE hProcess,
+                                                                       void* address, size_t size);
 
-	VCOV_COMMONEXPORT_DLL void ReadProcessMemory(HANDLE hProcess,
-	                                 DWORD64 address,
-	                                 void* buffer,
-	                                 SIZE_T size);
+    VCOV_COMMONEXPORT_DLL void ReadProcessMemory(HANDLE hProcess, DWORD64 address, void* buffer,
+                                                 SIZE_T size);
 
-	//-------------------------------------------------------------------------
-	template <typename T>
-	std::unique_ptr<T> ReadStructInProcessMemory(HANDLE hProcess,
-	                                             DWORD64 address)
-	{
-		auto data = std::make_unique<T>();
-		::Tools::ReadProcessMemory(hProcess, address, data.get(), sizeof(T));
+    //-------------------------------------------------------------------------
+    template <typename T>
+    std::unique_ptr<T> ReadStructInProcessMemory(HANDLE hProcess, DWORD64 address)
+    {
+        auto data = std::make_unique<T>();
+        ::Tools::ReadProcessMemory(hProcess, address, data.get(), sizeof(T));
 
-		return data;
-	}
-}
+        return data;
+    }
+} // namespace Tools

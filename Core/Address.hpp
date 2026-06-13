@@ -17,30 +17,28 @@
 #pragma once
 
 #include "CoreExport.h"
-#include <ostream>
 #include <Windows.h>
+#include <ostream>
 
 namespace CppCoverage
 {
-	class VCOV_COREEXPORT_DLL Address
-	{
-	public:				
-		Address(HANDLE hProcess, void* value);
-		Address(const Address&) = default;
+    class VCOV_COREEXPORT_DLL Address
+    {
+      public:
+        Address(HANDLE hProcess, void* value);
+        Address(const Address&) = default;
 
-		HANDLE GetProcessHandle() const;
-		void* GetValue() const;
+        HANDLE GetProcessHandle() const;
+        void*  GetValue() const;
 
-		bool operator<(const Address& other) const;
-		friend VCOV_COREEXPORT_DLL std::wostream& operator<<(std::wostream&, const Address&);
+        bool                       operator<(const Address& other) const;
+        friend VCOV_COREEXPORT_DLL std::wostream& operator<<(std::wostream&, const Address&);
 
-	private:		
-		Address& operator=(const Address&) = delete;
+      private:
+        Address& operator=(const Address&) = delete;
 
-	private:
-		HANDLE hProcess_;
-		void* value_;
-	};
-}
-
-
+      private:
+        HANDLE hProcess_;
+        void*  value_;
+    };
+} // namespace CppCoverage

@@ -20,30 +20,29 @@
 #include <filesystem>
 
 #pragma warning(push)
-#pragma warning(disable: 4275) // warning C4275: non dll-interface class 'std::exception' used as base for dll-interface class
+#pragma warning(disable : 4275) // warning C4275: non dll-interface class 'std::exception'
+                                // used as base for dll-interface class
 
 namespace FileFilter
-{	
-	class VCOV_FILTEREXPORT_DLL AmbiguousPathException : public std::runtime_error
-	{
-	public:		
-		AmbiguousPathException(
-			const std::filesystem::path& postFixPath,
-			const std::filesystem::path& firstPossiblePath,
-			const std::filesystem::path& secondPossiblePath);
+{
+    class VCOV_FILTEREXPORT_DLL AmbiguousPathException : public std::runtime_error
+    {
+      public:
+        AmbiguousPathException(const std::filesystem::path& postFixPath,
+                               const std::filesystem::path& firstPossiblePath,
+                               const std::filesystem::path& secondPossiblePath);
 
-		AmbiguousPathException(const AmbiguousPathException&) = default;
+        AmbiguousPathException(const AmbiguousPathException&) = default;
 
-		const std::filesystem::path& GetPostFixPath() const;
-		const std::filesystem::path& GetFirstPossiblePath() const;
-		const std::filesystem::path& GetSecondPossiblePath() const;
+        const std::filesystem::path& GetPostFixPath() const;
+        const std::filesystem::path& GetFirstPossiblePath() const;
+        const std::filesystem::path& GetSecondPossiblePath() const;
 
-	private:
-		std::filesystem::path postFixPath_;
-		std::filesystem::path firstPossiblePath_;
-		std::filesystem::path secondPossiblePath_;
-	};	
-}
+      private:
+        std::filesystem::path postFixPath_;
+        std::filesystem::path firstPossiblePath_;
+        std::filesystem::path secondPossiblePath_;
+    };
+} // namespace FileFilter
 
 #pragma warning(pop)
-

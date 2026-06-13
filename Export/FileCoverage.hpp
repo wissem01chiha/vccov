@@ -23,26 +23,26 @@
 
 namespace Plugin
 {
-	class VCOV_EXPORTEXPORT_DLL FileCoverage
-	{
-	public:
-		explicit FileCoverage(const std::filesystem::path& path);
+    class VCOV_EXPORTEXPORT_DLL FileCoverage
+    {
+      public:
+        explicit FileCoverage(const std::filesystem::path& path);
 
-		void AddLine(unsigned int lineNumber, bool hasBeenExecuted);
-		void UpdateLine(unsigned int lineNumber, bool hasBeenExecuted);
+        void AddLine(unsigned int lineNumber, bool hasBeenExecuted);
+        void UpdateLine(unsigned int lineNumber, bool hasBeenExecuted);
 
-		const std::filesystem::path& GetPath() const;
-		const LineCoverage* operator[](unsigned int line) const;
-		std::vector<LineCoverage> GetLines() const;
+        const std::filesystem::path& GetPath() const;
+        const LineCoverage*          operator[](unsigned int line) const;
+        std::vector<LineCoverage>    GetLines() const;
 
-		FileCoverage& operator=(const FileCoverage&) = default;
+        FileCoverage& operator=(const FileCoverage&) = default;
 
-	private:
-		FileCoverage(const FileCoverage&) = delete;
-				
-	private:
-		std::filesystem::path path_;
-		std::map<unsigned int, LineCoverage> lines_;	
-	};
+      private:
+        FileCoverage(const FileCoverage&) = delete;
 
-};
+      private:
+        std::filesystem::path                path_;
+        std::map<unsigned int, LineCoverage> lines_;
+    };
+
+}; // namespace Plugin

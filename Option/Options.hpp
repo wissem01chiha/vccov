@@ -27,88 +27,85 @@
 
 namespace CppCoverage
 {
-	class Patterns;	
-	
-	enum class LogLevel
-	{
-		Quiet,
-		Normal,
-		Verbose
-	};
+    class Patterns;
 
-	class VCOV_OPTIONEXPORT_DLL Options
-	{
-	public:
-		Options(
-			const Patterns& modulePatterns,
-			const Patterns& sourcePatterns,
-			const StartInfo*);
-		
-		Options(Options&&) = default;
-		~Options();
+    enum class LogLevel
+    {
+        Quiet,
+        Normal,
+        Verbose
+    };
 
-		const Patterns& GetModulePatterns() const;
-		const Patterns& GetSourcePatterns() const;
-		const StartInfo* GetStartInfo() const;
+    class VCOV_OPTIONEXPORT_DLL Options
+    {
+      public:
+        Options(const Patterns& modulePatterns, const Patterns& sourcePatterns, const StartInfo*);
 
-		void SetLogLevel(LogLevel);
-		LogLevel GetLogLevel() const;
-		
-		void EnablePlugingMode();
-		bool IsPlugingModeEnabled() const;
+        Options(Options&&) = default;
+        ~Options();
 
-		void EnableCoverChildrenMode();
-		bool IsCoverChildrenModeEnabled() const;
+        const Patterns&  GetModulePatterns() const;
+        const Patterns&  GetSourcePatterns() const;
+        const StartInfo* GetStartInfo() const;
+
+        void     SetLogLevel(LogLevel);
+        LogLevel GetLogLevel() const;
+
+        void EnablePlugingMode();
+        bool IsPlugingModeEnabled() const;
+
+        void EnableCoverChildrenMode();
+        bool IsCoverChildrenModeEnabled() const;
 
         void EnableStopOnAssertMode();
         bool IsStopOnAssertModeEnabled() const;
 
-		void DisableAggregateByFileMode();
-		bool IsAggregateByFileModeEnabled() const;
+        void DisableAggregateByFileMode();
+        bool IsAggregateByFileModeEnabled() const;
 
-		void EnableContinueAfterCppExceptionMode();
-		bool IsContinueAfterCppExceptionModeEnabled() const;
+        void EnableContinueAfterCppExceptionMode();
+        bool IsContinueAfterCppExceptionModeEnabled() const;
 
-		void AddExport(OptionsExport&&);
-		const std::vector<OptionsExport>& GetExports() const;
-		
-		void AddInputCoveragePath(const std::filesystem::path&);
-		const std::vector<std::filesystem::path>& GetInputCoveragePaths() const;
+        void                              AddExport(OptionsExport&&);
+        const std::vector<OptionsExport>& GetExports() const;
 
-		void AddUnifiedDiffSettings(UnifiedDiffSettings&&);
-		const std::vector<UnifiedDiffSettings>& GetUnifiedDiffSettingsCollection() const;
+        void AddInputCoveragePath(const std::filesystem::path&);
+        const std::vector<std::filesystem::path>& GetInputCoveragePaths() const;
 
-		void EnableOptimizedBuildSupport();
-		bool IsOptimizedBuildSupportEnabled() const;
+        void                                    AddUnifiedDiffSettings(UnifiedDiffSettings&&);
+        const std::vector<UnifiedDiffSettings>& GetUnifiedDiffSettingsCollection() const;
 
-		void AddExcludedLineRegex(const std::wstring&);
-		const std::vector<std::wstring>& GetExcludedLineRegexes() const;
+        void EnableOptimizedBuildSupport();
+        bool IsOptimizedBuildSupportEnabled() const;
 
-		void AddSubstitutePdbSourcePath(SubstitutePdbSourcePath&&);
-		const std::vector<SubstitutePdbSourcePath>& GetSubstitutePdbSourcePaths() const;
+        void                             AddExcludedLineRegex(const std::wstring&);
+        const std::vector<std::wstring>& GetExcludedLineRegexes() const;
 
-		friend VCOV_OPTIONEXPORT_DLL std::wostream& operator<<(std::wostream&, const Options&);
+        void AddSubstitutePdbSourcePath(SubstitutePdbSourcePath&&);
+        const std::vector<SubstitutePdbSourcePath>& GetSubstitutePdbSourcePaths() const;
 
-	private:
-		Options(const Options&) = delete;
-		Options& operator=(Options&&) = delete;
+        friend VCOV_OPTIONEXPORT_DLL std::wostream& operator<<(std::wostream&, const Options&);
 
-	private:
-		Patterns modules_;
-		Patterns sources_;
-		boost::optional<StartInfo> optionalStartInfo_;
+      private:
+        Options(const Options&)       = delete;
+        Options& operator=(Options&&) = delete;
 
-		LogLevel logLevel_;
-		bool isPluginModeEnabled_;
-		bool isCoverChildrenModeEnabled_;
-		bool isAggregateByFileModeEnabled_;
-		bool isContinueAfterCppExceptionModeEnabled_;
-        bool isStopOnAssertModeEnabled_;
-        bool isOptimizedBuildSupportEnabled_;
-        std::vector<OptionsExport> exports_;
-		std::vector<std::filesystem::path> inputCoveragePaths_;
-		std::vector<UnifiedDiffSettings> unifiedDiffSettingsCollection_;
-		std::vector<std::wstring> excludedLineRegexes_;
-		std::vector<SubstitutePdbSourcePath> substitutePdbSourcePaths_;
-	};
-}
+      private:
+        Patterns                   modules_;
+        Patterns                   sources_;
+        boost::optional<StartInfo> optionalStartInfo_;
+
+        LogLevel                             logLevel_;
+        bool                                 isPluginModeEnabled_;
+        bool                                 isCoverChildrenModeEnabled_;
+        bool                                 isAggregateByFileModeEnabled_;
+        bool                                 isContinueAfterCppExceptionModeEnabled_;
+        bool                                 isStopOnAssertModeEnabled_;
+        bool                                 isOptimizedBuildSupportEnabled_;
+        std::vector<OptionsExport>           exports_;
+        std::vector<std::filesystem::path>   inputCoveragePaths_;
+        std::vector<UnifiedDiffSettings>     unifiedDiffSettingsCollection_;
+        std::vector<std::wstring>            excludedLineRegexes_;
+        std::vector<SubstitutePdbSourcePath> substitutePdbSourcePaths_;
+    };
+} // namespace CppCoverage

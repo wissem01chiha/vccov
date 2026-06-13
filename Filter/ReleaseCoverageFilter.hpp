@@ -17,57 +17,55 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <unordered_set>
-#include <unordered_map>
+#include <filesystem>
 #include <memory>
 #include <minwindef.h>
-#include <filesystem>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace FileFilter
-{	
-	class IRelocationsExtractor;
-	class ModuleInfo;
-	class FileInfo;
-	class LineInfo;
+{
+    class IRelocationsExtractor;
+    class ModuleInfo;
+    class FileInfo;
+    class LineInfo;
 
-	class VCOV_FILTEREXPORT_DLL ReleaseCoverageFilter
-	{
-	public:
-		ReleaseCoverageFilter();
-		explicit ReleaseCoverageFilter(std::unique_ptr<IRelocationsExtractor>);
-		~ReleaseCoverageFilter();
+    class VCOV_FILTEREXPORT_DLL ReleaseCoverageFilter
+    {
+      public:
+        ReleaseCoverageFilter();
+        explicit ReleaseCoverageFilter(std::unique_ptr<IRelocationsExtractor>);
+        ~ReleaseCoverageFilter();
 
-		bool IsLineSelected(const ModuleInfo&, const FileInfo&, const LineInfo&);
-		
-	private:
-		ReleaseCoverageFilter(const ReleaseCoverageFilter&) = delete;
-		ReleaseCoverageFilter& operator=(const ReleaseCoverageFilter&) = delete;
-		ReleaseCoverageFilter(ReleaseCoverageFilter&&) = delete;
-		ReleaseCoverageFilter& operator=(ReleaseCoverageFilter&&) = delete;
+        bool IsLineSelected(const ModuleInfo&, const FileInfo&, const LineInfo&);
 
-		void UpdateCachesIfExpired(const ModuleInfo&, const FileInfo&);
-		struct FileData;
-		std::unique_ptr<FileData>
-		UpdateLineDataCaches(const std::filesystem::path& filePath,
-		                     const std::vector<LineInfo>&);
+      private:
+        ReleaseCoverageFilter(const ReleaseCoverageFilter&)            = delete;
+        ReleaseCoverageFilter& operator=(const ReleaseCoverageFilter&) = delete;
+        ReleaseCoverageFilter(ReleaseCoverageFilter&&)                 = delete;
+        ReleaseCoverageFilter& operator=(ReleaseCoverageFilter&&)      = delete;
 
-		const std::unique_ptr<IRelocationsExtractor> relocationsExtractor_;
+        void UpdateCachesIfExpired(const ModuleInfo&, const FileInfo&);
+        struct FileData;
+        std::unique_ptr<FileData> UpdateLineDataCaches(const std::filesystem::path& filePath,
+                                                       const std::vector<LineInfo>&);
 
-		struct FileData
-		{
-			std::filesystem::path path_;
-			std::unordered_set<DWORD64> lastSymbolAddresses_;
-			std::unordered_map<int, int> addressCountByLine_;
-		};
+        const std::unique_ptr<IRelocationsExtractor> relocationsExtractor_;
 
-		struct ModuleData
-		{
-			std::filesystem::path path_;
-			std::unordered_set<DWORD64> relocations_;
-			std::unique_ptr<FileData> fileData_;
-		};
+        struct FileData
+        {
+            std::filesystem::path        path_;
+            std::unordered_set<DWORD64>  lastSymbolAddresses_;
+            std::unordered_map<int, int> addressCountByLine_;
+        };
 
-		std::unique_ptr<ModuleData> mModuleData_;
-	};
-}
+        struct ModuleData
+        {
+            std::filesystem::path       path_;
+            std::unordered_set<DWORD64> relocations_;
+            std::unique_ptr<FileData>   fileData_;
+        };
 
+        std::unique_ptr<ModuleData> mModuleData_;
+    };
+} // namespace FileFilter

@@ -17,8 +17,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "TestCoverageSharedLib.hpp"
+#include "stdafx.h"
 
 #include <iostream>
 
@@ -26,30 +26,30 @@ namespace fs = std::filesystem;
 
 namespace TestCoverageSharedLib
 {
-	//-------------------------------------------------------------------------
-	bool IsOdd(int n)
-	{
-		if (n % 2 == 0) 
-			return true;
+    //-------------------------------------------------------------------------
+    bool IsOdd(int n)
+    {
+        if (n % 2 == 0)
+            return true;
 
-		return false;
-	}
+        return false;
+    }
 
-	//-------------------------------------------------------------------------
-	fs::path GetMainCppPath()
-	{
-		return __FILE__ ;
-	}
+    //-------------------------------------------------------------------------
+    fs::path GetMainCppPath()
+    {
+        return __FILE__;
+    }
 
-	//-------------------------------------------------------------------------
-	fs::path GetOutputBinaryPath()
-	{		
-		return std::filesystem::path(OUT_DIR) / TARGET_FILE_NAME;
-	}
+    //-------------------------------------------------------------------------
+    fs::path GetOutputBinaryPath()
+    {
+        return std::filesystem::path(OUT_DIR) / TARGET_FILE_NAME;
+    }
 
-	//-------------------------------------------------------------------------
-	void CallSharedFunctionFromSharedLib()
-	{
-		SharedFunction(true);
-	}
-}
+    //-------------------------------------------------------------------------
+    void CallSharedFunctionFromSharedLib()
+    {
+        SharedFunction(true);
+    }
+} // namespace TestCoverageSharedLib

@@ -14,79 +14,63 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "ProcessMemory.hpp"
-#include "ToolsException.hpp"
 #include "Log.hpp"
+#include "ToolsException.hpp"
+#include "stdafx.h"
 
 namespace Tools
 {
-	//-------------------------------------------------------------------------
-	std::vector<unsigned char>
-	ReadProcessMemory(HANDLE hProcess, void* address, size_t size)
-	{
-		std::vector<unsigned char> data(size);
-		ReadProcessMemory(hProcess,
-		                  reinterpret_cast<DWORD64>(address),
-		                  &data[0],
-		                  data.size());
-		return data;
-	}
+    //-------------------------------------------------------------------------
+    std::vector<unsigned char> ReadProcessMemory(HANDLE hProcess, void* address, size_t size)
+    {
+        std::vector<unsigned char> data(size);
+        ReadProcessMemory(hProcess, reinterpret_cast<DWORD64>(address), &data[0], data.size());
+        return data;
+    }
 
-	//-------------------------------------------------------------------------
-	void ReadProcessMemory(HANDLE hProcess,
-	                       DWORD64 address,
-	                       void* buffer,
-	                       SIZE_T size)
-	{
-		SIZE_T totalBytesRead = 0;
-		SIZE_T bytesRead = 0;
+    //-------------------------------------------------------------------------
+    void ReadProcessMemory(HANDLE hProcess, DWORD64 address, void* buffer, SIZE_T size)
+    {
+        SIZE_T totalBytesRead = 0;
+        SIZE_T bytesRead      = 0;
 
-		while (totalBytesRead < size)
-		{
-			if (!::ReadProcessMemory(
-			        hProcess,
-			        reinterpret_cast<void*>(address),
-			        &reinterpret_cast<char*>(buffer)[totalBytesRead],
-			        size - totalBytesRead,
-			        &bytesRead))
-			{
-				LOG_ERROR << "Cannot read memory";
-			}
-			if (bytesRead == 0)
-				THROW("Cannot ready process memory");
+        while (totalBytesRead < size)
+        {
+            if (!::ReadProcessMemory(hProcess, reinterpret_cast<void*>(address),
+                                     &reinterpret_cast<char*>(buffer)[totalBytesRead],
+                                     size - totalBytesRead, &bytesRead))
+            {
+                LOG_ERROR << "Cannot read memory";
+            }
+            if (bytesRead == 0)
+                THROW("Cannot ready process memory");
 
-			totalBytesRead += bytesRead;
-		}
-	}
+            totalBytesRead += bytesRead;
+        }
+    }
 
-	//-------------------------------------------------------------------------
-	void WriteProcessMemory(HANDLE hProcess,
-	                        void* address,
-	                        void* buffer,
-	                        size_t size)
-	{
-		SIZE_T totalWritten = 0;
-		SIZE_T written = 0;
+    //-------------------------------------------------------------------------
+    void WriteProcessMemory(HANDLE hProcess, void* address, void* buffer, size_t size)
+    {
+        SIZE_T totalWritten = 0;
+        SIZE_T written      = 0;
 
-		while (totalWritten < size)
-		{
-			auto startBuffer = static_cast<char*>(buffer) + totalWritten;
-			if (!::WriteProcessMemory(hProcess,
-			                          address,
-			                          startBuffer,
-			                          size - totalWritten,
-			                          &written))
-			{
-				LOG_ERROR << "Cannot write memory:";
-			}
+        while (totalWritten < size)
+        {
+            auto startBuffer = static_cast<char*>(buffer) + totalWritten;
+            if (!::WriteProcessMemory(hProcess, address, startBuffer, size - totalWritten,
+                                      &written))
+            {
+                LOG_ERROR << "Cannot write memory:";
+            }
 
-			if (written == 0)
-				THROW("Cannot write process memory");
+            if (written == 0)
+                THROW("Cannot write process memory");
 
-			if (!FlushInstructionCache(hProcess, startBuffer, written))
-				THROW("Cannot flush memory:");
-			totalWritten += written;
-		}
-	}
-}
+            if (!FlushInstructionCache(hProcess, startBuffer, written))
+                THROW("Cannot flush memory:");
+            totalWritten += written;
+        }
+    }
+} // namespace Tools

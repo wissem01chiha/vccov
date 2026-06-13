@@ -18,9 +18,9 @@
 
 #include <boost/optional.hpp>
 
-#include "FileFilter/PathMatcher.hpp"
-#include "FileFilter/File.hpp"
 #include "FileFilter/AmbiguousPathException.hpp"
+#include "FileFilter/File.hpp"
+#include "FileFilter/PathMatcher.hpp"
 #include "Tools.hpp"
 
 using namespace FileFilter;
@@ -28,101 +28,102 @@ namespace fs = std::filesystem;
 
 namespace std
 {
-	namespace filesystem
-	{
-		//---------------------------------------------------------------------
-		void PrintTo(const path& path, ::std::ostream* os) {
-			if (os)
-				*os << path.string();
-		}
-	}
-}
+    namespace filesystem
+    {
+        //---------------------------------------------------------------------
+        void PrintTo(const path& path, ::std::ostream* os)
+        {
+            if (os)
+                *os << path.string();
+        }
+    } // namespace filesystem
+} // namespace std
 
 namespace FileFilterTest
-{		
-	namespace
-	{
-		//-------------------------------------------------------------------------
-		std::wstring Match(PathMatcher& pathMatcher, const fs::path& path)
-		{
-			const auto* file = pathMatcher.Match(path);
+{
+    namespace
+    {
+        //-------------------------------------------------------------------------
+        std::wstring Match(PathMatcher& pathMatcher, const fs::path& path)
+        {
+            const auto* file = pathMatcher.Match(path);
 
-			return (file) ? file->GetPath().wstring() : L"No file found";
-		}
-	}
+            return (file) ? file->GetPath().wstring() : L"No file found";
+        }
+    } // namespace
 
-	//-------------------------------------------------------------------------
-	TEST(PathMatcherTest, PostFixBasicMatch)
-	{
-		std::vector<std::wstring> filenames = { L"Test.txt", L"Test\\Test2.txt" };
-		auto files = ToFiles(filenames);
-		PathMatcher pathMatcher{std::move(files), boost::none };
+    //-------------------------------------------------------------------------
+    TEST(PathMatcherTest, PostFixBasicMatch)
+    {
+        std::vector<std::wstring> filenames = { L"Test.txt", L"Test\\Test2.txt" };
+        auto                      files     = ToFiles(filenames);
+        PathMatcher               pathMatcher{ std::move(files), boost::none };
 
-		ASSERT_EQ(filenames.at(0), Match(pathMatcher, "Test.txt"));
-		ASSERT_EQ(filenames.at(1), Match(pathMatcher, "Test\\Test\\Test2.txt"));
-		ASSERT_EQ(filenames.at(1), Match(pathMatcher, "test\\test\\test2.txt"));
+        ASSERT_EQ(filenames.at(0), Match(pathMatcher, "Test.txt"));
+        ASSERT_EQ(filenames.at(1), Match(pathMatcher, "Test\\Test\\Test2.txt"));
+        ASSERT_EQ(filenames.at(1), Match(pathMatcher, "test\\test\\test2.txt"));
 
-		ASSERT_EQ(nullptr, pathMatcher.Match("Test2\\Test2.txt"));
-		ASSERT_EQ(nullptr, pathMatcher.Match("Test2.txt"));
-		ASSERT_EQ(nullptr, pathMatcher.Match("Test3.txt"));
-		ASSERT_EQ(0, pathMatcher.GetUnmatchedPaths().size());
-	}	
+        ASSERT_EQ(nullptr, pathMatcher.Match("Test2\\Test2.txt"));
+        ASSERT_EQ(nullptr, pathMatcher.Match("Test2.txt"));
+        ASSERT_EQ(nullptr, pathMatcher.Match("Test3.txt"));
+        ASSERT_EQ(0, pathMatcher.GetUnmatchedPaths().size());
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(PathMatcherTest, PostFixAmgigousPath)
-	{
-		std::vector<File> files;
-		const fs::path filename{ L"test.txt" };
-		const fs::path test1{ L"test1" / filename };
-		const fs::path test2{ L"test2" / filename };
-		files.emplace_back(filename);
-		
-		PathMatcher pathMatcher{ std::move(files), boost::none };
+    //-------------------------------------------------------------------------
+    TEST(PathMatcherTest, PostFixAmgigousPath)
+    {
+        std::vector<File> files;
+        const fs::path    filename{ L"test.txt" };
+        const fs::path    test1{ L"test1" / filename };
+        const fs::path    test2{ L"test2" / filename };
+        files.emplace_back(filename);
 
-		Match(pathMatcher, test1);
-		
-		try
-		{
-			Match(pathMatcher, test2);
-			FAIL();
-		}
-		catch (const AmbiguousPathException& e)
-		{
-			ASSERT_EQ(filename, e.GetPostFixPath());
-			ASSERT_EQ(test1, e.GetFirstPossiblePath());
-			ASSERT_EQ(test2, e.GetSecondPossiblePath());
-		}
-	}
-	
-	//-------------------------------------------------------------------------
-	TEST(PathMatcherTest, PostFixGetUnmatchedPaths)
-	{		
-		std::vector<std::wstring> filenames{ L"test1", L"test2", L"test\\test2", L"test3" };
-		auto files = ToFiles(filenames);
+        PathMatcher pathMatcher{ std::move(files), boost::none };
 
-		PathMatcher pathMatcher{ std::move(files), boost::none };
+        Match(pathMatcher, test1);
 
-		pathMatcher.Match(filenames.at(1));
-		auto unmatchedPaths = pathMatcher.GetUnmatchedPaths();
-		ASSERT_EQ(3, unmatchedPaths.size());
-		ASSERT_EQ(filenames.at(0), unmatchedPaths.at(0).wstring());
-		ASSERT_EQ(filenames.at(2), unmatchedPaths.at(1).wstring());
-		ASSERT_EQ(filenames.at(3), unmatchedPaths.at(2).wstring());
-	}
+        try
+        {
+            Match(pathMatcher, test2);
+            FAIL();
+        }
+        catch (const AmbiguousPathException& e)
+        {
+            ASSERT_EQ(filename, e.GetPostFixPath());
+            ASSERT_EQ(test1, e.GetFirstPossiblePath());
+            ASSERT_EQ(test2, e.GetSecondPossiblePath());
+        }
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(PathMatcherTest, FullPathBasicMatch)
-	{
-		std::vector<std::wstring> filenames{ L"test.txt", L"test2" };
-		auto files = ToFiles(filenames);
-		fs::path parentPath = "test";
-		PathMatcher pathMatcher{ std::move(files), parentPath };
+    //-------------------------------------------------------------------------
+    TEST(PathMatcherTest, PostFixGetUnmatchedPaths)
+    {
+        std::vector<std::wstring> filenames{ L"test1", L"test2", L"test\\test2", L"test3" };
+        auto                      files = ToFiles(filenames);
 
-		ASSERT_EQ(nullptr, pathMatcher.Match(filenames.at(0)));
-		ASSERT_EQ(filenames.at(0), Match(pathMatcher, parentPath / filenames.at(0)));
+        PathMatcher pathMatcher{ std::move(files), boost::none };
 
-		auto unmatchedPaths = pathMatcher.GetUnmatchedPaths();
-		ASSERT_EQ(1, unmatchedPaths.size());
-		ASSERT_EQ(parentPath / filenames.at(1), unmatchedPaths.at(0));
-	}
-}
+        pathMatcher.Match(filenames.at(1));
+        auto unmatchedPaths = pathMatcher.GetUnmatchedPaths();
+        ASSERT_EQ(3, unmatchedPaths.size());
+        ASSERT_EQ(filenames.at(0), unmatchedPaths.at(0).wstring());
+        ASSERT_EQ(filenames.at(2), unmatchedPaths.at(1).wstring());
+        ASSERT_EQ(filenames.at(3), unmatchedPaths.at(2).wstring());
+    }
+
+    //-------------------------------------------------------------------------
+    TEST(PathMatcherTest, FullPathBasicMatch)
+    {
+        std::vector<std::wstring> filenames{ L"test.txt", L"test2" };
+        auto                      files      = ToFiles(filenames);
+        fs::path                  parentPath = "test";
+        PathMatcher               pathMatcher{ std::move(files), parentPath };
+
+        ASSERT_EQ(nullptr, pathMatcher.Match(filenames.at(0)));
+        ASSERT_EQ(filenames.at(0), Match(pathMatcher, parentPath / filenames.at(0)));
+
+        auto unmatchedPaths = pathMatcher.GetUnmatchedPaths();
+        ASSERT_EQ(1, unmatchedPaths.size());
+        ASSERT_EQ(parentPath / filenames.at(1), unmatchedPaths.at(0));
+    }
+} // namespace FileFilterTest

@@ -16,44 +16,39 @@
 
 #pragma once
 
-#include <iosfwd> 
-#include <string>
 #include "HtmlExport.h"
+#include <iosfwd>
+#include <string>
 
 namespace Plugin
 {
-	class FileCoverage;
+    class FileCoverage;
 }
 
 namespace Exporter
 {
-	class VCOV_HTMLEXPORT_DLL HtmlFileCoverageExporter
-	{
-	public:
-		static const std::wstring StyleBackgroundColorExecuted;
-		static const std::wstring StyleBackgroundColorUnexecuted;
-		static const std::wstring EndStyle;
+    class VCOV_HTMLEXPORT_DLL HtmlFileCoverageExporter
+    {
+      public:
+        static const std::wstring StyleBackgroundColorExecuted;
+        static const std::wstring StyleBackgroundColorUnexecuted;
+        static const std::wstring EndStyle;
 
-	public:
-		HtmlFileCoverageExporter(
-			int maxSourceLineCount = 8000, 
-			int maxSourceLineStyleChangesCount = 1000,
-			int maxStyleChangesCount = 2000);
+      public:
+        HtmlFileCoverageExporter(int maxSourceLineCount             = 8000,
+                                 int maxSourceLineStyleChangesCount = 1000,
+                                 int maxStyleChangesCount           = 2000);
 
-		bool Export(
-			const Plugin::FileCoverage&,
-			std::wostream& output) const;
-		
-		bool MustEnableCodePrettify(int lineCount, int styleChangedCount) const;
+        bool Export(const Plugin::FileCoverage&, std::wostream& output) const;
 
-	private:
-		HtmlFileCoverageExporter(const HtmlFileCoverageExporter&) = delete;
-		HtmlFileCoverageExporter& operator=(const HtmlFileCoverageExporter&) = delete;
+        bool MustEnableCodePrettify(int lineCount, int styleChangedCount) const;
 
-		int maxSourceLineCount_;
-		int maxSourceLineStyleChangesCount_;
-		int maxStyleChangesCount_;
-	};
-}
+      private:
+        HtmlFileCoverageExporter(const HtmlFileCoverageExporter&)            = delete;
+        HtmlFileCoverageExporter& operator=(const HtmlFileCoverageExporter&) = delete;
 
-
+        int maxSourceLineCount_;
+        int maxSourceLineStyleChangesCount_;
+        int maxStyleChangesCount_;
+    };
+} // namespace Exporter

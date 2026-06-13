@@ -17,34 +17,33 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <set>
 #include <filesystem>
+#include <set>
 
 namespace FileFilter
 {
-	class VCOV_FILTEREXPORT_DLL File
-	{
-	public:
-		explicit File(const std::filesystem::path&);
-		File(File&&) = default;
-		File& operator=(File&&) = default;
+    class VCOV_FILTEREXPORT_DLL File
+    {
+      public:
+        explicit File(const std::filesystem::path&);
+        File(File&&)            = default;
+        File& operator=(File&&) = default;
 
-		void AddSelectedLines(const std::vector<int>&);
+        void AddSelectedLines(const std::vector<int>&);
 
-		const std::filesystem::path& GetPath() const;
-		void SetPath(const std::filesystem::path&);
+        const std::filesystem::path& GetPath() const;
+        void                         SetPath(const std::filesystem::path&);
 
-		bool IsLineSelected(int) const;
-		const std::set<int>& GetSelectedLines() const;
+        bool                 IsLineSelected(int) const;
+        const std::set<int>& GetSelectedLines() const;
 
-		bool operator==(const File&) const;
+        bool operator==(const File&) const;
 
-	private:
-		File(const File&) = delete;
-		File& operator=(const File&) = delete;
+      private:
+        File(const File&)            = delete;
+        File& operator=(const File&) = delete;
 
-		std::filesystem::path path_;
-		std::set<int> selectedLines_;
-	};
-}
-
+        std::filesystem::path path_;
+        std::set<int>         selectedLines_;
+    };
+} // namespace FileFilter

@@ -16,29 +16,28 @@
 
 #pragma once
 
-#include <filesystem>
-#include <boost/optional/optional.hpp>
-#include <optional>
 #include "OptionExport.h"
+#include <boost/optional/optional.hpp>
+#include <filesystem>
+#include <optional>
 
 namespace CppCoverage
 {
-	class VCOV_OPTIONEXPORT_DLL UnifiedDiffSettings
-	{
-	public:
-		UnifiedDiffSettings(
-			const std::filesystem::path& unifiedDiffPath,
-			const boost::optional<std::filesystem::path>& rootDiffFolder);
-		UnifiedDiffSettings(const UnifiedDiffSettings&) = default;
-		UnifiedDiffSettings(UnifiedDiffSettings&&) = default;
+    class VCOV_OPTIONEXPORT_DLL UnifiedDiffSettings
+    {
+      public:
+        UnifiedDiffSettings(const std::filesystem::path&                  unifiedDiffPath,
+                            const boost::optional<std::filesystem::path>& rootDiffFolder);
+        UnifiedDiffSettings(const UnifiedDiffSettings&) = default;
+        UnifiedDiffSettings(UnifiedDiffSettings&&)      = default;
 
-		const std::filesystem::path& GetUnifiedDiffPath() const;
-		const boost::optional<std::filesystem::path>& GetRootDiffFolder() const;
+        const std::filesystem::path&                  GetUnifiedDiffPath() const;
+        const boost::optional<std::filesystem::path>& GetRootDiffFolder() const;
 
-		UnifiedDiffSettings& operator=(const UnifiedDiffSettings&) = default;
+        UnifiedDiffSettings& operator=(const UnifiedDiffSettings&) = default;
 
-	private:
-		std::filesystem::path unifiedDiffPath_;
-		boost::optional<std::filesystem::path> rootDiffFolder_;
-	};
-}
+      private:
+        std::filesystem::path                  unifiedDiffPath_;
+        boost::optional<std::filesystem::path> rootDiffFolder_;
+    };
+} // namespace CppCoverage

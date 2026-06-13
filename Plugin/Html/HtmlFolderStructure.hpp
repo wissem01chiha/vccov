@@ -22,31 +22,30 @@
 #include <memory>
 
 namespace Exporter
-{	
-	class VCOV_HTMLEXPORT_DLL HtmlFolderStructure
-	{
-	public:
-		static const std::wstring ThirdParty;
-		static const std::wstring FolderModules;
+{
+    class VCOV_HTMLEXPORT_DLL HtmlFolderStructure
+    {
+      public:
+        static const std::wstring ThirdParty;
+        static const std::wstring FolderModules;
 
-	public:
-		HtmlFolderStructure(const std::filesystem::path& templateFolder);
-		~HtmlFolderStructure();
+      public:
+        HtmlFolderStructure(const std::filesystem::path& templateFolder);
+        ~HtmlFolderStructure();
 
-		std::filesystem::path CreateCurrentRoot(const std::filesystem::path& outputFolder);
-		HtmlFile CreateCurrentModule(const std::filesystem::path&);		
-		HtmlFile GetHtmlFilePath(const std::filesystem::path& filePath) const;
+        std::filesystem::path CreateCurrentRoot(const std::filesystem::path& outputFolder);
+        HtmlFile              CreateCurrentModule(const std::filesystem::path&);
+        HtmlFile              GetHtmlFilePath(const std::filesystem::path& filePath) const;
 
-	private:
-		HtmlFolderStructure(const HtmlFolderStructure&) = delete;
-		HtmlFolderStructure& operator=(const HtmlFolderStructure&) = delete;
+      private:
+        HtmlFolderStructure(const HtmlFolderStructure&)            = delete;
+        HtmlFolderStructure& operator=(const HtmlFolderStructure&) = delete;
 
-	private:
-		std::filesystem::path templateFolder_;
+      private:
+        std::filesystem::path templateFolder_;
 
-		struct Hierarchy;
-		std::unique_ptr<Hierarchy> optionalCurrentRoot_;
-		std::unique_ptr<Hierarchy> optionalCurrentModule_;
-	};
-}
-
+        struct Hierarchy;
+        std::unique_ptr<Hierarchy> optionalCurrentRoot_;
+        std::unique_ptr<Hierarchy> optionalCurrentModule_;
+    };
+} // namespace Exporter

@@ -16,48 +16,45 @@
 
 #pragma once
 
-#include <string>
+#include "ExportExport.h"
 #include <functional>
 #include <optional>
-#include "ExportExport.h"
+#include <string>
 
 namespace CppCoverage
 {
-	class VCOV_EXPORTEXPORT_DLL ExportPluginDescription
-	{
-	  public:
-		using CheckArgumentFct =
-		    std::function<void(const std::optional<std::wstring>&)>;
+    class VCOV_EXPORTEXPORT_DLL ExportPluginDescription
+    {
+      public:
+        using CheckArgumentFct = std::function<void(const std::optional<std::wstring>&)>;
 
-		//-------------------------------------------------------------------------------
-		ExportPluginDescription(std::wstring&& pluginName,
-		                        std::wstring&& parameterDescription,
-		                        CheckArgumentFct checkArgumentFct)
-		    : pluginName_{std::move(pluginName)},
-		      parameterDescription_{std::move(parameterDescription)},
-		      checkArgumentFct_{checkArgumentFct}
-		{
-		}
+        //-------------------------------------------------------------------------------
+        ExportPluginDescription(std::wstring&& pluginName, std::wstring&& parameterDescription,
+                                CheckArgumentFct checkArgumentFct)
+            : pluginName_{ std::move(pluginName) },
+              parameterDescription_{ std::move(parameterDescription) },
+              checkArgumentFct_{ checkArgumentFct }
+        {
+        }
 
-		//-------------------------------------------------------------------------------
-		ExportPluginDescription(const ExportPluginDescription&) = delete;
-		ExportPluginDescription&
-		operator=(const ExportPluginDescription&) = delete;
-		ExportPluginDescription(ExportPluginDescription&&) = default;
-		ExportPluginDescription& operator=(ExportPluginDescription&&) = default;
+        //-------------------------------------------------------------------------------
+        ExportPluginDescription(const ExportPluginDescription&)            = delete;
+        ExportPluginDescription& operator=(const ExportPluginDescription&) = delete;
+        ExportPluginDescription(ExportPluginDescription&&)                 = default;
+        ExportPluginDescription& operator=(ExportPluginDescription&&)      = default;
 
-		//-------------------------------------------------------------------------------
-		const std::wstring& GetPluginName() const;
+        //-------------------------------------------------------------------------------
+        const std::wstring& GetPluginName() const;
 
-		//-------------------------------------------------------------------------------
-		const std::wstring& GetParameterDescription() const;
+        //-------------------------------------------------------------------------------
+        const std::wstring& GetParameterDescription() const;
 
-		//-------------------------------------------------------------------------------
-		void CheckArgument(const std::optional<std::wstring>& parameter) const;
+        //-------------------------------------------------------------------------------
+        void CheckArgument(const std::optional<std::wstring>& parameter) const;
 
-	  private:
-		std::wstring pluginName_;
-		std::wstring parameterDescription_;
-		CheckArgumentFct checkArgumentFct_;
-	};
-}
+      private:
+        std::wstring     pluginName_;
+        std::wstring     parameterDescription_;
+        CheckArgumentFct checkArgumentFct_;
+    };
+} // namespace CppCoverage

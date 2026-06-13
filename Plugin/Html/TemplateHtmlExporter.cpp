@@ -14,232 +14,215 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "TemplateHtmlExporter.hpp"
-#include "OpenCppCoverageVersion.hpp"
-#include <fstream>
-#include <filesystem>
-#include <boost/algorithm/string.hpp>
-#include <boost/uuid/uuid_io.hpp>
 #include "CTemplate.hpp"
-#include "Tool.hpp"
 #include "CoverageRate.hpp"
 #include "ExporterException.hpp"
+#include "OpenCppCoverageVersion.hpp"
+#include "Tool.hpp"
+#include "stdafx.h"
+#include <boost/algorithm/string.hpp>
+#include <boost/uuid/uuid_io.hpp>
+#include <filesystem>
+#include <fstream>
 
 namespace cov = CppCoverage;
-namespace fs = std::filesystem;
+namespace fs  = std::filesystem;
 
 namespace Exporter
 {
-		//-------------------------------------------------------------------------
-		std::string ToString(const std::wstring& str)
-		{
-			return Tools::ToUtf8String(str);
-		}
+    //-------------------------------------------------------------------------
+    std::string ToString(const std::wstring& str)
+    {
+        return Tools::ToUtf8String(str);
+    }
 
-		//-------------------------------------------------------------------------
-		std::string ToHtmlPath(const fs::path& path)
-		{
-			auto htmlPath = path.wstring();
-			boost::algorithm::replace_all(htmlPath, L"\\", L"/");
-			return ToString(htmlPath);
-		}
+    //-------------------------------------------------------------------------
+    std::string ToHtmlPath(const fs::path& path)
+    {
+        auto htmlPath = path.wstring();
+        boost::algorithm::replace_all(htmlPath, L"\\", L"/");
+        return ToString(htmlPath);
+    }
 
-		//-------------------------------------------------------------------------
-		void WriteContentTo(const std::string& content, const fs::path& path)
-		{
-			std::ofstream ofs(path.string(), std::ios::binary);
+    //-------------------------------------------------------------------------
+    void WriteContentTo(const std::string& content, const fs::path& path)
+    {
+        std::ofstream ofs(path.string(), std::ios::binary);
 
-			if (!ofs)
-				THROW(L"Cannot open file" << path);
-			ofs << content;
-			ofs.flush();
-		}
+        if (!ofs)
+            THROW(L"Cannot open file" << path);
+        ofs << content;
+        ofs.flush();
+    }
 
-		//-------------------------------------------------------------------------
-		std::string GenerateTemplate(
-			const ctemplate::TemplateDictionary& templateDictionary,
-			const fs::path& templatePath)
-		{
-			std::string output;
+    //-------------------------------------------------------------------------
+    std::string GenerateTemplate(const ctemplate::TemplateDictionary& templateDictionary,
+                                 const fs::path&                      templatePath)
+    {
+        std::string output;
 
-			if (!ctemplate::ExpandTemplate(templatePath.string(), ctemplate::DO_NOT_STRIP, &templateDictionary, &output))
-				THROW(L"Cannot generate output for " + templatePath.wstring());
+        if (!ctemplate::ExpandTemplate(templatePath.string(), ctemplate::DO_NOT_STRIP,
+                                       &templateDictionary, &output))
+            THROW(L"Cannot generate output for " + templatePath.wstring());
 
-			return output;
-		}
-		
-		//-------------------------------------------------------------------------
-		void WriteTemplate(
-			const ctemplate::TemplateDictionary& templateDictionary,
-			const fs::path& templatePath,
-			const fs::path& output)
-		{			
-			std::string content = GenerateTemplate(templateDictionary, templatePath);
-			WriteContentTo(content, output);
-		}
-	
-	//-------------------------------------------------------------------------
-	const std::string TemplateHtmlExporter::MainTemplateItemSection = "ITEMS";
-	const std::string TemplateHtmlExporter::TitleTemplate = "TITLE";
-	const std::string TemplateHtmlExporter::ExecutedLineTemplate = "EXECUTED_LINE";
-	const std::string TemplateHtmlExporter::UnExecutedLineTemplate = "UNEXECUTED_LINE";
-	const std::string TemplateHtmlExporter::LinkTemplate = "LINK";
-	const std::string TemplateHtmlExporter::TotalLineTemplate = "TOTAL_LINE";	
-	const std::string TemplateHtmlExporter::NameTemplate = "NAME";
-	const std::string TemplateHtmlExporter::ItemLinkSection = "ITEM_LINK";
-	const std::string TemplateHtmlExporter::ItemNoLinkSection = "ITEM_NO_LINK";
-	const std::string TemplateHtmlExporter::ItemSimpleText = "ITEM_SIMPLE_TEXT";
-	const std::string TemplateHtmlExporter::BodyOnLoadTemplate = "BODY_ON_LOAD";
-	const std::string TemplateHtmlExporter::SourceWarningMessageTemplate = "SOURCE_WARNING_MESSAGE";
-	const std::string TemplateHtmlExporter::BodyOnLoadFct = "prettyPrint()";
-	const std::string TemplateHtmlExporter::SyntaxHighlightingDisabledMsg 
-		= "Syntax highlighting has been disabled for performance reasons.";
-	const std::string TemplateHtmlExporter::MainMessageTemplate = "MAIN_MESSAGE";
-	const std::string TemplateHtmlExporter::CoverRateTemplate = "COVER_RATE";
-	const std::string TemplateHtmlExporter::UncoverRateTemplate = "UNCOVER_RATE";
-	const std::string TemplateHtmlExporter::CodeTemplate = "CODE";
-	const std::string TemplateHtmlExporter::IdTemplate = "ID";
-	const std::string TemplateHtmlExporter::ThirdPartyPathTemplate = "THIRD_PARTY_PATH";
-	const std::string TemplateHtmlExporter::OCCProjectLink = "OCC_PROJECT_LINK";
-	const std::string TemplateHtmlExporter::OCCVersion = "OCC_VERSION";
-	const std::string TemplateHtmlExporter::ActualProjectLink = "https://github.com/OpenCppCoverage/OpenCppCoverage/releases";
+        return output;
+    }
 
-	//-------------------------------------------------------------------------
-	TemplateHtmlExporter::TemplateHtmlExporter(
-		const fs::path& mainTemplatePath,
-		const fs::path& fileTemplatePath)
-		: mainTemplatePath_(mainTemplatePath)
-		, fileTemplatePath_(fileTemplatePath)
-	{		
-	}
+    //-------------------------------------------------------------------------
+    void WriteTemplate(const ctemplate::TemplateDictionary& templateDictionary,
+                       const fs::path& templatePath, const fs::path& output)
+    {
+        std::string content = GenerateTemplate(templateDictionary, templatePath);
+        WriteContentTo(content, output);
+    }
 
-	//-------------------------------------------------------------------------
-	std::unique_ptr<ctemplate::TemplateDictionary> 
-	TemplateHtmlExporter::CreateTemplateDictionary(
-		const std::wstring& title, 
-		const std::wstring& message) const
-	{
-		auto titleStr = ToString(title);
-		std::unique_ptr<ctemplate::TemplateDictionary> dictionary;
+    //-------------------------------------------------------------------------
+    const std::string TemplateHtmlExporter::MainTemplateItemSection      = "ITEMS";
+    const std::string TemplateHtmlExporter::TitleTemplate                = "TITLE";
+    const std::string TemplateHtmlExporter::ExecutedLineTemplate         = "EXECUTED_LINE";
+    const std::string TemplateHtmlExporter::UnExecutedLineTemplate       = "UNEXECUTED_LINE";
+    const std::string TemplateHtmlExporter::LinkTemplate                 = "LINK";
+    const std::string TemplateHtmlExporter::TotalLineTemplate            = "TOTAL_LINE";
+    const std::string TemplateHtmlExporter::NameTemplate                 = "NAME";
+    const std::string TemplateHtmlExporter::ItemLinkSection              = "ITEM_LINK";
+    const std::string TemplateHtmlExporter::ItemNoLinkSection            = "ITEM_NO_LINK";
+    const std::string TemplateHtmlExporter::ItemSimpleText               = "ITEM_SIMPLE_TEXT";
+    const std::string TemplateHtmlExporter::BodyOnLoadTemplate           = "BODY_ON_LOAD";
+    const std::string TemplateHtmlExporter::SourceWarningMessageTemplate = "SOURCE_WARNING_MESSAGE";
+    const std::string TemplateHtmlExporter::BodyOnLoadFct                = "prettyPrint()";
+    const std::string TemplateHtmlExporter::SyntaxHighlightingDisabledMsg =
+        "Syntax highlighting has been disabled for performance reasons.";
+    const std::string TemplateHtmlExporter::MainMessageTemplate    = "MAIN_MESSAGE";
+    const std::string TemplateHtmlExporter::CoverRateTemplate      = "COVER_RATE";
+    const std::string TemplateHtmlExporter::UncoverRateTemplate    = "UNCOVER_RATE";
+    const std::string TemplateHtmlExporter::CodeTemplate           = "CODE";
+    const std::string TemplateHtmlExporter::IdTemplate             = "ID";
+    const std::string TemplateHtmlExporter::ThirdPartyPathTemplate = "THIRD_PARTY_PATH";
+    const std::string TemplateHtmlExporter::OCCProjectLink         = "OCC_PROJECT_LINK";
+    const std::string TemplateHtmlExporter::OCCVersion             = "OCC_VERSION";
+    const std::string TemplateHtmlExporter::ActualProjectLink =
+        "https://github.com/OpenCppCoverage/OpenCppCoverage/releases";
 
-		dictionary.reset(new ctemplate::TemplateDictionary(titleStr));
+    //-------------------------------------------------------------------------
+    TemplateHtmlExporter::TemplateHtmlExporter(const fs::path& mainTemplatePath,
+                                               const fs::path& fileTemplatePath)
+        : mainTemplatePath_(mainTemplatePath), fileTemplatePath_(fileTemplatePath)
+    {
+    }
 
-		dictionary->SetValue(TitleTemplate, titleStr);
-		dictionary->SetValue(MainMessageTemplate, ToString(message));
-		dictionary->SetValue(OCCProjectLink, ActualProjectLink);
-		dictionary->SetValue(OCCVersion, OPENCPPCOVERAGE_VERSION);
+    //-------------------------------------------------------------------------
+    std::unique_ptr<ctemplate::TemplateDictionary>
+    TemplateHtmlExporter::CreateTemplateDictionary(const std::wstring& title,
+                                                   const std::wstring& message) const
+    {
+        auto                                           titleStr = ToString(title);
+        std::unique_ptr<ctemplate::TemplateDictionary> dictionary;
 
-		return dictionary;
-	}
+        dictionary.reset(new ctemplate::TemplateDictionary(titleStr));
 
-	//-------------------------------------------------------------------------
-	void TemplateHtmlExporter::AddFileSectionToDictionary(
-		const fs::path& originalFilename,
-		const cov::CoverageRate& coverageRate,
-		bool isSimpleText,
-		const fs::path* fileOutput,		
-		ctemplate::TemplateDictionary& moduleTemplateDictionary)
-	{
-		auto sectionDictionary = moduleTemplateDictionary.AddSectionDictionary(MainTemplateItemSection);
-		
-		moduleTemplateDictionary.SetValue(ThirdPartyPathTemplate, "../third-party");
-		FillSection(*sectionDictionary, isSimpleText, fileOutput, coverageRate, originalFilename);
-	}
-	
-	//-------------------------------------------------------------------------
-	void TemplateHtmlExporter::AddModuleSectionToDictionary(			
-		const fs::path& originalFilename,
-		const cov::CoverageRate& coverageRate,
-		bool isSimpleText,
-		const fs::path* moduleOutput,
-		ctemplate::TemplateDictionary& projectDictionary)
-	{
-		auto sectionDictionary = projectDictionary.AddSectionDictionary(MainTemplateItemSection);			
-			
-		projectDictionary.SetValue(ThirdPartyPathTemplate, "third-party");
-		FillSection(*sectionDictionary, isSimpleText, moduleOutput, coverageRate, originalFilename);
-	}				
-	
-	//-------------------------------------------------------------------------
-	void TemplateHtmlExporter::GenerateModuleTemplate(
-		const ctemplate::TemplateDictionary& templateDictionary,
-		const fs::path& output) const
-	{
-		WriteTemplate(templateDictionary, mainTemplatePath_, output);
-	}
+        dictionary->SetValue(TitleTemplate, titleStr);
+        dictionary->SetValue(MainMessageTemplate, ToString(message));
+        dictionary->SetValue(OCCProjectLink, ActualProjectLink);
+        dictionary->SetValue(OCCVersion, OPENCPPCOVERAGE_VERSION);
 
-	//-------------------------------------------------------------------------
-	void TemplateHtmlExporter::GenerateProjectTemplate(
-		const ctemplate::TemplateDictionary& templateDictionary,
-		const fs::path& output) const
-	{
-		WriteTemplate(templateDictionary, mainTemplatePath_, output);
-	}
+        return dictionary;
+    }
 
-	//-------------------------------------------------------------------------
-	void TemplateHtmlExporter::GenerateSourceTemplate(
-		const std::wstring& title,
-		const std::wstring& codeContent,
-		bool enableCodePrettify,
-		const fs::path& output) const
-	{
-		auto titleStr = ToString(title);
-		ctemplate::TemplateDictionary dictionary(titleStr);
-		std::string bodyLoad = BodyOnLoadFct;
-		std::string warning = "";
+    //-------------------------------------------------------------------------
+    void TemplateHtmlExporter::AddFileSectionToDictionary(
+        const fs::path& originalFilename, const cov::CoverageRate& coverageRate, bool isSimpleText,
+        const fs::path* fileOutput, ctemplate::TemplateDictionary& moduleTemplateDictionary)
+    {
+        auto sectionDictionary =
+            moduleTemplateDictionary.AddSectionDictionary(MainTemplateItemSection);
 
-		if (!enableCodePrettify)
-		{
-			bodyLoad = "";
-			warning = SyntaxHighlightingDisabledMsg;
-		}
+        moduleTemplateDictionary.SetValue(ThirdPartyPathTemplate, "../third-party");
+        FillSection(*sectionDictionary, isSimpleText, fileOutput, coverageRate, originalFilename);
+    }
 
-		dictionary.SetValue(TitleTemplate, titleStr);
-		dictionary.SetValue(CodeTemplate, ToString(codeContent));
-		dictionary.SetValue(BodyOnLoadTemplate, bodyLoad);
-		dictionary.SetValue(SourceWarningMessageTemplate, warning);
-		dictionary.SetValue(OCCProjectLink, ActualProjectLink);
-		dictionary.SetValue(OCCVersion, OPENCPPCOVERAGE_VERSION);
-		WriteTemplate(dictionary, fileTemplatePath_, output);
-	}
-	//-------------------------------------------------------------------------
-	std::string TemplateHtmlExporter::GetUuid()
-	{
-		boost::uuids::uuid id(uuidGenerator_());
+    //-------------------------------------------------------------------------
+    void TemplateHtmlExporter::AddModuleSectionToDictionary(
+        const fs::path& originalFilename, const cov::CoverageRate& coverageRate, bool isSimpleText,
+        const fs::path* moduleOutput, ctemplate::TemplateDictionary& projectDictionary)
+    {
+        auto sectionDictionary = projectDictionary.AddSectionDictionary(MainTemplateItemSection);
 
-		return boost::uuids::to_string(id);
-	}
+        projectDictionary.SetValue(ThirdPartyPathTemplate, "third-party");
+        FillSection(*sectionDictionary, isSimpleText, moduleOutput, coverageRate, originalFilename);
+    }
 
-	//-------------------------------------------------------------------------
-	void TemplateHtmlExporter::FillSection(
-		ctemplate::TemplateDictionary& sectionDictionary,
-		bool isSimpleText,
-		const fs::path* link,
-		const cov::CoverageRate& coverageRate,
-		const fs::path& originalFilename)
-	{
-		if (link)
-		{
-			auto htmlPath = ToHtmlPath(*link);
-			sectionDictionary.SetValueAndShowSection(
-				LinkTemplate, 
-				htmlPath, 
-				ItemLinkSection);
-		}
-		else
-		{
-			sectionDictionary.ShowSection(isSimpleText ? ItemSimpleText
-			                                           : ItemNoLinkSection);
-		}
+    //-------------------------------------------------------------------------
+    void TemplateHtmlExporter::GenerateModuleTemplate(
+        const ctemplate::TemplateDictionary& templateDictionary, const fs::path& output) const
+    {
+        WriteTemplate(templateDictionary, mainTemplatePath_, output);
+    }
 
-		sectionDictionary.SetIntValue(CoverRateTemplate, coverageRate.GetPercentRate());
-		sectionDictionary.SetIntValue(UncoverRateTemplate, 100 - coverageRate.GetPercentRate());
-		sectionDictionary.SetIntValue(ExecutedLineTemplate, coverageRate.GetExecutedLinesCount());
-		sectionDictionary.SetIntValue(UnExecutedLineTemplate, coverageRate.GetUnExecutedLinesCount());
-		sectionDictionary.SetIntValue(TotalLineTemplate, coverageRate.GetTotalLinesCount());
-		sectionDictionary.SetValue(IdTemplate, GetUuid());
-		auto name = ToString(originalFilename.wstring());
-		sectionDictionary.SetValue(NameTemplate, name);
-	}
-}
+    //-------------------------------------------------------------------------
+    void TemplateHtmlExporter::GenerateProjectTemplate(
+        const ctemplate::TemplateDictionary& templateDictionary, const fs::path& output) const
+    {
+        WriteTemplate(templateDictionary, mainTemplatePath_, output);
+    }
+
+    //-------------------------------------------------------------------------
+    void TemplateHtmlExporter::GenerateSourceTemplate(const std::wstring& title,
+                                                      const std::wstring& codeContent,
+                                                      bool                enableCodePrettify,
+                                                      const fs::path&     output) const
+    {
+        auto                          titleStr = ToString(title);
+        ctemplate::TemplateDictionary dictionary(titleStr);
+        std::string                   bodyLoad = BodyOnLoadFct;
+        std::string                   warning  = "";
+
+        if (!enableCodePrettify)
+        {
+            bodyLoad = "";
+            warning  = SyntaxHighlightingDisabledMsg;
+        }
+
+        dictionary.SetValue(TitleTemplate, titleStr);
+        dictionary.SetValue(CodeTemplate, ToString(codeContent));
+        dictionary.SetValue(BodyOnLoadTemplate, bodyLoad);
+        dictionary.SetValue(SourceWarningMessageTemplate, warning);
+        dictionary.SetValue(OCCProjectLink, ActualProjectLink);
+        dictionary.SetValue(OCCVersion, OPENCPPCOVERAGE_VERSION);
+        WriteTemplate(dictionary, fileTemplatePath_, output);
+    }
+    //-------------------------------------------------------------------------
+    std::string TemplateHtmlExporter::GetUuid()
+    {
+        boost::uuids::uuid id(uuidGenerator_());
+
+        return boost::uuids::to_string(id);
+    }
+
+    //-------------------------------------------------------------------------
+    void TemplateHtmlExporter::FillSection(ctemplate::TemplateDictionary& sectionDictionary,
+                                           bool isSimpleText, const fs::path* link,
+                                           const cov::CoverageRate& coverageRate,
+                                           const fs::path&          originalFilename)
+    {
+        if (link)
+        {
+            auto htmlPath = ToHtmlPath(*link);
+            sectionDictionary.SetValueAndShowSection(LinkTemplate, htmlPath, ItemLinkSection);
+        }
+        else
+        {
+            sectionDictionary.ShowSection(isSimpleText ? ItemSimpleText : ItemNoLinkSection);
+        }
+
+        sectionDictionary.SetIntValue(CoverRateTemplate, coverageRate.GetPercentRate());
+        sectionDictionary.SetIntValue(UncoverRateTemplate, 100 - coverageRate.GetPercentRate());
+        sectionDictionary.SetIntValue(ExecutedLineTemplate, coverageRate.GetExecutedLinesCount());
+        sectionDictionary.SetIntValue(UnExecutedLineTemplate,
+                                      coverageRate.GetUnExecutedLinesCount());
+        sectionDictionary.SetIntValue(TotalLineTemplate, coverageRate.GetTotalLinesCount());
+        sectionDictionary.SetValue(IdTemplate, GetUuid());
+        auto name = ToString(originalFilename.wstring());
+        sectionDictionary.SetValue(NameTemplate, name);
+    }
+} // namespace Exporter

@@ -17,10 +17,10 @@
 #include "stdafx.h"
 #include <boost/algorithm/string/predicate.hpp>
 
+#include "CppCoverage/OptionsParser.hpp"
+#include "CppCoverage/ProgramOptions.hpp"
 #include "OpenCppCoverageTestTools.hpp"
 #include "TestCoverageConsole/TestCoverageConsole.hpp"
-#include "CppCoverage/ProgramOptions.hpp"
-#include "CppCoverage/OptionsParser.hpp"
 #include "Tools/Tool.hpp"
 
 using CppCoverage::OptionsParser;
@@ -28,33 +28,29 @@ using CppCoverage::ProgramOptions;
 
 namespace OpenCppCoverageTest
 {
-	//-------------------------------------------------------------------------
-	TEST(WarningManagerTests, CommandLineTooLong)
-	{
-		std::string stdOut;
-		const std::vector<std::pair<std::string, std::string>>
-		    coverageArguments = {
-		        {ProgramOptions::SelectedSourcesOption,
-		         TestCoverageConsole::GetMainCppPath().string()},
-		        {ProgramOptions::SelectedModulesOption,
-		         TestCoverageConsole::GetOutputBinaryPath().string()},
-		        {ProgramOptions::QuietOption, ""}};
-		std::vector<std::wstring> arguments{TestCoverageConsole::TestBasic};
+    //-------------------------------------------------------------------------
+    TEST(WarningManagerTests, CommandLineTooLong)
+    {
+        std::string                                            stdOut;
+        const std::vector<std::pair<std::string, std::string>> coverageArguments = {
+            { ProgramOptions::SelectedSourcesOption,
+              TestCoverageConsole::GetMainCppPath().string() },
+            { ProgramOptions::SelectedModulesOption,
+              TestCoverageConsole::GetOutputBinaryPath().string() },
+            { ProgramOptions::QuietOption, "" }
+        };
+        std::vector<std::wstring> arguments{ TestCoverageConsole::TestBasic };
 
-		RunCoverageFor(coverageArguments,
-		               TestCoverageConsole::GetOutputBinaryPath(),
-		               arguments,
-		               &stdOut);
-		ASSERT_EQ("", stdOut);
-		for (int i = 0; i < OptionsParser::DosCommandLineMaxSize / 10; ++i)
-			arguments.push_back(L"01223456789");
+        RunCoverageFor(coverageArguments, TestCoverageConsole::GetOutputBinaryPath(), arguments,
+                       &stdOut);
+        ASSERT_EQ("", stdOut);
+        for (int i = 0; i < OptionsParser::DosCommandLineMaxSize / 10; ++i)
+            arguments.push_back(L"01223456789");
 
-		RunCoverageFor(coverageArguments,
-		               TestCoverageConsole::GetOutputBinaryPath(),
-		               arguments,
-		               &stdOut);
-		auto output = Tools::LocalToWString(stdOut);
-		ASSERT_TRUE(boost::algorithm::contains(
-		    output, OptionsParser::GetTooLongCommandLineMessage()));
-	}
-}
+        RunCoverageFor(coverageArguments, TestCoverageConsole::GetOutputBinaryPath(), arguments,
+                       &stdOut);
+        auto output = Tools::LocalToWString(stdOut);
+        ASSERT_TRUE(
+            boost::algorithm::contains(output, OptionsParser::GetTooLongCommandLineMessage()));
+    }
+} // namespace OpenCppCoverageTest

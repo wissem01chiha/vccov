@@ -16,60 +16,60 @@
 
 #pragma once
 
+#include "OptionExport.h"
 #include <boost/optional.hpp>
 #include <iosfwd>
 #include <map>
 #include <memory>
-#include "OptionExport.h"
 
 namespace Tools
 {
-	class WarningManager;
+    class WarningManager;
 }
 
 namespace boost
 {
-	namespace program_options
-	{
-		class variables_map;
-	}
-}
+    namespace program_options
+    {
+        class variables_map;
+    }
+} // namespace boost
 
 namespace CppCoverage
 {
-	class Options;
-	class ProgramOptions;
-	enum  class OptionsExportType;
-	class IOptionParser;
-	class ProgramOptionsVariablesMap;
+    class Options;
+    class ProgramOptions;
+    enum class OptionsExportType;
+    class IOptionParser;
+    class ProgramOptionsVariablesMap;
 
-	class VCOV_OPTIONEXPORT_DLL OptionsParser
-	{
-	public:
-		static const char PathSeparator;
-		static const int DosCommandLineMaxSize;
+    class VCOV_OPTIONEXPORT_DLL OptionsParser
+    {
+      public:
+        static const char PathSeparator;
+        static const int  DosCommandLineMaxSize;
 
-		OptionsParser();
-		explicit OptionsParser(std::shared_ptr<Tools::WarningManager>,
-		                       std::vector<std::unique_ptr<IOptionParser>>&&);
-		~OptionsParser();
+        OptionsParser();
+        explicit OptionsParser(std::shared_ptr<Tools::WarningManager>,
+                               std::vector<std::unique_ptr<IOptionParser>>&&);
+        ~OptionsParser();
 
-		boost::optional<Options> Parse(int argc, const char** argv, std::wostream* emptyOptionsExplanation) const;
-				
-		static std::wstring GetTooLongCommandLineMessage();
+        boost::optional<Options> Parse(int argc, const char** argv,
+                                       std::wostream* emptyOptionsExplanation) const;
 
-	private:
-		OptionsParser(const OptionsParser&) = delete;
-		OptionsParser& operator=(const OptionsParser&) = delete;
-		OptionsParser(OptionsParser&&) = delete;
-		OptionsParser& operator=(OptionsParser&&) = delete;
+        static std::wstring GetTooLongCommandLineMessage();
 
-		boost::optional<Options> Parse(int argc, const char** argv) const;
-		void ShowExplanation(std::wostream* emptyOptionsExplanation, const char* message) const;
-		
-		std::unique_ptr<ProgramOptions> programOptions_;
-		std::shared_ptr<Tools::WarningManager> optionalWarningManager_;
-		std::vector<std::unique_ptr<IOptionParser>> optionParsers_;
-	};
-}
+      private:
+        OptionsParser(const OptionsParser&)            = delete;
+        OptionsParser& operator=(const OptionsParser&) = delete;
+        OptionsParser(OptionsParser&&)                 = delete;
+        OptionsParser& operator=(OptionsParser&&)      = delete;
 
+        boost::optional<Options> Parse(int argc, const char** argv) const;
+        void ShowExplanation(std::wostream* emptyOptionsExplanation, const char* message) const;
+
+        std::unique_ptr<ProgramOptions>             programOptions_;
+        std::shared_ptr<Tools::WarningManager>      optionalWarningManager_;
+        std::vector<std::unique_ptr<IOptionParser>> optionParsers_;
+    };
+} // namespace CppCoverage

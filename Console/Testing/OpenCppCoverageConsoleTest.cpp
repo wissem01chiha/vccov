@@ -17,166 +17,158 @@
 #include "stdafx.h"
 
 #include <Windows.h>
-#include <filesystem>
 #include <boost/algorithm/string/predicate.hpp>
+#include <filesystem>
 
-#include "TestCoverageConsole/TestCoverageConsole.hpp"
-#include "OpenCppCoverage/OpenCppCoverage.hpp"
+#include "CppCoverage/ExportOptionParser.hpp"
+#include "CppCoverage/FilterAssistant.hpp"
 #include "CppCoverage/OptionsParser.hpp"
 #include "CppCoverage/ProgramOptions.hpp"
-#include "CppCoverage/FilterAssistant.hpp"
-#include "CppCoverage/ExportOptionParser.hpp"
+#include "OpenCppCoverage/OpenCppCoverage.hpp"
+#include "TestCoverageConsole/TestCoverageConsole.hpp"
 
+#include "TestHelper/TemporaryPath.hpp"
 #include "Tools/ScopedAction.hpp"
 #include "Tools/Tool.hpp"
-#include "TestHelper/TemporaryPath.hpp"
 
 #include "OpenCppCoverageTestTools.hpp"
 
-namespace fs = std::filesystem;
+namespace fs  = std::filesystem;
 namespace cov = CppCoverage;
 
 namespace OpenCppCoverageTest
-{	
-	namespace
-	{
-		//---------------------------------------------------------------------
-		void CheckOutputDirectory(const TestHelper::TemporaryPath& tempFolder)
-		{			
-			ASSERT_FALSE(fs::is_empty(tempFolder.GetPath()));
-		}
+{
+    namespace
+    {
+        //---------------------------------------------------------------------
+        void CheckOutputDirectory(const TestHelper::TemporaryPath& tempFolder)
+        {
+            ASSERT_FALSE(fs::is_empty(tempFolder.GetPath()));
+        }
 
-		//---------------------------------------------------------------------
-		int RunCoverageForProgram(
-		    const std::vector<std::pair<std::string, std::string>>&
-		        additionalCoverageArguments,
-		    const fs::path& programToRun,
-		    const std::vector<std::wstring>& arguments)
-		{
-			auto coverageArguments = additionalCoverageArguments;
-			AddDefaultFilters(coverageArguments, programToRun);
-			coverageArguments.emplace_back(cov::ProgramOptions::QuietOption,
-			                               "");
-			std::string ignoreOutput;
-			return RunCoverageFor(
-			    coverageArguments, programToRun, arguments, &ignoreOutput);
-		}
+        //---------------------------------------------------------------------
+        int RunCoverageForProgram(
+            const std::vector<std::pair<std::string, std::string>>& additionalCoverageArguments,
+            const fs::path& programToRun, const std::vector<std::wstring>& arguments)
+        {
+            auto coverageArguments = additionalCoverageArguments;
+            AddDefaultFilters(coverageArguments, programToRun);
+            coverageArguments.emplace_back(cov::ProgramOptions::QuietOption, "");
+            std::string ignoreOutput;
+            return RunCoverageFor(coverageArguments, programToRun, arguments, &ignoreOutput);
+        }
 
-		//---------------------------------------------------------------------
-		int RunCoverageForProgram(const fs::path& programToRun,
-		                          const std::vector<std::wstring>& arguments)
-		{
-			TestHelper::TemporaryPath tempFolder;
+        //---------------------------------------------------------------------
+        int RunCoverageForProgram(const fs::path&                  programToRun,
+                                  const std::vector<std::wstring>& arguments)
+        {
+            TestHelper::TemporaryPath tempFolder;
 
-			int exitCode = RunCoverageForProgram(
-			{ BuildExportTypeString(cov::ExportOptionParser::ExportTypeHtmlValue,
-									  tempFolder.GetPath()) },
-			    programToRun,
-			    arguments);
+            int exitCode = RunCoverageForProgram(
+                { BuildExportTypeString(cov::ExportOptionParser::ExportTypeHtmlValue,
+                                        tempFolder.GetPath()) },
+                programToRun, arguments);
 
-			CheckOutputDirectory(tempFolder);
-			return exitCode;
-		}
+            CheckOutputDirectory(tempFolder);
+            return exitCode;
+        }
 
-		//---------------------------------------------------------------------
-		std::wstring
-		GetOutput(const std::pair<std::string, std::string>& coverageArgument)
-		{
-			std::string output;
-			auto exitCode =
-			    RunCoverageFor({coverageArgument},
-			                   TestCoverageConsole::GetOutputBinaryPath(),
-			                   {},
-			                   &output);
-			if (exitCode != 0)
-				throw std::runtime_error("Exit code invalid");
-			return Tools::LocalToWString(output);
-		}
-	}
+        //---------------------------------------------------------------------
+        std::wstring GetOutput(const std::pair<std::string, std::string>& coverageArgument)
+        {
+            std::string output;
+            auto        exitCode = RunCoverageFor({ coverageArgument },
+                                                  TestCoverageConsole::GetOutputBinaryPath(), {}, &output);
+            if (exitCode != 0)
+                throw std::runtime_error("Exit code invalid");
+            return Tools::LocalToWString(output);
+        }
+    } // namespace
 
-	//-------------------------------------------------------------------------
-	TEST(OpenCppCoverageConsoleTest, Basic)
-	{		
-		fs::path testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
-							
-		ASSERT_EQ(0, RunCoverageForProgram(testCoverageConsole, {}));
-	}	
+    //-------------------------------------------------------------------------
+    TEST(OpenCppCoverageConsoleTest, Basic)
+    {
+        fs::path testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
 
-	//-------------------------------------------------------------------------
-	TEST(OpenCppCoverageConsoleTest, UnhandledException)
-	{
-		fs::path testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
+        ASSERT_EQ(0, RunCoverageForProgram(testCoverageConsole, {}));
+    }
 
-		ASSERT_NE(0, RunCoverageForProgram(testCoverageConsole, { TestCoverageConsole::TestThrowUnHandledSEHException }));
-	}
-	
-	//-------------------------------------------------------------------------
-	TEST(OpenCppCoverageConsoleTest, Breakpoint)
-	{
-		fs::path testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
+    //-------------------------------------------------------------------------
+    TEST(OpenCppCoverageConsoleTest, UnhandledException)
+    {
+        fs::path testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
 
-		ASSERT_EQ(EXCEPTION_BREAKPOINT, RunCoverageForProgram(testCoverageConsole, { TestCoverageConsole::TestBreakPoint }));
-	}
+        ASSERT_NE(0,
+                  RunCoverageForProgram(testCoverageConsole,
+                                        { TestCoverageConsole::TestThrowUnHandledSEHException }));
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(OpenCppCoverageConsoleTest, BreakpointChildProcess)
-	{
-		fs::path testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
+    //-------------------------------------------------------------------------
+    TEST(OpenCppCoverageConsoleTest, Breakpoint)
+    {
+        fs::path testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
 
-		ASSERT_EQ(0, RunCoverageForProgram(testCoverageConsole,
-			{ TestCoverageConsole::TestChildProcess, TestCoverageConsole::TestBreakPoint }));
-	}
+        ASSERT_EQ(
+            EXCEPTION_BREAKPOINT,
+            RunCoverageForProgram(testCoverageConsole, { TestCoverageConsole::TestBreakPoint }));
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(OpenCppCoverageConsoleTest, ExporterTest)
-	{
-		fs::path exporterTest{ OUT_DIR };
-		
-		exporterTest /= "ExporterTest.exe";
-		ASSERT_EQ(0, RunCoverageForProgram(exporterTest, {}));
-	}
+    //-------------------------------------------------------------------------
+    TEST(OpenCppCoverageConsoleTest, BreakpointChildProcess)
+    {
+        fs::path testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
 
-	//-------------------------------------------------------------------------
-	TEST(OpenCppCoverageConsoleTest, ExitCode)
-	{
-		TestHelper::TemporaryPath tempFolder;
+        ASSERT_EQ(
+            0, RunCoverageForProgram(testCoverageConsole, { TestCoverageConsole::TestChildProcess,
+                                                            TestCoverageConsole::TestBreakPoint }));
+    }
 
-		const fs::path testCoverageConsole =
-		    TestCoverageConsole::GetOutputBinaryPath();
-		std::vector<std::pair<std::string, std::string>>
-		    additionalCoverageArguments = {BuildExportTypeString(
-		        cov::ExportOptionParser::ExportTypeBinaryValue,
-		        tempFolder.GetPath())};
+    //-------------------------------------------------------------------------
+    TEST(OpenCppCoverageConsoleTest, ExporterTest)
+    {
+        fs::path exporterTest{ OUT_DIR };
 
-		int exitCode = RunCoverageForProgram(
-		    additionalCoverageArguments,
-		    testCoverageConsole,
-		    {TestCoverageConsole::TestThrowUnHandledCppException});
-		ASSERT_NE(0, exitCode);
-		ASSERT_TRUE(Tools::FileExists(tempFolder));
+        exporterTest /= "ExporterTest.exe";
+        ASSERT_EQ(0, RunCoverageForProgram(exporterTest, {}));
+    }
 
-		additionalCoverageArguments.emplace_back(
-		    cov::ProgramOptions::InputCoverageValue, tempFolder->string());
-		exitCode = RunCoverageForProgram(
-		    additionalCoverageArguments,
-		    testCoverageConsole,
-		    {TestCoverageConsole::TestBasic});
-		ASSERT_EQ(0, exitCode);
-	}
+    //-------------------------------------------------------------------------
+    TEST(OpenCppCoverageConsoleTest, ExitCode)
+    {
+        TestHelper::TemporaryPath tempFolder;
 
-	//-------------------------------------------------------------------------
-	TEST(OpenCppCoverageConsoleTest, FilterAssistantNoModules)
-	{
-		ASSERT_TRUE(boost::algorithm::contains(
-		    GetOutput({cov::ProgramOptions::SelectedModulesOption, "No match"}),
-		    cov::FilterAssistant::NoModulesSelectedMsg));
-	}
+        const fs::path testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
+        std::vector<std::pair<std::string, std::string>> additionalCoverageArguments = {
+            BuildExportTypeString(cov::ExportOptionParser::ExportTypeBinaryValue,
+                                  tempFolder.GetPath())
+        };
 
-	//-------------------------------------------------------------------------
-	TEST(OpenCppCoverageConsoleTest, FilterAssistantNoSourceFiles)
-	{
-		ASSERT_TRUE(boost::algorithm::contains(
-		    GetOutput({cov::ProgramOptions::SelectedSourcesOption, "No match"}),
-		    cov::FilterAssistant::NoSourceFilesSelectedMsg));
-	}
-}
+        int exitCode =
+            RunCoverageForProgram(additionalCoverageArguments, testCoverageConsole,
+                                  { TestCoverageConsole::TestThrowUnHandledCppException });
+        ASSERT_NE(0, exitCode);
+        ASSERT_TRUE(Tools::FileExists(tempFolder));
+
+        additionalCoverageArguments.emplace_back(cov::ProgramOptions::InputCoverageValue,
+                                                 tempFolder->string());
+        exitCode = RunCoverageForProgram(additionalCoverageArguments, testCoverageConsole,
+                                         { TestCoverageConsole::TestBasic });
+        ASSERT_EQ(0, exitCode);
+    }
+
+    //-------------------------------------------------------------------------
+    TEST(OpenCppCoverageConsoleTest, FilterAssistantNoModules)
+    {
+        ASSERT_TRUE(boost::algorithm::contains(
+            GetOutput({ cov::ProgramOptions::SelectedModulesOption, "No match" }),
+            cov::FilterAssistant::NoModulesSelectedMsg));
+    }
+
+    //-------------------------------------------------------------------------
+    TEST(OpenCppCoverageConsoleTest, FilterAssistantNoSourceFiles)
+    {
+        ASSERT_TRUE(boost::algorithm::contains(
+            GetOutput({ cov::ProgramOptions::SelectedSourcesOption, "No match" }),
+            cov::FilterAssistant::NoSourceFilesSelectedMsg));
+    }
+} // namespace OpenCppCoverageTest

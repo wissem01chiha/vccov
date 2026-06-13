@@ -25,30 +25,28 @@
 
 namespace CppCoverage
 {
-	class VCOV_COREEXPORT_DLL StartInfo
-	{
-	public:
-		explicit StartInfo(const std::filesystem::path&);
-		
-		StartInfo(StartInfo&&);
+    class VCOV_COREEXPORT_DLL StartInfo
+    {
+      public:
+        explicit StartInfo(const std::filesystem::path&);
 
-		StartInfo(const StartInfo&) = default;		
-		StartInfo& operator=(const StartInfo&) = default;
+        StartInfo(StartInfo&&);
 
-		void SetWorkingDirectory(const std::filesystem::path&);
-		void AddArgument(const std::wstring&);
+        StartInfo(const StartInfo&)            = default;
+        StartInfo& operator=(const StartInfo&) = default;
 
-		const std::filesystem::path& GetPath() const;
-		const std::vector<std::wstring>& GetArguments() const;
-		const std::filesystem::path* GetWorkingDirectory() const;
+        void SetWorkingDirectory(const std::filesystem::path&);
+        void AddArgument(const std::wstring&);
 
-		friend VCOV_COREEXPORT_DLL std::wostream& operator<<(std::wostream& ostr, const StartInfo&);
+        const std::filesystem::path&     GetPath() const;
+        const std::vector<std::wstring>& GetArguments() const;
+        const std::filesystem::path*     GetWorkingDirectory() const;
 
-	private:
-		std::filesystem::path path_;
-		std::vector<std::wstring> arguments_;
-		boost::optional<std::filesystem::path> workingDirectory_;
-	};
-}
+        friend VCOV_COREEXPORT_DLL std::wostream& operator<<(std::wostream& ostr, const StartInfo&);
 
-
+      private:
+        std::filesystem::path                  path_;
+        std::vector<std::wstring>              arguments_;
+        boost::optional<std::filesystem::path> workingDirectory_;
+    };
+} // namespace CppCoverage

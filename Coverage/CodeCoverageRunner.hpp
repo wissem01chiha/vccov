@@ -23,53 +23,55 @@
 
 namespace Tools
 {
-	class WarningManager;
+    class WarningManager;
 }
 
 namespace CppCoverage
 {
-	class StartInfo;
-	class RunCoverageSettings;
-	class DebugInformationEventHandler;
-	class ExecutedAddressManager;
-	class BreakPoint;
-	class CoverageFilterManager;
-	class ExceptionHandler;
-	class UnifiedDiffSettings;
-	class MonitoredLineRegister;
-	class FilterAssistant;
+    class StartInfo;
+    class RunCoverageSettings;
+    class DebugInformationEventHandler;
+    class ExecutedAddressManager;
+    class BreakPoint;
+    class CoverageFilterManager;
+    class ExceptionHandler;
+    class UnifiedDiffSettings;
+    class MonitoredLineRegister;
+    class FilterAssistant;
 
-	class VCOV_COVERAGEEXPORT_DLL CodeCoverageRunner : private IDebugEventsHandler
-	{
-	public:
-		explicit CodeCoverageRunner(std::shared_ptr<Tools::WarningManager>);
-		~CodeCoverageRunner();
+    class VCOV_COVERAGEEXPORT_DLL CodeCoverageRunner : private IDebugEventsHandler
+    {
+      public:
+        explicit CodeCoverageRunner(std::shared_ptr<Tools::WarningManager>);
+        ~CodeCoverageRunner();
 
-		Plugin::CoverageData RunCoverage(const RunCoverageSettings&);
+        Plugin::CoverageData RunCoverage(const RunCoverageSettings&);
 
-	private:
-		virtual void OnCreateProcess(const CREATE_PROCESS_DEBUG_INFO&) override;
-		virtual void OnExitProcess(HANDLE hProcess, HANDLE hThread, const EXIT_PROCESS_DEBUG_INFO&) override;
-		virtual void OnLoadDll(HANDLE hProcess, HANDLE hThread, const LOAD_DLL_DEBUG_INFO&) override;
-		virtual void OnUnloadDll(HANDLE hProcess, HANDLE hThread, const UNLOAD_DLL_DEBUG_INFO&) override;
-		virtual ExceptionType OnException(HANDLE hProcess, HANDLE hThread, const EXCEPTION_DEBUG_INFO&) override;
+      private:
+        virtual void          OnCreateProcess(const CREATE_PROCESS_DEBUG_INFO&) override;
+        virtual void          OnExitProcess(HANDLE hProcess, HANDLE hThread,
+                                            const EXIT_PROCESS_DEBUG_INFO&) override;
+        virtual void          OnLoadDll(HANDLE hProcess, HANDLE hThread,
+                                        const LOAD_DLL_DEBUG_INFO&) override;
+        virtual void          OnUnloadDll(HANDLE hProcess, HANDLE hThread,
+                                          const UNLOAD_DLL_DEBUG_INFO&) override;
+        virtual ExceptionType OnException(HANDLE hProcess, HANDLE hThread,
+                                          const EXCEPTION_DEBUG_INFO&) override;
 
-	private:
-		CodeCoverageRunner(const CodeCoverageRunner&) = delete;
-		CodeCoverageRunner& operator=(const CodeCoverageRunner&) = delete;
+      private:
+        CodeCoverageRunner(const CodeCoverageRunner&)            = delete;
+        CodeCoverageRunner& operator=(const CodeCoverageRunner&) = delete;
 
-		void LoadModule(HANDLE hProcess, HANDLE hFile, void* baseOfImage);
-		bool OnBreakPoint(const EXCEPTION_DEBUG_INFO&, HANDLE hProcess, HANDLE hThread);
+        void LoadModule(HANDLE hProcess, HANDLE hFile, void* baseOfImage);
+        bool OnBreakPoint(const EXCEPTION_DEBUG_INFO&, HANDLE hProcess, HANDLE hThread);
 
-	private:
-		std::shared_ptr<BreakPoint> breakpoint_;
-		std::shared_ptr<ExecutedAddressManager> executedAddressManager_;
-		std::shared_ptr<CoverageFilterManager> coverageFilterManager_;
-		std::unique_ptr<MonitoredLineRegister> monitoredLineRegister_;
-		std::unique_ptr<ExceptionHandler> exceptionHandler_;
-		std::shared_ptr<Tools::WarningManager> warningManager_;
-		std::shared_ptr<FilterAssistant> filterAssistant_;
-	};
-}
-
-
+      private:
+        std::shared_ptr<BreakPoint>             breakpoint_;
+        std::shared_ptr<ExecutedAddressManager> executedAddressManager_;
+        std::shared_ptr<CoverageFilterManager>  coverageFilterManager_;
+        std::unique_ptr<MonitoredLineRegister>  monitoredLineRegister_;
+        std::unique_ptr<ExceptionHandler>       exceptionHandler_;
+        std::shared_ptr<Tools::WarningManager>  warningManager_;
+        std::shared_ptr<FilterAssistant>        filterAssistant_;
+    };
+} // namespace CppCoverage

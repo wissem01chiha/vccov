@@ -14,79 +14,79 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "MappedFile.hpp"
-#include <fstream>
 #include "TemporaryPath.hpp"
+#include "stdafx.h"
+#include <fstream>
 
 namespace ToolsTests
 {
-	namespace
-	{
-		//---------------------------------------------------------------------
-		std::unique_ptr<TestHelper::TemporaryPath> CreateFile(const std::vector<std::string>& lines)
-		{
-			auto path = std::make_unique<TestHelper::TemporaryPath>();
-			std::ofstream ofs(path->GetPath().string(), std::ios::binary);
+    namespace
+    {
+        //---------------------------------------------------------------------
+        std::unique_ptr<TestHelper::TemporaryPath> CreateFile(const std::vector<std::string>& lines)
+        {
+            auto          path = std::make_unique<TestHelper::TemporaryPath>();
+            std::ofstream ofs(path->GetPath().string(), std::ios::binary);
 
-			for (const auto& line : lines)
-				ofs.write(line.c_str(), line.size());
-			return path;
-		}
+            for (const auto& line : lines)
+                ofs.write(line.c_str(), line.size());
+            return path;
+        }
 
-		//---------------------------------------------------------------------
-		std::vector<std::string> GetLines(const std::filesystem::path& path)
-		{
-			std::ifstream ifs(path.wstring());
-			std::vector<std::string> lines;
-			std::string line;
+        //---------------------------------------------------------------------
+        std::vector<std::string> GetLines(const std::filesystem::path& path)
+        {
+            std::ifstream            ifs(path.wstring());
+            std::vector<std::string> lines;
+            std::string              line;
 
-			while (std::getline(ifs, line))
-				lines.push_back(line);
-			return lines;
-		}
-	}
+            while (std::getline(ifs, line))
+                lines.push_back(line);
+            return lines;
+        }
+    } // namespace
 
-	//---------------------------------------------------------------------
-	TEST(MappedFileTest, GetLine)
-	{
-		auto path = CreateFile({ "\r\n", "abc\r\n", "123\n" });
-		auto file = Tools::MappedFile::TryCreate(path->GetPath());
-		auto expectedLines = GetLines(*path);
-		ASSERT_EQ(expectedLines, file->GetLines());
-	}
+    //---------------------------------------------------------------------
+    TEST(MappedFileTest, GetLine)
+    {
+        auto path          = CreateFile({ "\r\n", "abc\r\n", "123\n" });
+        auto file          = Tools::MappedFile::TryCreate(path->GetPath());
+        auto expectedLines = GetLines(*path);
+        ASSERT_EQ(expectedLines, file->GetLines());
+    }
 
-	//---------------------------------------------------------------------
-	TEST(MappedFileTest, EmptyFile)
-	{
-		TestHelper::TemporaryPath path{ TestHelper::TemporaryPathOption::CreateAsFile };
-		ASSERT_EQ(nullptr, Tools::MappedFile::TryCreate(path.GetPath()));
-	}
+    //---------------------------------------------------------------------
+    TEST(MappedFileTest, EmptyFile)
+    {
+        TestHelper::TemporaryPath path{ TestHelper::TemporaryPathOption::CreateAsFile };
+        ASSERT_EQ(nullptr, Tools::MappedFile::TryCreate(path.GetPath()));
+    }
 
-	//---------------------------------------------------------------------
-	TEST(MappedFileTest, MissingFile)
-	{
-		ASSERT_EQ(nullptr, Tools::MappedFile::TryCreate("MissingFile"));
-	}
+    //---------------------------------------------------------------------
+    TEST(MappedFileTest, MissingFile)
+    {
+        ASSERT_EQ(nullptr, Tools::MappedFile::TryCreate("MissingFile"));
+    }
 
-	//---------------------------------------------------------------------
-	TEST(MappedFileTest, WholeFile)
-	{
-		auto lines = GetLines(__FILE__);
-		auto file = Tools::MappedFile::TryCreate(__FILE__);
+    //---------------------------------------------------------------------
+    TEST(MappedFileTest, WholeFile)
+    {
+        auto lines = GetLines(__FILE__);
+        auto file  = Tools::MappedFile::TryCreate(__FILE__);
 
-		ASSERT_LT(0, static_cast<int>(lines.size()));
-		ASSERT_EQ(lines, file->GetLines());
-	}
+        ASSERT_LT(0, static_cast<int>(lines.size()));
+        ASSERT_EQ(lines, file->GetLines());
+    }
 
-	//---------------------------------------------------------------------
-	TEST(MappedFileTest, EmptyEndLine)
-	{
-		auto path = CreateFile({ "Test", "\n", "\n" });
-		auto expectedLines = GetLines(*path);
-		auto file = Tools::MappedFile::TryCreate(*path);
+    //---------------------------------------------------------------------
+    TEST(MappedFileTest, EmptyEndLine)
+    {
+        auto path          = CreateFile({ "Test", "\n", "\n" });
+        auto expectedLines = GetLines(*path);
+        auto file          = Tools::MappedFile::TryCreate(*path);
 
-		ASSERT_TRUE(file);
-		ASSERT_EQ(expectedLines, file->GetLines());
-	}
-}
+        ASSERT_TRUE(file);
+        ASSERT_EQ(expectedLines, file->GetLines());
+    }
+} // namespace ToolsTests

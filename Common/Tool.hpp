@@ -16,49 +16,47 @@
 
 #pragma once
 
-#include <string>
-#include <functional>
-#include <filesystem>
-#include <boost/optional/optional_fwd.hpp>
 #include "CommonExport.h"
+#include <boost/optional/optional_fwd.hpp>
+#include <filesystem>
+#include <functional>
+#include <string>
 
 namespace Tools
-{	
-	VCOV_COMMONEXPORT_DLL std::wstring LocalToWString(const std::string&);
-	VCOV_COMMONEXPORT_DLL std::wstring Utf8ToWString(const std::string&);
-	VCOV_COMMONEXPORT_DLL std::string ToLocalString(const std::wstring&);
-	VCOV_COMMONEXPORT_DLL std::string ToUtf8String(const std::wstring&);
+{
+    VCOV_COMMONEXPORT_DLL std::wstring LocalToWString(const std::string&);
+    VCOV_COMMONEXPORT_DLL std::wstring Utf8ToWString(const std::string&);
+    VCOV_COMMONEXPORT_DLL std::string ToLocalString(const std::wstring&);
+    VCOV_COMMONEXPORT_DLL std::string ToUtf8String(const std::wstring&);
 
-	VCOV_COMMONEXPORT_DLL boost::optional<std::wstring> Try(std::function<void()>);	
-	
-	template <typename Exception, typename Fct>
-	decltype(auto)
-	Try(Fct fct, std::function<std::string(const std::string&)> buildErrorMsg)
-	{
-		std::string error;
-		try
-		{
-			return fct();
-		}
-		catch (const std::exception& e)
-		{
-			error = e.what();
-		}
-		catch (...)
-		{
-			error = "Unknow";
-		}
+    VCOV_COMMONEXPORT_DLL boost::optional<std::wstring> Try(std::function<void()>);
 
-		throw Exception(buildErrorMsg(error));
-	}
+    template <typename Exception, typename Fct>
+    decltype(auto) Try(Fct fct, std::function<std::string(const std::string&)> buildErrorMsg)
+    {
+        std::string error;
+        try
+        {
+            return fct();
+        }
+        catch (const std::exception& e)
+        {
+            error = e.what();
+        }
+        catch (...)
+        {
+            error = "Unknow";
+        }
 
-	VCOV_COMMONEXPORT_DLL std::filesystem::path GetExecutableFolder();
+        throw Exception(buildErrorMsg(error));
+    }
 
-	VCOV_COMMONEXPORT_DLL void ShowOutputMessage(const std::wstring& message, const std::filesystem::path& path);
-	VCOV_COMMONEXPORT_DLL std::wstring GetSeparatorLine();
+    VCOV_COMMONEXPORT_DLL std::filesystem::path GetExecutableFolder();
 
-	VCOV_COMMONEXPORT_DLL void CreateParentFolderIfNeeded(const std::filesystem::path& path);
-	VCOV_COMMONEXPORT_DLL bool FileExists(const std::filesystem::path& path);
-}
+    VCOV_COMMONEXPORT_DLL void ShowOutputMessage(const std::wstring&          message,
+                                                 const std::filesystem::path& path);
+    VCOV_COMMONEXPORT_DLL std::wstring GetSeparatorLine();
 
-
+    VCOV_COMMONEXPORT_DLL void CreateParentFolderIfNeeded(const std::filesystem::path& path);
+    VCOV_COMMONEXPORT_DLL bool FileExists(const std::filesystem::path& path);
+} // namespace Tools

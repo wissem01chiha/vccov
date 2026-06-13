@@ -19,139 +19,130 @@
 #include <random>
 
 #include "CppCoverage/CoverageDataMerger.hpp"
-#include "Plugin/Exporter/CoverageData.hpp" 
-#include "Plugin/Exporter/ModuleCoverage.hpp" 
-#include "Plugin/Exporter/FileCoverage.hpp" 
-#include "Plugin/Exporter/LineCoverage.hpp" 
+#include "Plugin/Exporter/CoverageData.hpp"
+#include "Plugin/Exporter/FileCoverage.hpp"
+#include "Plugin/Exporter/LineCoverage.hpp"
+#include "Plugin/Exporter/ModuleCoverage.hpp"
 
 namespace cov = CppCoverage;
-namespace fs = std::filesystem;
+namespace fs  = std::filesystem;
 
 namespace CppCoverageTest
 {
-	namespace
-	{
-		//---------------------------------------------------------------------
-		struct LineInfo
-		{
-			LineInfo(
-				const fs::path& module,
-				const fs::path& file,
-				unsigned int line)
-				: module_(module)
-				, file_(file)
-				, line_{ line }
-			{
-			}
+    namespace
+    {
+        //---------------------------------------------------------------------
+        struct LineInfo
+        {
+            LineInfo(const fs::path& module, const fs::path& file, unsigned int line)
+                : module_(module), file_(file), line_{ line }
+            {
+            }
 
-			//---------------------------------------------------------------------
-			bool operator<(const LineInfo& lineInfo) const
-			{
-				return std::make_tuple(module_, file_, line_)
-					< std::make_tuple(lineInfo.module_, lineInfo.file_, lineInfo.line_);
-			}
+            //---------------------------------------------------------------------
+            bool operator<(const LineInfo& lineInfo) const
+            {
+                return std::make_tuple(module_, file_, line_) <
+                       std::make_tuple(lineInfo.module_, lineInfo.file_, lineInfo.line_);
+            }
 
-			fs::path module_;
-			fs::path file_;
-			unsigned int line_;
-		};
-		
-		using LineInfoHasBeenExecuted = std::map<LineInfo, unsigned int>;
-		using RandFct = std::function < unsigned int() > ;
+            fs::path     module_;
+            fs::path     file_;
+            unsigned int line_;
+        };
 
-		//---------------------------------------------------------------------
-		std::set<unsigned int> GetRandomValues(const RandFct& getRand, size_t elementNumber)
-		{
-			std::set<unsigned int> randomValues;
+        using LineInfoHasBeenExecuted = std::map<LineInfo, unsigned int>;
+        using RandFct                 = std::function<unsigned int()>;
 
-			while (randomValues.size() < elementNumber)
-				randomValues.insert(getRand());
-			return randomValues;
-		}
+        //---------------------------------------------------------------------
+        std::set<unsigned int> GetRandomValues(const RandFct& getRand, size_t elementNumber)
+        {
+            std::set<unsigned int> randomValues;
 
-		//---------------------------------------------------------------------
-		void AddRandomFileCoverage(
-			const RandFct& getRand,
-			unsigned int fileIndex,
-			Plugin::ModuleCoverage& module,			
-			LineInfoHasBeenExecuted& mergedLineInfo)
-		{
-			auto fileName = std::to_wstring(fileIndex);
-			auto& file = module.AddFile(fileName);
-			
-			for (auto line: GetRandomValues(getRand, getRand()))
-			{
-				auto hasBeenExecuted = getRand() % 2;
+            while (randomValues.size() < elementNumber)
+                randomValues.insert(getRand());
+            return randomValues;
+        }
 
-				file.AddLine(line, (hasBeenExecuted > 0));
-				LineInfo lineInfo{ module.GetPath().wstring(), fileName, line };
-			
-				mergedLineInfo[lineInfo] += hasBeenExecuted; // Count the execution
-			}
-		}
+        //---------------------------------------------------------------------
+        void AddRandomFileCoverage(const RandFct& getRand, unsigned int fileIndex,
+                                   Plugin::ModuleCoverage&  module,
+                                   LineInfoHasBeenExecuted& mergedLineInfo)
+        {
+            auto  fileName = std::to_wstring(fileIndex);
+            auto& file     = module.AddFile(fileName);
 
-		//---------------------------------------------------------------------
-		Plugin::CoverageData AddRandomCoverageData(
-			const RandFct& getRand,
-			LineInfoHasBeenExecuted& mergedLineInfo)
-		{
-			Plugin::CoverageData coverageData{ L"", 0 };
-			
-			for (auto moduleIndex: GetRandomValues(getRand, getRand()))
-			{
-				auto moduleName = std::to_wstring(moduleIndex);
-				auto& module = coverageData.AddModule(moduleName);
-				
-				for (auto fileIndex: GetRandomValues(getRand, getRand()))
-					AddRandomFileCoverage(getRand, fileIndex, module, mergedLineInfo);
-			}
+            for (auto line : GetRandomValues(getRand, getRand()))
+            {
+                auto hasBeenExecuted = getRand() % 2;
 
-			return coverageData;
-		}
+                file.AddLine(line, (hasBeenExecuted > 0));
+                LineInfo lineInfo{ module.GetPath().wstring(), fileName, line };
 
-		//---------------------------------------------------------------------
-		std::vector<Plugin::CoverageData> AddRandomCoverageDataCollection(
-			int maxRandomValue,
-			LineInfoHasBeenExecuted& mergedLineInfo)
-		{
-			std::default_random_engine generator;
-			std::uniform_int_distribution<unsigned int> distribution(1, maxRandomValue);
-			auto getRand = [&](){ return distribution(generator); };
+                mergedLineInfo[lineInfo] += hasBeenExecuted; // Count the execution
+            }
+        }
 
-			std::vector<Plugin::CoverageData> coverageDatas;
-			auto coverageDataCount = getRand();
+        //---------------------------------------------------------------------
+        Plugin::CoverageData AddRandomCoverageData(const RandFct&           getRand,
+                                                   LineInfoHasBeenExecuted& mergedLineInfo)
+        {
+            Plugin::CoverageData coverageData{ L"", 0 };
 
-			for (size_t i = 0; i < coverageDataCount; ++i)
-				coverageDatas.emplace_back(AddRandomCoverageData(getRand, mergedLineInfo));
-			
-			return coverageDatas;
-		}
-	}
+            for (auto moduleIndex : GetRandomValues(getRand, getRand()))
+            {
+                auto  moduleName = std::to_wstring(moduleIndex);
+                auto& module     = coverageData.AddModule(moduleName);
 
-	//-------------------------------------------------------------------------
-	TEST(CoverageDataMergerRandomTest, RandomTest)
-	{
-		LineInfoHasBeenExecuted mergedLineInfo;
-		
-		auto coverageDatas = AddRandomCoverageDataCollection(6, mergedLineInfo);
-		auto coverageDataMerged = cov::CoverageDataMerger{}.Merge(coverageDatas);
-		size_t totalLine = 0;
+                for (auto fileIndex : GetRandomValues(getRand, getRand()))
+                    AddRandomFileCoverage(getRand, fileIndex, module, mergedLineInfo);
+            }
 
-		for (const auto& module : coverageDataMerged.GetModules())
-		{
-			for (const auto& file : module->GetFiles())
-			{
-				for (const auto& lineCoverage : file->GetLines())
-				{
-					const auto& executedCount = mergedLineInfo.at(
-						{ module->GetPath(), file->GetPath(), lineCoverage.GetLineNumber() });
-					auto hasBeenExecuted = executedCount > 0;
-					ASSERT_EQ(hasBeenExecuted, lineCoverage.HasBeenExecuted());
-					++totalLine;
-				}
-			}
-		}
+            return coverageData;
+        }
 
-		ASSERT_EQ(mergedLineInfo.size(), totalLine);
-	}
-}
+        //---------------------------------------------------------------------
+        std::vector<Plugin::CoverageData>
+        AddRandomCoverageDataCollection(int maxRandomValue, LineInfoHasBeenExecuted& mergedLineInfo)
+        {
+            std::default_random_engine                  generator;
+            std::uniform_int_distribution<unsigned int> distribution(1, maxRandomValue);
+            auto getRand = [&]() { return distribution(generator); };
+
+            std::vector<Plugin::CoverageData> coverageDatas;
+            auto                              coverageDataCount = getRand();
+
+            for (size_t i = 0; i < coverageDataCount; ++i)
+                coverageDatas.emplace_back(AddRandomCoverageData(getRand, mergedLineInfo));
+
+            return coverageDatas;
+        }
+    } // namespace
+
+    //-------------------------------------------------------------------------
+    TEST(CoverageDataMergerRandomTest, RandomTest)
+    {
+        LineInfoHasBeenExecuted mergedLineInfo;
+
+        auto   coverageDatas      = AddRandomCoverageDataCollection(6, mergedLineInfo);
+        auto   coverageDataMerged = cov::CoverageDataMerger{}.Merge(coverageDatas);
+        size_t totalLine          = 0;
+
+        for (const auto& module : coverageDataMerged.GetModules())
+        {
+            for (const auto& file : module->GetFiles())
+            {
+                for (const auto& lineCoverage : file->GetLines())
+                {
+                    const auto& executedCount = mergedLineInfo.at(
+                        { module->GetPath(), file->GetPath(), lineCoverage.GetLineNumber() });
+                    auto hasBeenExecuted = executedCount > 0;
+                    ASSERT_EQ(hasBeenExecuted, lineCoverage.HasBeenExecuted());
+                    ++totalLine;
+                }
+            }
+        }
+
+        ASSERT_EQ(mergedLineInfo.size(), totalLine);
+    }
+} // namespace CppCoverageTest

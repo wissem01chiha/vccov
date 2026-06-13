@@ -17,33 +17,31 @@
 #pragma once
 
 #include "CoreExport.h"
-#include <vector>
 #include <Windows.h>
+#include <vector>
 
 namespace CppCoverage
 {
-	class Address;
+    class Address;
 
-	class VCOV_COREEXPORT_DLL BreakPoint
-	{
-	  public:
-		BreakPoint() = default;
+    class VCOV_COREEXPORT_DLL BreakPoint
+    {
+      public:
+        BreakPoint() = default;
 
-		static const unsigned char breakPointInstruction;
+        static const unsigned char breakPointInstruction;
 
-		void RemoveBreakPoint(const Address&,
-		                      unsigned char oldInstruction) const;
+        void RemoveBreakPoint(const Address&, unsigned char oldInstruction) const;
 
-		using InstructionCollection =
-		    std::vector<std::pair<unsigned char, DWORD64>>;
+        using InstructionCollection = std::vector<std::pair<unsigned char, DWORD64>>;
 
-		InstructionCollection
-		SetBreakPoints(HANDLE hProcess, std::vector<DWORD64>&& addresses) const;
+        InstructionCollection SetBreakPoints(HANDLE                 hProcess,
+                                             std::vector<DWORD64>&& addresses) const;
 
-		void AdjustEipAfterBreakPointRemoval(HANDLE hThread) const;
+        void AdjustEipAfterBreakPointRemoval(HANDLE hThread) const;
 
-	  private:
-		BreakPoint(const BreakPoint&) = delete;
-		BreakPoint& operator=(const BreakPoint&) = delete;
-	};
-}
+      private:
+        BreakPoint(const BreakPoint&)            = delete;
+        BreakPoint& operator=(const BreakPoint&) = delete;
+    };
+} // namespace CppCoverage

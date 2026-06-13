@@ -14,29 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "HtmlFile.hpp"
+#include "stdafx.h"
 
 namespace Exporter
 {
-	//-------------------------------------------------------------------------
-	HtmlFile::HtmlFile(
-		std::filesystem::path absolutePath,
-		std::filesystem::path relativeLinkPath)
-		: absolutePath_(absolutePath)
-		, relativeLinkPath_(relativeLinkPath)
-	{
-	}
+    //-------------------------------------------------------------------------
+    HtmlFile::HtmlFile(std::filesystem::path absolutePath, std::filesystem::path relativeLinkPath)
+        : absolutePath_(absolutePath), relativeLinkPath_(relativeLinkPath)
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path& HtmlFile::GetAbsolutePath() const
-	{
-		return absolutePath_;
-	}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path& HtmlFile::GetAbsolutePath() const
+    {
+        return absolutePath_;
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path& HtmlFile::GetRelativeLinkPath() const
-	{
-		return relativeLinkPath_;
-	}
-}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path& HtmlFile::GetRelativeLinkPath() const
+    {
+        return relativeLinkPath_;
+    }
+} // namespace Exporter

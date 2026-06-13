@@ -19,8 +19,8 @@
 #include <iostream>
 #include <windows.h>
 
-#include "Tools/Tool.hpp"
 #include "Tools/ScopedAction.hpp"
+#include "Tools/Tool.hpp"
 
 #include "TestCoverageConsole.hpp"
 
@@ -28,48 +28,51 @@
 // release mode. (This project has no optmisation in release mode).
 namespace TestCoverageConsole
 {
-	//-------------------------------------------------------------------------
-	void RunTestBasic()
-	{
-		if (false)
-		{
-			int answer = 42;
-		}
-	}
+    //-------------------------------------------------------------------------
+    void RunTestBasic()
+    {
+        if (false)
+        {
+            int answer = 42;
+        }
+    }
 
-	//-------------------------------------------------------------------------
-	void RunChildProcesses(int argc, _TCHAR* argv[])
-	{
-		auto outputBinaryPath = TestCoverageConsole::GetOutputBinaryPath();
+    //-------------------------------------------------------------------------
+    void RunChildProcesses(int argc, _TCHAR* argv[])
+    {
+        auto outputBinaryPath = TestCoverageConsole::GetOutputBinaryPath();
 
-		if (argc < 2)
-			throw std::runtime_error("Invalid number of arguments.");
-		if (argv[1] != TestCoverageConsole::TestChildProcess)
-			throw std::runtime_error("Invalid argument.");
+        if (argc < 2)
+            throw std::runtime_error("Invalid number of arguments.");
+        if (argv[1] != TestCoverageConsole::TestChildProcess)
+            throw std::runtime_error("Invalid argument.");
 
-		for (int i = 2; i < argc; ++i)
-		{
-			auto argument = Tools::ToLocalString(argv[i]);
-			std::cout << "Start: " << outputBinaryPath << " with " << argument << std::endl;
-			auto handle = Poco::Process::launch(outputBinaryPath.string(), std::vector<std::string>{argument});
-			handle.wait();
-		}
-	}
+        for (int i = 2; i < argc; ++i)
+        {
+            auto argument = Tools::ToLocalString(argv[i]);
+            std::cout << "Start: " << outputBinaryPath << " with " << argument << std::endl;
+            auto handle = Poco::Process::launch(outputBinaryPath.string(),
+                                                std::vector<std::string>{ argument });
+            handle.wait();
+        }
+    }
 
-	//-------------------------------------------------------------------------
-	void UnloadReloadDll()
-	{
-		auto testHelper = L"TestHelper.dll";
-		auto module = LoadLibraryEx(testHelper, nullptr, 0);
-		
-		// Be sure the library is unloaded by calling FreeLibrary until unload.
-		while (FreeLibrary(module));
+    //-------------------------------------------------------------------------
+    void UnloadReloadDll()
+    {
+        auto testHelper = L"TestHelper.dll";
+        auto module     = LoadLibraryEx(testHelper, nullptr, 0);
 
-		module = LoadLibraryEx(testHelper, nullptr, 0);
-		Tools::ScopedAction freeLibrary{ [=]() { FreeLibrary(module); } };
+        // Be sure the library is unloaded by calling FreeLibrary until unload.
+        while (FreeLibrary(module))
+            ;
 
-		auto fct = (void (*)())GetProcAddress(module, "TestUnloadDll");
-		fct();	}
+        module = LoadLibraryEx(testHelper, nullptr, 0);
+        Tools::ScopedAction freeLibrary{ [=]() { FreeLibrary(module); } };
 
-	const std::string ExcludedLine = "For CodeCoverageRunnerTest::ExcludedLine";
-}
+        auto fct = (void (*)())GetProcAddress(module, "TestUnloadDll");
+        fct();
+    }
+
+    const std::string ExcludedLine = "For CodeCoverageRunnerTest::ExcludedLine";
+} // namespace TestCoverageConsole

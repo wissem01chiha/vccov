@@ -19,80 +19,73 @@
 #include <fstream>
 
 #include "CppCoverage/DebugInformationEnumerator.hpp"
-#include "TestCoverageConsole/TestDebugInformationEnumerator.hpp"
 #include "TestCoverageConsole/TestCoverageConsole.hpp"
+#include "TestCoverageConsole/TestDebugInformationEnumerator.hpp"
 
 namespace CppCoverageTest
 {
-	namespace
-	{
-		struct DebugInformationHandlerMock
-		    : CppCoverage::IDebugInformationHandler
-		{
-			//--------------------------------------------------------------------------
-			explicit DebugInformationHandlerMock(
-			    const std::filesystem::path& selectedFilename)
-			    : selectedFilename_{selectedFilename}
-			{
-			}
+    namespace
+    {
+        struct DebugInformationHandlerMock : CppCoverage::IDebugInformationHandler
+        {
+            //--------------------------------------------------------------------------
+            explicit DebugInformationHandlerMock(const std::filesystem::path& selectedFilename)
+                : selectedFilename_{ selectedFilename }
+            {
+            }
 
-			//--------------------------------------------------------------------------
-			bool IsSourceFileSelected(
-			    const std::filesystem::path& sourceFile) override
-			{
-				return selectedFilename_ == sourceFile.filename();
-			}
+            //--------------------------------------------------------------------------
+            bool IsSourceFileSelected(const std::filesystem::path& sourceFile) override
+            {
+                return selectedFilename_ == sourceFile.filename();
+            }
 
-			//--------------------------------------------------------------------------
-			void OnSourceFile(const std::filesystem::path& path,
-			                  const std::vector<Line>& lines) override
-			{
-				selectedFullPath_ = path;
-				for (const auto& line : lines)
-					lines_.push_back(line.lineNumber_);
-			}
+            //--------------------------------------------------------------------------
+            void OnSourceFile(const std::filesystem::path& path,
+                              const std::vector<Line>&     lines) override
+            {
+                selectedFullPath_ = path;
+                for (const auto& line : lines)
+                    lines_.push_back(line.lineNumber_);
+            }
 
-			const std::filesystem::path selectedFilename_;
-			std::filesystem::path selectedFullPath_;
-			std::vector<int> lines_;
-		};
+            const std::filesystem::path selectedFilename_;
+            std::filesystem::path       selectedFullPath_;
+            std::vector<int>            lines_;
+        };
 
-		//---------------------------------------------------------------------------
-		std::vector<int>
-		GetLineNumbersWithTag(const std::filesystem::path& path,
-		                      const std::wstring& tag)
-		{
-			std::vector<int> lines;
-			std::wifstream ifs(path.wstring());
-			std::wstring line;
+        //---------------------------------------------------------------------------
+        std::vector<int> GetLineNumbersWithTag(const std::filesystem::path& path,
+                                               const std::wstring&          tag)
+        {
+            std::vector<int> lines;
+            std::wifstream   ifs(path.wstring());
+            std::wstring     line;
 
-			for (int lineNumber = 1; std::getline(ifs, line); ++lineNumber)
-			{
-				if (line.find(tag) != std::wstring::npos)
-					lines.push_back(lineNumber);
-			}
+            for (int lineNumber = 1; std::getline(ifs, line); ++lineNumber)
+            {
+                if (line.find(tag) != std::wstring::npos)
+                    lines.push_back(lineNumber);
+            }
 
-			return lines;
-		}
-	}
+            return lines;
+        }
+    } // namespace
 
-	//-------------------------------------------------------------------------
-	TEST(DebugInformationEnumeratorTest, Enumerate)
-	{
-		auto selectedPath =
-		    TestCoverageConsole::GetDebugInformationEnumeratorTestPath();
-		DebugInformationHandlerMock debugInformationHandler{
-		    selectedPath.filename()};
+    //-------------------------------------------------------------------------
+    TEST(DebugInformationEnumeratorTest, Enumerate)
+    {
+        auto selectedPath = TestCoverageConsole::GetDebugInformationEnumeratorTestPath();
+        DebugInformationHandlerMock debugInformationHandler{ selectedPath.filename() };
 
-		CppCoverage::DebugInformationEnumerator debugInformationEnumerator{ {} };
+        CppCoverage::DebugInformationEnumerator debugInformationEnumerator{ {} };
 
-		auto binary = TestCoverageConsole::GetOutputBinaryPath();
-		ASSERT_TRUE(debugInformationEnumerator.Enumerate(
-		    binary, debugInformationHandler));
+        auto binary = TestCoverageConsole::GetOutputBinaryPath();
+        ASSERT_TRUE(debugInformationEnumerator.Enumerate(binary, debugInformationHandler));
 
-		auto lineWithDebugInfo = GetLineNumbersWithTag(
-		    debugInformationHandler.selectedFullPath_, L"@DebugInfoExpected");
+        auto lineWithDebugInfo =
+            GetLineNumbersWithTag(debugInformationHandler.selectedFullPath_, L"@DebugInfoExpected");
 
-		ASSERT_EQ(debugInformationHandler.lines_, lineWithDebugInfo);
-	}
-}
+        ASSERT_EQ(debugInformationHandler.lines_, lineWithDebugInfo);
+    }
+} // namespace CppCoverageTest

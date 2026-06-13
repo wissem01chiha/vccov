@@ -21,4 +21,3 @@
 GENERATE_EXCEPTION_CLASS(FileFilter, FileFilterException);
 
 #define THROW(message) THROW_BASE(FileFilter, FileFilterException, message)
-

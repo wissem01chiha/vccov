@@ -14,22 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "WarningManager.hpp"
 #include "Log.hpp"
+#include "stdafx.h"
 
 namespace Tools
 {
-	//-------------------------------------------------------------------------
-	void WarningManager::AddWarning(const std::wstring& warning)
-	{
-		warnings_.push_back(warning);
-	}
+    //-------------------------------------------------------------------------
+    void WarningManager::AddWarning(const std::wstring& warning)
+    {
+        warnings_.push_back(warning);
+    }
 
-	//-------------------------------------------------------------------------
-	void WarningManager::DisplayWarnings() const
-	{
-		for (const auto& warning : warnings_)
-			LOG_WARNING << warning;
-	}
-}
+    //-------------------------------------------------------------------------
+    void WarningManager::DisplayWarnings() const
+    {
+        for (const auto& warning : warnings_)
+            LOG_WARNING << warning;
+    }
+} // namespace Tools

@@ -14,81 +14,80 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "Log.hpp"
-#include <filesystem>
-#include <boost/log/expressions.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/support/date_time.hpp>
+#include "stdafx.h"
 #include <boost/locale.hpp>
+#include <boost/log/expressions.hpp>
+#include <boost/log/support/date_time.hpp>
+#include <boost/log/utility/setup/common_attributes.hpp>
+#include <boost/log/utility/setup/console.hpp>
+#include <boost/log/utility/setup/file.hpp>
+#include <filesystem>
 
-namespace logging = boost::log;
-namespace sinks = boost::log::sinks;
+namespace logging  = boost::log;
+namespace sinks    = boost::log::sinks;
 namespace keywords = boost::log::keywords;
-namespace expr = boost::log::expressions;
+namespace expr     = boost::log::expressions;
 
 namespace Tools
 {
-	namespace
-	{
-		//-------------------------------------------------------------------------
-		void SetLogSink(boost::shared_ptr<logging::sinks::sink> sink)
-		{
-			logging::core::get()->remove_all_sinks();
-			logging::core::get()->add_sink(sink);
-		}
-	}
+    namespace
+    {
+        //-------------------------------------------------------------------------
+        void SetLogSink(boost::shared_ptr<logging::sinks::sink> sink)
+        {
+            logging::core::get()->remove_all_sinks();
+            logging::core::get()->add_sink(sink);
+        }
+    } // namespace
 
-	//-------------------------------------------------------------------------
-	void InitConsoleAndFileLog(const std::filesystem::path& logPath)
-	{		
-		boost::log::add_common_attributes();
+    //-------------------------------------------------------------------------
+    void InitConsoleAndFileLog(const std::filesystem::path& logPath)
+    {
+        boost::log::add_common_attributes();
 
-		auto fileSink = logging::add_file_log(logPath.wstring(),
-			boost::log::keywords::format =
-			expr::stream
-			<< "[" << expr::format_date_time< boost::posix_time::ptime >("TimeStamp", "%Y-%m-%d %H:%M:%S")
-			<< "] [" << logging::trivial::severity
-			<< "] " << expr::message);
+        auto fileSink = logging::add_file_log(
+            logPath.wstring(), boost::log::keywords::format =
+                                   expr::stream << "["
+                                                << expr::format_date_time<boost::posix_time::ptime>(
+                                                       "TimeStamp", "%Y-%m-%d %H:%M:%S")
+                                                << "] [" << logging::trivial::severity << "] "
+                                                << expr::message);
 
-		auto consoleSink = logging::add_console_log(std::clog,
-			boost::log::keywords::format =
-			expr::stream
-			<< "[" << logging::trivial::severity
-			<< "] " << expr::message
-			);
+        auto consoleSink = logging::add_console_log(
+            std::clog, boost::log::keywords::format = expr::stream
+                                                      << "[" << logging::trivial::severity << "] "
+                                                      << expr::message);
 
-		// Set correct endocing for special char
-		auto loc = boost::locale::generator()("en_US.UTF-8");		
-		fileSink->imbue(loc);
-		consoleSink->imbue(loc);		
-	}
+        // Set correct endocing for special char
+        auto loc = boost::locale::generator()("en_US.UTF-8");
+        fileSink->imbue(loc);
+        consoleSink->imbue(loc);
+    }
 
-	//-------------------------------------------------------------------------
-	void SetLoggerMinSeverity(boost::log::trivial::severity_level minSeverity)
-	{
-		auto filter = logging::trivial::severity >= minSeverity;
+    //-------------------------------------------------------------------------
+    void SetLoggerMinSeverity(boost::log::trivial::severity_level minSeverity)
+    {
+        auto filter = logging::trivial::severity >= minSeverity;
 
-		logging::core::get()->set_filter(filter);		
-	}
+        logging::core::get()->set_filter(filter);
+    }
 
-	//-------------------------------------------------------------------------
-	void EnableLogger(bool isEnabled)
-	{
-		logging::core::get()->set_logging_enabled(isEnabled);
-	}
+    //-------------------------------------------------------------------------
+    void EnableLogger(bool isEnabled)
+    {
+        logging::core::get()->set_logging_enabled(isEnabled);
+    }
 
-	//-------------------------------------------------------------------------
-	void InitLoggerOstream(const boost::shared_ptr<std::ostringstream>& ostr)
-	{
-		typedef sinks::synchronous_sink<sinks::text_ostream_backend> text_sink;
-		auto sink = boost::make_shared<text_sink>();
-		auto backend = sink->locked_backend();
+    //-------------------------------------------------------------------------
+    void InitLoggerOstream(const boost::shared_ptr<std::ostringstream>& ostr)
+    {
+        typedef sinks::synchronous_sink<sinks::text_ostream_backend> text_sink;
+        auto sink    = boost::make_shared<text_sink>();
+        auto backend = sink->locked_backend();
 
-		backend->add_stream(ostr);
-		backend->auto_flush(true);
-		SetLogSink(sink);
-	}	
-}
+        backend->add_stream(ostr);
+        backend->auto_flush(true);
+        SetLogSink(sink);
+    }
+} // namespace Tools

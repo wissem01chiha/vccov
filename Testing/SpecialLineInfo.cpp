@@ -19,16 +19,16 @@
 
 namespace TestCoverageConsole
 {
-	//-------------------------------------------------------------------------
-	void SpecialLineInfo()
-	{
-		// Generate a SRCCODEINFO::LineNumber == 0x00feefee
-		try
-		{
-			throw 42;
-		}
-		catch (...)
-		{
-		}
-	}
-}
+    //-------------------------------------------------------------------------
+    void SpecialLineInfo()
+    {
+        // Generate a SRCCODEINFO::LineNumber == 0x00feefee
+        try
+        {
+            throw 42;
+        }
+        catch (...)
+        {
+        }
+    }
+} // namespace TestCoverageConsole

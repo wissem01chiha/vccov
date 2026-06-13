@@ -23,11 +23,11 @@
 #include <boost/algorithm/string.hpp>
 
 #include "Plugin/Exporter/CoverageData.hpp"
-#include "Plugin/Exporter/ModuleCoverage.hpp"
 #include "Plugin/Exporter/FileCoverage.hpp"
+#include "Plugin/Exporter/ModuleCoverage.hpp"
 
-#include "Exporter/InvalidOutputFileException.hpp"
 #include "Exporter/CoberturaExporter.hpp"
+#include "Exporter/InvalidOutputFileException.hpp"
 #include "tools/Tool.hpp"
 
 #include "TestHelper/TemporaryPath.hpp"
@@ -36,97 +36,97 @@ namespace fs = std::filesystem;
 
 namespace ExporterTest
 {
-	namespace
-	{
-		//-------------------------------------------------------------------------
-		std::wstring GetExpectedResult()
-		{
-			fs::path expectedResult = fs::path(PROJECT_DIR) / "Data" / "CoberturaExporterExpectedResult.xml";
-			std::wifstream ifs{ expectedResult.wstring().c_str() };
-			std::wostringstream ostr;
+    namespace
+    {
+        //-------------------------------------------------------------------------
+        std::wstring GetExpectedResult()
+        {
+            fs::path expectedResult =
+                fs::path(PROJECT_DIR) / "Data" / "CoberturaExporterExpectedResult.xml";
+            std::wifstream      ifs{ expectedResult.wstring().c_str() };
+            std::wostringstream ostr;
 
-			ostr << ifs.rdbuf();
+            ostr << ifs.rdbuf();
 
-			return ostr.str();
-		}
-	}
-	
-	//-------------------------------------------------------------------------
-	TEST(CoberturaExporterTest, Export)
-	{
-		Plugin::CoverageData coverageData{L"", 0};
+            return ostr.str();
+        }
+    } // namespace
 
-		coverageData.AddModule(L"EmptyModule");
-		auto& module = coverageData.AddModule(L"Module");
+    //-------------------------------------------------------------------------
+    TEST(CoberturaExporterTest, Export)
+    {
+        Plugin::CoverageData coverageData{ L"", 0 };
 
-		module.AddFile("EmptyFile");
-		auto& file = module.AddFile("File");
+        coverageData.AddModule(L"EmptyModule");
+        auto& module = coverageData.AddModule(L"Module");
 
-		file.AddLine(0, true);
-		file.AddLine(1, false);
+        module.AddFile("EmptyFile");
+        auto& file = module.AddFile("File");
 
-		module.AddFile("File2").AddLine(0, true);
+        file.AddLine(0, true);
+        file.AddLine(1, false);
 
-		std::wostringstream ostr;
-		Exporter::CoberturaExporter().Export(coverageData, ostr);
-		auto result = ostr.str();
-		std::wregex regex(LR"(timestamp="\d*")");
-		result = std::regex_replace(result, regex, L"timestamp=\"TIMESTAMP\"");
+        module.AddFile("File2").AddLine(0, true);
 
-		auto expectedResult = GetExpectedResult();				
-		
-		ASSERT_EQ(result, expectedResult);
-	}	
+        std::wostringstream ostr;
+        Exporter::CoberturaExporter().Export(coverageData, ostr);
+        auto        result = ostr.str();
+        std::wregex regex(LR"(timestamp="\d*")");
+        result = std::regex_replace(result, regex, L"timestamp=\"TIMESTAMP\"");
 
-	//-------------------------------------------------------------------------
-	TEST(CoberturaExporterTest, SubFolderDoesNotExist)
-	{
-		Plugin::CoverageData coverageData{ L"", 0 };
-		TestHelper::TemporaryPath output;
-		auto outputPath = output.GetPath() / "SubFolder" / "output.xml";
+        auto expectedResult = GetExpectedResult();
 
-		ASSERT_FALSE(Tools::FileExists(outputPath));
-		Exporter::CoberturaExporter().Export(coverageData, outputPath);
-		ASSERT_TRUE(Tools::FileExists(outputPath));
-	}
+        ASSERT_EQ(result, expectedResult);
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(CoberturaExporterTest, SpecialChars)
-	{
-		Plugin::CoverageData coverageData{ L"", 0 };
-		coverageData.AddModule(L"יא").AddFile(L"יא").AddLine(0, true);
-		
-		std::wostringstream ostr;
-		Exporter::CoberturaExporter().Export(coverageData, ostr);
-		auto result = ostr.str();
+    //-------------------------------------------------------------------------
+    TEST(CoberturaExporterTest, SubFolderDoesNotExist)
+    {
+        Plugin::CoverageData      coverageData{ L"", 0 };
+        TestHelper::TemporaryPath output;
+        auto                      outputPath = output.GetPath() / "SubFolder" / "output.xml";
 
-		auto packageName = Tools::LocalToWString(u8"package name=\"יא\"");
-		auto name = Tools::LocalToWString(u8"class name=\"יא\"");
-		auto filename = Tools::LocalToWString(u8"filename=\"יא\"");
+        ASSERT_FALSE(Tools::FileExists(outputPath));
+        Exporter::CoberturaExporter().Export(coverageData, outputPath);
+        ASSERT_TRUE(Tools::FileExists(outputPath));
+    }
 
-		ASSERT_TRUE(boost::algorithm::contains(result, packageName));
-		ASSERT_TRUE(boost::algorithm::contains(result, name));
-		ASSERT_TRUE(boost::algorithm::contains(result, filename));
-	}
+    //-------------------------------------------------------------------------
+    TEST(CoberturaExporterTest, SpecialChars)
+    {
+        Plugin::CoverageData coverageData{ L"", 0 };
+        coverageData.AddModule(L"יא").AddFile(L"יא").AddLine(0, true);
 
-	//-------------------------------------------------------------------------
-	TEST(CoberturaExporterTest, OutputExists)
-	{
-		Plugin::CoverageData coverageData{ L"", 0 };
-		TestHelper::TemporaryPath outputPath{ TestHelper::TemporaryPathOption::CreateAsFile };
-		
-		ASSERT_NO_THROW(Exporter::CoberturaExporter().Export(coverageData, outputPath));
-	}
+        std::wostringstream ostr;
+        Exporter::CoberturaExporter().Export(coverageData, ostr);
+        auto result = ostr.str();
 
-	//-------------------------------------------------------------------------
-	TEST(CoberturaExporterTest, InvalidFile)
-	{
-		Plugin::CoverageData coverageData{L"", 0};
-		TestHelper::TemporaryPath outputPath{
-		    TestHelper::TemporaryPathOption::CreateAsFolder};
+        auto packageName = Tools::LocalToWString(u8"package name=\"יא\"");
+        auto name        = Tools::LocalToWString(u8"class name=\"יא\"");
+        auto filename    = Tools::LocalToWString(u8"filename=\"יא\"");
 
-		ASSERT_THROW(Exporter::CoberturaExporter().Export(
-		                 coverageData, outputPath.GetPath() / "InvalidFile/"),
-		             Exporter::InvalidOutputFileException);
-	}
-}
+        ASSERT_TRUE(boost::algorithm::contains(result, packageName));
+        ASSERT_TRUE(boost::algorithm::contains(result, name));
+        ASSERT_TRUE(boost::algorithm::contains(result, filename));
+    }
+
+    //-------------------------------------------------------------------------
+    TEST(CoberturaExporterTest, OutputExists)
+    {
+        Plugin::CoverageData      coverageData{ L"", 0 };
+        TestHelper::TemporaryPath outputPath{ TestHelper::TemporaryPathOption::CreateAsFile };
+
+        ASSERT_NO_THROW(Exporter::CoberturaExporter().Export(coverageData, outputPath));
+    }
+
+    //-------------------------------------------------------------------------
+    TEST(CoberturaExporterTest, InvalidFile)
+    {
+        Plugin::CoverageData      coverageData{ L"", 0 };
+        TestHelper::TemporaryPath outputPath{ TestHelper::TemporaryPathOption::CreateAsFolder };
+
+        ASSERT_THROW(Exporter::CoberturaExporter().Export(coverageData,
+                                                          outputPath.GetPath() / "InvalidFile/"),
+                     Exporter::InvalidOutputFileException);
+    }
+} // namespace ExporterTest

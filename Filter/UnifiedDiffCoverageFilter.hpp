@@ -17,41 +17,38 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <vector>
+#include "PathMatcher.hpp"
 #include <boost/optional/optional_fwd.hpp>
 #include <filesystem>
-#include "PathMatcher.hpp"
+#include <vector>
 
 namespace FileFilter
 {
-	class File;
+    class File;
 
-	class VCOV_FILTEREXPORT_DLL UnifiedDiffCoverageFilter
-	{
-	public:
-		UnifiedDiffCoverageFilter(
-			const std::filesystem::path& unifiedDiffPath,
-			const boost::optional<std::filesystem::path>& rootDiffFolder);
+    class VCOV_FILTEREXPORT_DLL UnifiedDiffCoverageFilter
+    {
+      public:
+        UnifiedDiffCoverageFilter(const std::filesystem::path&                  unifiedDiffPath,
+                                  const boost::optional<std::filesystem::path>& rootDiffFolder);
 
-		UnifiedDiffCoverageFilter(
-			std::vector<File>&&,
-			const boost::optional<std::filesystem::path>& rootDiffFolder);
+        UnifiedDiffCoverageFilter(std::vector<File>&&,
+                                  const boost::optional<std::filesystem::path>& rootDiffFolder);
 
-		bool IsSourceFileSelected(const std::filesystem::path&);
-		bool IsLineSelected(const std::filesystem::path&, int lineNumber);
-		std::vector<std::filesystem::path> GetUnmatchedPaths() const;
+        bool IsSourceFileSelected(const std::filesystem::path&);
+        bool IsLineSelected(const std::filesystem::path&, int lineNumber);
+        std::vector<std::filesystem::path> GetUnmatchedPaths() const;
 
-	private:
-		UnifiedDiffCoverageFilter(const UnifiedDiffCoverageFilter&) = delete;
-		UnifiedDiffCoverageFilter& operator=(const UnifiedDiffCoverageFilter&) = delete;
-		UnifiedDiffCoverageFilter(UnifiedDiffCoverageFilter&&) = delete;
-		UnifiedDiffCoverageFilter& operator=(UnifiedDiffCoverageFilter&&) = delete;
+      private:
+        UnifiedDiffCoverageFilter(const UnifiedDiffCoverageFilter&)            = delete;
+        UnifiedDiffCoverageFilter& operator=(const UnifiedDiffCoverageFilter&) = delete;
+        UnifiedDiffCoverageFilter(UnifiedDiffCoverageFilter&&)                 = delete;
+        UnifiedDiffCoverageFilter& operator=(UnifiedDiffCoverageFilter&&)      = delete;
 
-		File* SearchFile(const std::filesystem::path&);
+        File* SearchFile(const std::filesystem::path&);
 
-		std::filesystem::path lastPath_;
-		File* lastFile_;
-		PathMatcher pathMatcher_;
-	};
-}
-
+        std::filesystem::path lastPath_;
+        File*                 lastFile_;
+        PathMatcher           pathMatcher_;
+    };
+} // namespace FileFilter

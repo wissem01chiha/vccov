@@ -20,11 +20,11 @@
 
 namespace TestCoverageConsole
 {
-	void SpecialLineInfo();
+    void SpecialLineInfo();
 
-	//-------------------------------------------------------------------------
-	inline std::filesystem::path GetSpecialLineInfoFilename()
-	{
-		return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
-	}
-}
+    //-------------------------------------------------------------------------
+    inline std::filesystem::path GetSpecialLineInfoFilename()
+    {
+        return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
+    }
+} // namespace TestCoverageConsole

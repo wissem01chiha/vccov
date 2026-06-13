@@ -16,31 +16,31 @@
 
 #pragma once
 
+#include "CoreExport.h"
 #include <regex>
 #include <string>
-#include "CoreExport.h"
 
 namespace CppCoverage
 {
-	class VCOV_COREEXPORT_DLL Wildcards
-	{
-	public:
-		static const std::vector<wchar_t> EscapedChars;
+    class VCOV_COREEXPORT_DLL Wildcards
+    {
+      public:
+        static const std::vector<wchar_t> EscapedChars;
 
-	public:
-		explicit Wildcards(std::wstring, bool isRegexCaseSensitiv = false);
-		Wildcards(Wildcards&&);
+      public:
+        explicit Wildcards(std::wstring, bool isRegexCaseSensitiv = false);
+        Wildcards(Wildcards&&);
 
-		bool Match(const std::wstring& str) const;
+        bool Match(const std::wstring& str) const;
 
-		friend VCOV_COREEXPORT_DLL std::wostream& operator<<(std::wostream&, const Wildcards&);
+        friend VCOV_COREEXPORT_DLL std::wostream& operator<<(std::wostream&, const Wildcards&);
 
-	private:
-		Wildcards(const Wildcards&) = delete;
-		Wildcards& operator=(const Wildcards&) = delete;
+      private:
+        Wildcards(const Wildcards&)            = delete;
+        Wildcards& operator=(const Wildcards&) = delete;
 
-	private:
-		std::wregex wildcars_;
-		std::wstring originalStr_;
-	};
-}
+      private:
+        std::wregex  wildcars_;
+        std::wstring originalStr_;
+    };
+} // namespace CppCoverage

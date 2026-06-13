@@ -21,17 +21,16 @@
 
 namespace Exporter
 {
-	class VCOV_BINARYEXPORT_DLL BinaryExporter : public IExporter
-	{
-	public:
-		BinaryExporter() = default;
+    class VCOV_BINARYEXPORT_DLL BinaryExporter : public IExporter
+    {
+      public:
+        BinaryExporter() = default;
 
-		std::filesystem::path GetDefaultPath(const std::wstring& prefix) const override;
-		void Export(const Plugin::CoverageData&, const std::filesystem::path& output) override;
+        std::filesystem::path GetDefaultPath(const std::wstring& prefix) const override;
+        void Export(const Plugin::CoverageData&, const std::filesystem::path& output) override;
 
-	private:
-		BinaryExporter(const BinaryExporter&) = delete;
-		BinaryExporter& operator=(const BinaryExporter&) = delete;
-	};
-}
-
+      private:
+        BinaryExporter(const BinaryExporter&)            = delete;
+        BinaryExporter& operator=(const BinaryExporter&) = delete;
+    };
+} // namespace Exporter

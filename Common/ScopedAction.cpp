@@ -14,30 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "ScopedAction.hpp"
-#include <boost/optional/optional.hpp>
-#include "Tool.hpp"
 #include "Log.hpp"
+#include "Tool.hpp"
+#include "stdafx.h"
+#include <boost/optional/optional.hpp>
 
 namespace Tools
 {
-	//-------------------------------------------------------------------------
-	ScopedAction::ScopedAction(std::function<void()> action)
-		: action_(action)
-	{
-	}
+    //-------------------------------------------------------------------------
+    ScopedAction::ScopedAction(std::function<void()> action) : action_(action)
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	ScopedAction::~ScopedAction()
-	{
-		auto error = Try([&]
-		{
-			action_();
-		});
+    //-------------------------------------------------------------------------
+    ScopedAction::~ScopedAction()
+    {
+        auto error = Try([&] { action_(); });
 
-		if (error)
-			LOG_ERROR << *error;
-	}
+        if (error)
+            LOG_ERROR << *error;
+    }
 
-}
+} // namespace Tools

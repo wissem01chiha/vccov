@@ -20,11 +20,11 @@
 
 namespace TestCoverageConsole
 {
-	void FilterByDiff();
+    void FilterByDiff();
 
-	//-------------------------------------------------------------------------
-	inline std::filesystem::path GetTestDiffFilename()
-	{
-		return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
-	}
-}
+    //-------------------------------------------------------------------------
+    inline std::filesystem::path GetTestDiffFilename()
+    {
+        return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
+    }
+} // namespace TestCoverageConsole

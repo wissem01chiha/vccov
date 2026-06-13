@@ -16,31 +16,30 @@
 
 #pragma once
 
-#include <Windows.h>
-#include <boost/optional.hpp>
 #include "CoreExport.h"
 #include "StartInfo.hpp"
+#include <Windows.h>
+#include <boost/optional.hpp>
 
 namespace CppCoverage
 {
-	class VCOV_COREEXPORT_DLL Process
-	{
-	public:
-		static const std::wstring CannotFindPathMessage;
-		static const std::wstring CheckIfValidExecutableMessage;
+    class VCOV_COREEXPORT_DLL Process
+    {
+      public:
+        static const std::wstring CannotFindPathMessage;
+        static const std::wstring CheckIfValidExecutableMessage;
 
-		Process(const StartInfo& startInfo);
-		~Process();
-		
-		void Start(DWORD creationFlags);
+        Process(const StartInfo& startInfo);
+        ~Process();
 
-	private:
-		Process(const Process&) = delete;
-		Process& operator=(const Process&) = delete;
+        void Start(DWORD creationFlags);
 
-	private:
-		boost::optional<PROCESS_INFORMATION> processInformation_;
-		const StartInfo startInfo_;
-	};
-}
+      private:
+        Process(const Process&)            = delete;
+        Process& operator=(const Process&) = delete;
 
+      private:
+        boost::optional<PROCESS_INFORMATION> processInformation_;
+        const StartInfo                      startInfo_;
+    };
+} // namespace CppCoverage

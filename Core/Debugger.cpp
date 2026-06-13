@@ -14,290 +14,282 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "CppCoverageException.hpp"
 #include "Debugger.hpp"
+#include "CppCoverageException.hpp"
 #include "IDebugEventsHandler.hpp"
 #include "Log.hpp"
 #include "Process.hpp"
 #include "ScopedAction.hpp"
-#include "stdafx.h"
 #include "Tool.hpp"
+#include "stdafx.h"
 
 namespace CppCoverage
 {
-	//-------------------------------------------------------------------------
-	namespace
-	{
-		void OnRip(const RIP_INFO& ripInfo)
-		{
-			LOG_ERROR << "Debugee process terminate unexpectedly:"
-				<< "(type:" << ripInfo.dwType << ")"
-				<< GetErrorMessage(ripInfo.dwError);
-		}
-	}	
+    //-------------------------------------------------------------------------
+    namespace
+    {
+        void OnRip(const RIP_INFO& ripInfo)
+        {
+            LOG_ERROR << "Debugee process terminate unexpectedly:"
+                      << "(type:" << ripInfo.dwType << ")" << GetErrorMessage(ripInfo.dwError);
+        }
+    } // namespace
 
-	//-------------------------------------------------------------------------
-	struct Debugger::ProcessStatus
-	{
-		ProcessStatus() = default;
+    //-------------------------------------------------------------------------
+    struct Debugger::ProcessStatus
+    {
+        ProcessStatus() = default;
 
-		ProcessStatus(
-			boost::optional<int> exitCode,
-			boost::optional<DWORD> continueStatus)
-			: exitCode_{ exitCode }
-			, continueStatus_{ continueStatus }
-		{
-		}
+        ProcessStatus(boost::optional<int> exitCode, boost::optional<DWORD> continueStatus)
+            : exitCode_{ exitCode }, continueStatus_{ continueStatus }
+        {
+        }
 
-		boost::optional<int> exitCode_;
-		boost::optional<DWORD> continueStatus_;
-	};
+        boost::optional<int>   exitCode_;
+        boost::optional<DWORD> continueStatus_;
+    };
 
-	//-------------------------------------------------------------------------
-	Debugger::Debugger(
-		bool coverChildren,
-		bool continueAfterCppException,
-        bool stopOnAssert)
-		: coverChildren_{ coverChildren }
-		, continueAfterCppException_{ continueAfterCppException }
-        , stopOnAssert_{ stopOnAssert }
-	{
-	}
+    //-------------------------------------------------------------------------
+    Debugger::Debugger(bool coverChildren, bool continueAfterCppException, bool stopOnAssert)
+        : coverChildren_{ coverChildren }, continueAfterCppException_{ continueAfterCppException },
+          stopOnAssert_{ stopOnAssert }
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	int Debugger::Debug(
-		const StartInfo& startInfo,
-		IDebugEventsHandler& debugEventsHandler)
-	{
-		Process process(startInfo);
-		process.Start((coverChildren_) ? DEBUG_PROCESS: DEBUG_ONLY_THIS_PROCESS);
-		
-		DEBUG_EVENT debugEvent;
-		boost::optional<int> exitCode;
+    //-------------------------------------------------------------------------
+    int Debugger::Debug(const StartInfo& startInfo, IDebugEventsHandler& debugEventsHandler)
+    {
+        Process process(startInfo);
+        process.Start((coverChildren_) ? DEBUG_PROCESS : DEBUG_ONLY_THIS_PROCESS);
 
-		processHandles_.clear();
-		threadHandles_.clear();
-		rootProcessId_ = boost::none;
+        DEBUG_EVENT          debugEvent;
+        boost::optional<int> exitCode;
 
-		while (!exitCode || !processHandles_.empty())
-		{
-			if (!WaitForDebugEvent(&debugEvent, INFINITE))
-				THROW_LAST_ERROR(L"Error WaitForDebugEvent:", GetLastError());
+        processHandles_.clear();
+        threadHandles_.clear();
+        rootProcessId_ = boost::none;
 
-			ProcessStatus processStatus = HandleDebugEvent(debugEvent, debugEventsHandler);
-			
-			// Get the exit code of the root process
-			// Set once as we do not want EXCEPTION_BREAKPOINT to be override
-			if (processStatus.exitCode_ && rootProcessId_ == debugEvent.dwProcessId && !exitCode)
-				exitCode = processStatus.exitCode_;
+        while (!exitCode || !processHandles_.empty())
+        {
+            if (!WaitForDebugEvent(&debugEvent, INFINITE))
+                THROW_LAST_ERROR(L"Error WaitForDebugEvent:", GetLastError());
 
-			auto continueStatus = boost::get_optional_value_or(processStatus.continueStatus_, DBG_CONTINUE);
+            ProcessStatus processStatus = HandleDebugEvent(debugEvent, debugEventsHandler);
 
-			if (!ContinueDebugEvent(debugEvent.dwProcessId, debugEvent.dwThreadId, continueStatus))
-				THROW_LAST_ERROR("Error in ContinueDebugEvent:", GetLastError());
-		}
+            // Get the exit code of the root process
+            // Set once as we do not want EXCEPTION_BREAKPOINT to be override
+            if (processStatus.exitCode_ && rootProcessId_ == debugEvent.dwProcessId && !exitCode)
+                exitCode = processStatus.exitCode_;
 
-		return *exitCode;
-	}
-	
-	//-------------------------------------------------------------------------
-	Debugger::ProcessStatus Debugger::HandleDebugEvent(
-		const DEBUG_EVENT& debugEvent,
-		IDebugEventsHandler& debugEventsHandler)
-	{
-		auto dwProcessId = debugEvent.dwProcessId;
-		auto dwThreadId = debugEvent.dwThreadId;
+            auto continueStatus =
+                boost::get_optional_value_or(processStatus.continueStatus_, DBG_CONTINUE);
 
-		switch (debugEvent.dwDebugEventCode)
-		{
-			case CREATE_PROCESS_DEBUG_EVENT: OnCreateProcess(debugEvent, debugEventsHandler); break;
-			case CREATE_THREAD_DEBUG_EVENT: OnCreateThread(debugEvent.u.CreateThread.hThread, dwThreadId); break;
-			default:
-			{
-				auto hProcess = GetProcessHandle(dwProcessId);
-				auto hThread = GetThreadHandle(dwThreadId);
-				return HandleNotCreationalEvent(debugEvent, debugEventsHandler, hProcess, hThread, dwThreadId);
-			}
-		}
+            if (!ContinueDebugEvent(debugEvent.dwProcessId, debugEvent.dwThreadId, continueStatus))
+                THROW_LAST_ERROR("Error in ContinueDebugEvent:", GetLastError());
+        }
 
-		return{};
-	}
+        return *exitCode;
+    }
 
-	//-------------------------------------------------------------------------
-	Debugger::ProcessStatus
-		Debugger::HandleNotCreationalEvent(
-		const DEBUG_EVENT& debugEvent,
-		IDebugEventsHandler& debugEventsHandler,
-		HANDLE hProcess,
-		HANDLE hThread,
-		DWORD dwThreadId)
-	{
-		switch (debugEvent.dwDebugEventCode)
-		{
-			case EXIT_PROCESS_DEBUG_EVENT:
-			{
-				auto exitCode = OnExitProcess(debugEvent, hProcess, hThread, debugEventsHandler);
-				return ProcessStatus{exitCode, boost::none};
-			}
-			case EXIT_THREAD_DEBUG_EVENT: OnExitThread(dwThreadId); break;
-			case LOAD_DLL_DEBUG_EVENT:
-			{
-				const auto& loadDll = debugEvent.u.LoadDll;
-				Tools::ScopedAction scopedAction{ [&loadDll]{ CloseHandle(loadDll.hFile); } };
-				debugEventsHandler.OnLoadDll(hProcess, hThread, loadDll);
-				break;
-			}
-			case UNLOAD_DLL_DEBUG_EVENT:
-			{
-				debugEventsHandler.OnUnloadDll(hProcess, hThread, debugEvent.u.UnloadDll);
-				break;
-			}
-			case EXCEPTION_DEBUG_EVENT: return OnException(debugEvent, debugEventsHandler, hProcess, hThread);
-			case RIP_EVENT: OnRip(debugEvent.u.RipInfo); break;
-			default: LOG_DEBUG << "Debug event:" << debugEvent.dwDebugEventCode; break;
-		}
+    //-------------------------------------------------------------------------
+    Debugger::ProcessStatus Debugger::HandleDebugEvent(const DEBUG_EVENT&   debugEvent,
+                                                       IDebugEventsHandler& debugEventsHandler)
+    {
+        auto dwProcessId = debugEvent.dwProcessId;
+        auto dwThreadId  = debugEvent.dwThreadId;
 
-		return ProcessStatus{};
-	}
-	
-	//-------------------------------------------------------------------------
-	Debugger::ProcessStatus
-		Debugger::OnException(
-		const DEBUG_EVENT& debugEvent,
-		IDebugEventsHandler& debugEventsHandler,
-		HANDLE hProcess,
-		HANDLE hThread) const
-	{
-		const auto& exception = debugEvent.u.Exception;
-		auto exceptionType = debugEventsHandler.OnException(hProcess, hThread, exception);
+        switch (debugEvent.dwDebugEventCode)
+        {
+        case CREATE_PROCESS_DEBUG_EVENT:
+            OnCreateProcess(debugEvent, debugEventsHandler);
+            break;
+        case CREATE_THREAD_DEBUG_EVENT:
+            OnCreateThread(debugEvent.u.CreateThread.hThread, dwThreadId);
+            break;
+        default:
+        {
+            auto hProcess = GetProcessHandle(dwProcessId);
+            auto hThread  = GetThreadHandle(dwThreadId);
+            return HandleNotCreationalEvent(debugEvent, debugEventsHandler, hProcess, hThread,
+                                            dwThreadId);
+        }
+        }
 
-		switch (exceptionType)
-		{
-			case IDebugEventsHandler::ExceptionType::BreakPoint:
-			{
-				return ProcessStatus{ boost::none, DBG_CONTINUE };
-			}
-			case IDebugEventsHandler::ExceptionType::InvalidBreakPoint:
-			{
-				LOG_WARNING << Tools::GetSeparatorLine();
-				LOG_WARNING << "It seems there is an assertion failure or you call DebugBreak() in your program.";
-				LOG_WARNING << Tools::GetSeparatorLine();
+        return {};
+    }
 
-                if (stopOnAssert_)
-                {
-                  LOG_WARNING << "Stop on assertion.";
-                  return ProcessStatus{ boost::none, DBG_EXCEPTION_NOT_HANDLED };
-                }
-                else
-                {
-                  return ProcessStatus(EXCEPTION_BREAKPOINT, DBG_CONTINUE);
-                }
-			}
-			case IDebugEventsHandler::ExceptionType::NotHandled:
-			{
-				return ProcessStatus{ boost::none, DBG_EXCEPTION_NOT_HANDLED };
-			}
-			case IDebugEventsHandler::ExceptionType::Error:
-			{
-				return ProcessStatus{ boost::none, DBG_EXCEPTION_NOT_HANDLED };
-			}
-			case IDebugEventsHandler::ExceptionType::CppError:
-			{
-				if (continueAfterCppException_)
-				{
-					const auto& exceptionRecord = exception.ExceptionRecord;
-					LOG_WARNING << "Continue after a C++ exception.";
-					return ProcessStatus{ static_cast<int>(exceptionRecord.ExceptionCode), DBG_CONTINUE };
-				}
-				return ProcessStatus{ boost::none, DBG_EXCEPTION_NOT_HANDLED };
-			}
-		}
-		THROW("Invalid exception Type.");
-	}
+    //-------------------------------------------------------------------------
+    Debugger::ProcessStatus
+    Debugger::HandleNotCreationalEvent(const DEBUG_EVENT&   debugEvent,
+                                       IDebugEventsHandler& debugEventsHandler, HANDLE hProcess,
+                                       HANDLE hThread, DWORD dwThreadId)
+    {
+        switch (debugEvent.dwDebugEventCode)
+        {
+        case EXIT_PROCESS_DEBUG_EVENT:
+        {
+            auto exitCode = OnExitProcess(debugEvent, hProcess, hThread, debugEventsHandler);
+            return ProcessStatus{ exitCode, boost::none };
+        }
+        case EXIT_THREAD_DEBUG_EVENT:
+            OnExitThread(dwThreadId);
+            break;
+        case LOAD_DLL_DEBUG_EVENT:
+        {
+            const auto&         loadDll = debugEvent.u.LoadDll;
+            Tools::ScopedAction scopedAction{ [&loadDll] { CloseHandle(loadDll.hFile); } };
+            debugEventsHandler.OnLoadDll(hProcess, hThread, loadDll);
+            break;
+        }
+        case UNLOAD_DLL_DEBUG_EVENT:
+        {
+            debugEventsHandler.OnUnloadDll(hProcess, hThread, debugEvent.u.UnloadDll);
+            break;
+        }
+        case EXCEPTION_DEBUG_EVENT:
+            return OnException(debugEvent, debugEventsHandler, hProcess, hThread);
+        case RIP_EVENT:
+            OnRip(debugEvent.u.RipInfo);
+            break;
+        default:
+            LOG_DEBUG << "Debug event:" << debugEvent.dwDebugEventCode;
+            break;
+        }
 
-	//-------------------------------------------------------------------------
-	void Debugger::OnCreateProcess(
-		const DEBUG_EVENT& debugEvent,
-		IDebugEventsHandler& debugEventsHandler)
-	{		
-		const auto& processInfo = debugEvent.u.CreateProcessInfo;
-		Tools::ScopedAction scopedAction{ [&processInfo]{ CloseHandle(processInfo.hFile); } };
+        return ProcessStatus{};
+    }
 
-		LOG_DEBUG << "Create Process:" << debugEvent.dwProcessId;
+    //-------------------------------------------------------------------------
+    Debugger::ProcessStatus Debugger::OnException(const DEBUG_EVENT&   debugEvent,
+                                                  IDebugEventsHandler& debugEventsHandler,
+                                                  HANDLE hProcess, HANDLE hThread) const
+    {
+        const auto& exception     = debugEvent.u.Exception;
+        auto        exceptionType = debugEventsHandler.OnException(hProcess, hThread, exception);
 
-		if (!rootProcessId_ && processHandles_.empty())
-			rootProcessId_ = debugEvent.dwProcessId;
+        switch (exceptionType)
+        {
+        case IDebugEventsHandler::ExceptionType::BreakPoint:
+        {
+            return ProcessStatus{ boost::none, DBG_CONTINUE };
+        }
+        case IDebugEventsHandler::ExceptionType::InvalidBreakPoint:
+        {
+            LOG_WARNING << Tools::GetSeparatorLine();
+            LOG_WARNING << "It seems there is an assertion failure or you call "
+                           "DebugBreak() in your program.";
+            LOG_WARNING << Tools::GetSeparatorLine();
 
-		if (!processHandles_.emplace(debugEvent.dwProcessId, processInfo.hProcess).second)
-			THROW("Process id already exist");
-				
-		debugEventsHandler.OnCreateProcess(processInfo);
+            if (stopOnAssert_)
+            {
+                LOG_WARNING << "Stop on assertion.";
+                return ProcessStatus{ boost::none, DBG_EXCEPTION_NOT_HANDLED };
+            }
+            else
+            {
+                return ProcessStatus(EXCEPTION_BREAKPOINT, DBG_CONTINUE);
+            }
+        }
+        case IDebugEventsHandler::ExceptionType::NotHandled:
+        {
+            return ProcessStatus{ boost::none, DBG_EXCEPTION_NOT_HANDLED };
+        }
+        case IDebugEventsHandler::ExceptionType::Error:
+        {
+            return ProcessStatus{ boost::none, DBG_EXCEPTION_NOT_HANDLED };
+        }
+        case IDebugEventsHandler::ExceptionType::CppError:
+        {
+            if (continueAfterCppException_)
+            {
+                const auto& exceptionRecord = exception.ExceptionRecord;
+                LOG_WARNING << "Continue after a C++ exception.";
+                return ProcessStatus{ static_cast<int>(exceptionRecord.ExceptionCode),
+                                      DBG_CONTINUE };
+            }
+            return ProcessStatus{ boost::none, DBG_EXCEPTION_NOT_HANDLED };
+        }
+        }
+        THROW("Invalid exception Type.");
+    }
 
-		OnCreateThread(processInfo.hThread, debugEvent.dwThreadId);
-	}
+    //-------------------------------------------------------------------------
+    void Debugger::OnCreateProcess(const DEBUG_EVENT&   debugEvent,
+                                   IDebugEventsHandler& debugEventsHandler)
+    {
+        const auto&         processInfo = debugEvent.u.CreateProcessInfo;
+        Tools::ScopedAction scopedAction{ [&processInfo] { CloseHandle(processInfo.hFile); } };
 
-	//-------------------------------------------------------------------------
-	int Debugger::OnExitProcess(
-		const DEBUG_EVENT& debugEvent,
-		HANDLE hProcess,
-		HANDLE hThread,
-		IDebugEventsHandler& debugEventsHandler)
-	{
-		OnExitThread(debugEvent.dwThreadId);
-		auto processId = debugEvent.dwProcessId;
+        LOG_DEBUG << "Create Process:" << debugEvent.dwProcessId;
 
-		LOG_DEBUG << "Exit Process:" << processId;
+        if (!rootProcessId_ && processHandles_.empty())
+            rootProcessId_ = debugEvent.dwProcessId;
 
-		auto exitProcess = debugEvent.u.ExitProcess;
-		debugEventsHandler.OnExitProcess(hProcess, hThread, exitProcess);
+        if (!processHandles_.emplace(debugEvent.dwProcessId, processInfo.hProcess).second)
+            THROW("Process id already exist");
 
-		if (processHandles_.erase(processId) != 1)
-			THROW("Cannot find exited process.");
+        debugEventsHandler.OnCreateProcess(processInfo);
 
-		return exitProcess.dwExitCode;
-	}
+        OnCreateThread(processInfo.hThread, debugEvent.dwThreadId);
+    }
 
-	//-------------------------------------------------------------------------
-	void Debugger::OnCreateThread(
-		HANDLE hThread,
-		DWORD dwThreadId)
-	{
-		LOG_DEBUG << "Create Thread:" << dwThreadId;
+    //-------------------------------------------------------------------------
+    int Debugger::OnExitProcess(const DEBUG_EVENT& debugEvent, HANDLE hProcess, HANDLE hThread,
+                                IDebugEventsHandler& debugEventsHandler)
+    {
+        OnExitThread(debugEvent.dwThreadId);
+        auto processId = debugEvent.dwProcessId;
 
-		if (!threadHandles_.emplace(dwThreadId, hThread).second)
-			THROW("Thread id already exist");
-	}
-	
-	//-------------------------------------------------------------------------
-	void Debugger::OnExitThread(DWORD dwThreadId)
-	{	
-		LOG_DEBUG << "Exit thread:" << dwThreadId;
+        LOG_DEBUG << "Exit Process:" << processId;
 
-		if (threadHandles_.erase(dwThreadId) != 1)
-			THROW("Cannot find exited thread.");
-	}
+        auto exitProcess = debugEvent.u.ExitProcess;
+        debugEventsHandler.OnExitProcess(hProcess, hThread, exitProcess);
 
-	//-------------------------------------------------------------------------
-	HANDLE Debugger::GetProcessHandle(DWORD dwProcessId) const
-	{
-		return processHandles_.at(dwProcessId);
-	}
+        if (processHandles_.erase(processId) != 1)
+            THROW("Cannot find exited process.");
 
-	//-------------------------------------------------------------------------
-	HANDLE Debugger::GetThreadHandle(DWORD dwThreadId) const
-	{
-		return threadHandles_.at(dwThreadId);
-	}
+        return exitProcess.dwExitCode;
+    }
 
-	//-------------------------------------------------------------------------
-	size_t Debugger::GetRunningProcesses() const
-	{
-		return processHandles_.size();
-	}
+    //-------------------------------------------------------------------------
+    void Debugger::OnCreateThread(HANDLE hThread, DWORD dwThreadId)
+    {
+        LOG_DEBUG << "Create Thread:" << dwThreadId;
 
-	//-------------------------------------------------------------------------
-	size_t Debugger::GetRunningThreads() const
-	{
-		return threadHandles_.size();
-	}
-}
+        if (!threadHandles_.emplace(dwThreadId, hThread).second)
+            THROW("Thread id already exist");
+    }
+
+    //-------------------------------------------------------------------------
+    void Debugger::OnExitThread(DWORD dwThreadId)
+    {
+        LOG_DEBUG << "Exit thread:" << dwThreadId;
+
+        if (threadHandles_.erase(dwThreadId) != 1)
+            THROW("Cannot find exited thread.");
+    }
+
+    //-------------------------------------------------------------------------
+    HANDLE Debugger::GetProcessHandle(DWORD dwProcessId) const
+    {
+        return processHandles_.at(dwProcessId);
+    }
+
+    //-------------------------------------------------------------------------
+    HANDLE Debugger::GetThreadHandle(DWORD dwThreadId) const
+    {
+        return threadHandles_.at(dwThreadId);
+    }
+
+    //-------------------------------------------------------------------------
+    size_t Debugger::GetRunningProcesses() const
+    {
+        return processHandles_.size();
+    }
+
+    //-------------------------------------------------------------------------
+    size_t Debugger::GetRunningThreads() const
+    {
+        return threadHandles_.size();
+    }
+} // namespace CppCoverage

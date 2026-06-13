@@ -14,48 +14,49 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "MappedFile.hpp"
-#include "ToolsException.hpp"
 #include "Tool.hpp"
+#include "ToolsException.hpp"
+#include "stdafx.h"
 #include <boost/iostreams/device/mapped_file.hpp>
 
 namespace Tools
 {
-	//-------------------------------------------------------------------------
-	MappedFile::MappedFile(const std::filesystem::path& path)
-	{
-		boost::iostreams::mapped_file mappedFile(path.string(), boost::iostreams::mapped_file::readonly);
+    //-------------------------------------------------------------------------
+    MappedFile::MappedFile(const std::filesystem::path& path)
+    {
+        boost::iostreams::mapped_file mappedFile(path.string(),
+                                                 boost::iostreams::mapped_file::readonly);
 
-		if (!mappedFile)
-			THROW(L"Cannot create mapped file: " + path.wstring());
+        if (!mappedFile)
+            THROW(L"Cannot create mapped file: " + path.wstring());
 
-		auto begin = mappedFile.const_begin();
-		const auto end = mappedFile.const_end();
-		for (auto it = begin; it != end; ++it)
-		{
-			if (*it == '\n')
-			{
-				const auto endOfLine = (it != begin && *(it - 1) == '\r') ? it - 1 : it;
-				lines_.push_back({ begin, endOfLine });
-				begin = it + 1;
-			}
-		}
-		if (begin != end)
-			lines_.push_back({begin, end});
-	}
+        auto       begin = mappedFile.const_begin();
+        const auto end   = mappedFile.const_end();
+        for (auto it = begin; it != end; ++it)
+        {
+            if (*it == '\n')
+            {
+                const auto endOfLine = (it != begin && *(it - 1) == '\r') ? it - 1 : it;
+                lines_.push_back({ begin, endOfLine });
+                begin = it + 1;
+            }
+        }
+        if (begin != end)
+            lines_.push_back({ begin, end });
+    }
 
-	//-------------------------------------------------------------------------
-	const std::vector<std::string>& MappedFile::GetLines() const
-	{
-		return lines_;
-	}
+    //-------------------------------------------------------------------------
+    const std::vector<std::string>& MappedFile::GetLines() const
+    {
+        return lines_;
+    }
 
-	//-------------------------------------------------------------------------
-	std::unique_ptr<MappedFile> MappedFile::TryCreate(const std::filesystem::path& path)
-	{
-		if (!FileExists(path) || std::filesystem::file_size(path) == 0)
-			return nullptr;
-		return std::unique_ptr<MappedFile>(new MappedFile{ path });
-	}
-}
+    //-------------------------------------------------------------------------
+    std::unique_ptr<MappedFile> MappedFile::TryCreate(const std::filesystem::path& path)
+    {
+        if (!FileExists(path) || std::filesystem::file_size(path) == 0)
+            return nullptr;
+        return std::unique_ptr<MappedFile>(new MappedFile{ path });
+    }
+} // namespace Tools

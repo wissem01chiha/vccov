@@ -14,101 +14,98 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "CoverageDataSerializer.hpp"
 #include "CoverageData.hpp"
 #include "CoverageData.pb.hpp"
-#include "CoverageDataSerializer.hpp"
 #include "ExporterException.hpp"
 #include "FileCoverage.hpp"
 #include "InvalidOutputFileException.hpp"
 #include "LineCoverage.hpp"
 #include "ModuleCoverage.hpp"
 #include "ProtoBuff.hpp"
-#include "stdafx.h"
 #include "Tool.hpp"
+#include "stdafx.h"
 #include <fstream>
 
 namespace Exporter
 {
-		//---------------------------------------------------------------------
-		void InitializeProtoBuffFrom(const Plugin::FileCoverage &file,
-                             ProtoBuff::FileCoverage &fileProtoBuff)
-		{
-			fileProtoBuff.set_path(Tools::ToUtf8String(file.GetPath().wstring()));
+    //---------------------------------------------------------------------
+    void InitializeProtoBuffFrom(const Plugin::FileCoverage& file,
+                                 ProtoBuff::FileCoverage&    fileProtoBuff)
+    {
+        fileProtoBuff.set_path(Tools::ToUtf8String(file.GetPath().wstring()));
 
-			for (const auto& line : file.GetLines())
-			{
-				auto lineProtoBuff = fileProtoBuff.add_lines();
-				
-				lineProtoBuff->set_linenumber(line.GetLineNumber());
-				lineProtoBuff->set_hasbeenexecuted(line.HasBeenExecuted());
-			}
-		}
+        for (const auto& line : file.GetLines())
+        {
+            auto lineProtoBuff = fileProtoBuff.add_lines();
 
-		//---------------------------------------------------------------------
-		void InitializeModuleProtoBuffFrom(
-                    const Plugin::ModuleCoverage &module,
-			ProtoBuff::ModuleCoverage& moduleProtoBuff)
-		{
-			moduleProtoBuff.set_path(Tools::ToUtf8String(module.GetPath().wstring()));
-			
-			for (const auto& file : module.GetFiles())
-			{
-				auto fileProtoBuff = moduleProtoBuff.add_files();
-				InitializeProtoBuffFrom(*file, *fileProtoBuff);
-			}
-		}
+            lineProtoBuff->set_linenumber(line.GetLineNumber());
+            lineProtoBuff->set_hasbeenexecuted(line.HasBeenExecuted());
+        }
+    }
 
-		//---------------------------------------------------------------------
-		void FillCoverageDataProtoBuffFrom(
-                    const Plugin::CoverageData &coverageData,
-			ProtoBuff::CoverageData& coverageDataProtoBuff)
-		{
-			coverageDataProtoBuff.set_name(Tools::ToUtf8String(coverageData.GetName()));
-			coverageDataProtoBuff.set_exitcode(coverageData.GetExitCode());
-			coverageDataProtoBuff.set_modulecount(coverageData.GetModules().size());			
-		}
+    //---------------------------------------------------------------------
+    void InitializeModuleProtoBuffFrom(const Plugin::ModuleCoverage& module,
+                                       ProtoBuff::ModuleCoverage&    moduleProtoBuff)
+    {
+        moduleProtoBuff.set_path(Tools::ToUtf8String(module.GetPath().wstring()));
 
-		//---------------------------------------------------------------------
-		void WriteMessage(
-			const google::protobuf::MessageLite& message, 
-			google::protobuf::io::CodedOutputStream& output)
-		{
-			output.WriteVarint64(message.ByteSizeLong());
-			if (!message.SerializeToCodedStream(&output))
-				THROW(L"Cannot serialize message to stream");
-		}
+        for (const auto& file : module.GetFiles())
+        {
+            auto fileProtoBuff = moduleProtoBuff.add_files();
+            InitializeProtoBuffFrom(*file, *fileProtoBuff);
+        }
+    }
 
-	//-------------------------------------------------------------------------
-	const unsigned int CoverageDataSerializer::FileTypeId = 1351727964; // random number
-	
-	//-------------------------------------------------------------------------
-	void CoverageDataSerializer::Serialize(
-            const Plugin::CoverageData &coverageData,
-		const std::filesystem::path& output) const
-	{		
-		ProtoBuff::CoverageData coverageDataProtoBuff;
-		Tools::CreateParentFolderIfNeeded(output);
+    //---------------------------------------------------------------------
+    void FillCoverageDataProtoBuffFrom(const Plugin::CoverageData& coverageData,
+                                       ProtoBuff::CoverageData&    coverageDataProtoBuff)
+    {
+        coverageDataProtoBuff.set_name(Tools::ToUtf8String(coverageData.GetName()));
+        coverageDataProtoBuff.set_exitcode(coverageData.GetExitCode());
+        coverageDataProtoBuff.set_modulecount(coverageData.GetModules().size());
+    }
 
-		std::ofstream ofs(output.string(), std::ios::binary);
-		if (!ofs)
-			throw InvalidOutputFileException(output, "binary");
+    //---------------------------------------------------------------------
+    void WriteMessage(const google::protobuf::MessageLite&     message,
+                      google::protobuf::io::CodedOutputStream& output)
+    {
+        output.WriteVarint64(message.ByteSizeLong());
+        if (!message.SerializeToCodedStream(&output))
+            THROW(L"Cannot serialize message to stream");
+    }
 
-		google::protobuf::io::OstreamOutputStream outputStream(&ofs);
-		google::protobuf::io::CodedOutputStream codedOutputStream(&outputStream);
+    //-------------------------------------------------------------------------
+    const unsigned int CoverageDataSerializer::FileTypeId = 1351727964; // random number
 
-		codedOutputStream.WriteVarint32(CoverageDataSerializer::FileTypeId);
+    //-------------------------------------------------------------------------
+    void CoverageDataSerializer::Serialize(const Plugin::CoverageData&  coverageData,
+                                           const std::filesystem::path& output) const
+    {
+        ProtoBuff::CoverageData coverageDataProtoBuff;
+        Tools::CreateParentFolderIfNeeded(output);
 
-		FillCoverageDataProtoBuffFrom(coverageData, coverageDataProtoBuff);
-		WriteMessage(coverageDataProtoBuff, codedOutputStream);
-				 			
-		// Here we serialize manually modules because protobuff's limit.
-		// See https://developers.google.com/protocol-buffers/docs/techniques#large-data
-		for (const auto& module : coverageData.GetModules())
-		{
-			ProtoBuff::ModuleCoverage moduleProtoBuff;
-			InitializeModuleProtoBuffFrom(*module, moduleProtoBuff);
+        std::ofstream ofs(output.string(), std::ios::binary);
+        if (!ofs)
+            throw InvalidOutputFileException(output, "binary");
 
-			WriteMessage(moduleProtoBuff, codedOutputStream);
-		}
-	}
-}
+        google::protobuf::io::OstreamOutputStream outputStream(&ofs);
+        google::protobuf::io::CodedOutputStream   codedOutputStream(&outputStream);
+
+        codedOutputStream.WriteVarint32(CoverageDataSerializer::FileTypeId);
+
+        FillCoverageDataProtoBuffFrom(coverageData, coverageDataProtoBuff);
+        WriteMessage(coverageDataProtoBuff, codedOutputStream);
+
+        // Here we serialize manually modules because protobuff's limit.
+        // See
+        // https://developers.google.com/protocol-buffers/docs/techniques#large-data
+        for (const auto& module : coverageData.GetModules())
+        {
+            ProtoBuff::ModuleCoverage moduleProtoBuff;
+            InitializeModuleProtoBuffFrom(*module, moduleProtoBuff);
+
+            WriteMessage(moduleProtoBuff, codedOutputStream);
+        }
+    }
+} // namespace Exporter

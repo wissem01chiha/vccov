@@ -16,16 +16,15 @@
 
 #pragma once
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace FileFilter
 {
-	class File;
+    class File;
 }
 
 namespace FileFilterTest
 {
-	std::vector<FileFilter::File> ToFiles(const std::vector<std::wstring>& filenames);
+    std::vector<FileFilter::File> ToFiles(const std::vector<std::wstring>& filenames);
 }
-

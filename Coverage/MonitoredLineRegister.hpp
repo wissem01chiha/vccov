@@ -17,57 +17,50 @@
 #pragma once
 
 #include "DebugInformationEnumerator.hpp"
+#include <filesystem>
 #include <memory>
 #include <unordered_map>
-#include <filesystem>
 
 namespace FileFilter
 {
-	class LineInfo;
-	class ModuleInfo;
-}
+    class LineInfo;
+    class ModuleInfo;
+} // namespace FileFilter
 
 namespace CppCoverage
 {
-	class ICoverageFilterManager;
-	class BreakPoint;
-	class ExecutedAddressManager;
-	class FilterAssistant;
+    class ICoverageFilterManager;
+    class BreakPoint;
+    class ExecutedAddressManager;
+    class FilterAssistant;
 
-	class MonitoredLineRegister : private IDebugInformationHandler
-	{
-	  public:
-		MonitoredLineRegister(std::shared_ptr<BreakPoint>,
-		                      std::shared_ptr<ExecutedAddressManager>,
-		                      std::shared_ptr<ICoverageFilterManager>,
-		                      std::unique_ptr<DebugInformationEnumerator>,
-		                      std::shared_ptr<FilterAssistant>);
-		~MonitoredLineRegister();
+    class MonitoredLineRegister : private IDebugInformationHandler
+    {
+      public:
+        MonitoredLineRegister(std::shared_ptr<BreakPoint>, std::shared_ptr<ExecutedAddressManager>,
+                              std::shared_ptr<ICoverageFilterManager>,
+                              std::unique_ptr<DebugInformationEnumerator>,
+                              std::shared_ptr<FilterAssistant>);
+        ~MonitoredLineRegister();
 
-		bool RegisterLineToMonitor(const std::filesystem::path& modulePath,
-		                           HANDLE hProcess,
-		                           void* baseOfImage);
+        bool RegisterLineToMonitor(const std::filesystem::path& modulePath, HANDLE hProcess,
+                                   void* baseOfImage);
 
-	  private:
-		bool IsSourceFileSelected(const std::filesystem::path&) override;
-		void OnSourceFile(const std::filesystem::path&,
-		                  const std::vector<Line>&) override;
+      private:
+        bool IsSourceFileSelected(const std::filesystem::path&) override;
+        void OnSourceFile(const std::filesystem::path&, const std::vector<Line>&) override;
 
-		using LineNumberByAddress =
-		    std::unordered_map<DWORD64, std::vector<int>>;
-		void SetBreakPoint(const std::filesystem::path&,
-		                   HANDLE hProcess,
-		                   std::vector<DWORD64>&&,
-		                   const LineNumberByAddress&);
+        using LineNumberByAddress = std::unordered_map<DWORD64, std::vector<int>>;
+        void SetBreakPoint(const std::filesystem::path&, HANDLE hProcess, std::vector<DWORD64>&&,
+                           const LineNumberByAddress&);
 
-		const FileFilter::ModuleInfo& GetModuleInfo() const;
+        const FileFilter::ModuleInfo& GetModuleInfo() const;
 
-		std::unique_ptr<FileFilter::ModuleInfo> moduleInfo_;
-		const std::shared_ptr<BreakPoint> breakPoint_;
-		const std::shared_ptr<ExecutedAddressManager> executedAddressManager_;
-		const std::shared_ptr<ICoverageFilterManager> coverageFilterManager_;
-		const std::unique_ptr<DebugInformationEnumerator>
-		    debugInformationEnumerator_;
-		const std::shared_ptr<FilterAssistant> filterAssistant_;
-	};
-}
+        std::unique_ptr<FileFilter::ModuleInfo>           moduleInfo_;
+        const std::shared_ptr<BreakPoint>                 breakPoint_;
+        const std::shared_ptr<ExecutedAddressManager>     executedAddressManager_;
+        const std::shared_ptr<ICoverageFilterManager>     coverageFilterManager_;
+        const std::unique_ptr<DebugInformationEnumerator> debugInformationEnumerator_;
+        const std::shared_ptr<FilterAssistant>            filterAssistant_;
+    };
+} // namespace CppCoverage

@@ -14,111 +14,113 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "CoverageRateComputer.hpp"
 #include "CoverageData.hpp"
 #include "CoverageRate.hpp"
-#include "CoverageRateComputer.hpp"
 #include "FileCoverage.hpp"
 #include "ModuleCoverage.hpp"
 #include "stdafx.h"
 
 namespace CppCoverage
 {
-	namespace
-	{
-		//---------------------------------------------------------------------
-		CoverageRate ComputeFileCoverage(const Plugin::FileCoverage& file)
-		{
-			int executedLines = 0;
-			int unexecutedLines = 0;
+    namespace
+    {
+        //---------------------------------------------------------------------
+        CoverageRate ComputeFileCoverage(const Plugin::FileCoverage& file)
+        {
+            int executedLines   = 0;
+            int unexecutedLines = 0;
 
-			for (const auto& lineCoverage : file.GetLines())
-			{
-				if (lineCoverage.HasBeenExecuted())
-					++executedLines;
-				else
-					++unexecutedLines;
-			}
+            for (const auto& lineCoverage : file.GetLines())
+            {
+                if (lineCoverage.HasBeenExecuted())
+                    ++executedLines;
+                else
+                    ++unexecutedLines;
+            }
 
-			return CoverageRate{executedLines, unexecutedLines};
-		}
-		
-		//---------------------------------------------------------------------
-		template<typename Object>
-		std::vector<Object*> SortByCoverageRate(
-			const std::vector<std::unique_ptr<Object>>& objects,
-			const std::unordered_map<const Object*, CoverageRate>& coverageRates)
-		{
-			std::vector<Object*> sortedObjects;
-			
-			for (const auto& object : objects)
-				sortedObjects.push_back(object.get());
+            return CoverageRate{ executedLines, unexecutedLines };
+        }
 
-			std::sort(sortedObjects.begin(), sortedObjects.end(), 
-				[&](const Object* object1, const Object* object2)
-			{
-				return coverageRates.at(object1).GetPercentRate() 
-					 < coverageRates.at(object2).GetPercentRate();
-			});
+        //---------------------------------------------------------------------
+        template <typename Object>
+        std::vector<Object*>
+        SortByCoverageRate(const std::vector<std::unique_ptr<Object>>&            objects,
+                           const std::unordered_map<const Object*, CoverageRate>& coverageRates)
+        {
+            std::vector<Object*> sortedObjects;
 
-			return sortedObjects;
-		}
-	}
+            for (const auto& object : objects)
+                sortedObjects.push_back(object.get());
 
-	//-------------------------------------------------------------------------
-	CoverageRateComputer::CoverageRateComputer(const Plugin::CoverageData& coverageData)
-		: coverageData_(coverageData)
-	{
-		ComputeCoverageRateCache(coverageData);
-	}
-	
-	//-------------------------------------------------------------------------
-	void CoverageRateComputer::ComputeCoverageRateCache(const Plugin::CoverageData& coverageData)
-	{
-		for (const auto& module : coverageData.GetModules())
-		{
-			CoverageRate moduleCoverageRate;
+            std::sort(sortedObjects.begin(), sortedObjects.end(),
+                      [&](const Object* object1, const Object* object2)
+                      {
+                          return coverageRates.at(object1).GetPercentRate() <
+                                 coverageRates.at(object2).GetPercentRate();
+                      });
 
-			for (const auto& file : module->GetFiles())
-			{
-				CoverageRate fileCoverageRate = ComputeFileCoverage(*file);
+            return sortedObjects;
+        }
+    } // namespace
 
-				moduleCoverageRate += fileCoverageRate;
-				fileCoverageRate_.emplace(file.get(), fileCoverageRate);
-			}
+    //-------------------------------------------------------------------------
+    CoverageRateComputer::CoverageRateComputer(const Plugin::CoverageData& coverageData)
+        : coverageData_(coverageData)
+    {
+        ComputeCoverageRateCache(coverageData);
+    }
 
-			moduleCoverageRate_.emplace(module.get(), moduleCoverageRate);
-			coverageRate_ += moduleCoverageRate;
-		}
-	}
-	
-	//-------------------------------------------------------------------------
-	std::vector<Plugin::ModuleCoverage*> CoverageRateComputer::SortModulesByCoverageRate() const
-	{
-		return SortByCoverageRate(coverageData_.GetModules(), moduleCoverageRate_);
-	}
+    //-------------------------------------------------------------------------
+    void CoverageRateComputer::ComputeCoverageRateCache(const Plugin::CoverageData& coverageData)
+    {
+        for (const auto& module : coverageData.GetModules())
+        {
+            CoverageRate moduleCoverageRate;
 
-	//-------------------------------------------------------------------------
-	std::vector<Plugin::FileCoverage*> CoverageRateComputer::SortFilesByCoverageRate(
-		const Plugin::ModuleCoverage& modules) const
-	{
-		return SortByCoverageRate(modules.GetFiles(), fileCoverageRate_);
-	}
+            for (const auto& file : module->GetFiles())
+            {
+                CoverageRate fileCoverageRate = ComputeFileCoverage(*file);
 
-	//-------------------------------------------------------------------------
-	const CoverageRate& CoverageRateComputer::GetCoverageRate() const
-	{
-		return coverageRate_;
-	}
+                moduleCoverageRate += fileCoverageRate;
+                fileCoverageRate_.emplace(file.get(), fileCoverageRate);
+            }
 
-	//-------------------------------------------------------------------------
-	const CoverageRate& CoverageRateComputer::GetCoverageRate(const Plugin::ModuleCoverage& module) const
-	{
-		return moduleCoverageRate_.at(&module);
-	}
-	
-	//-------------------------------------------------------------------------
-	const CoverageRate& CoverageRateComputer::GetCoverageRate(const Plugin::FileCoverage& file) const
-	{
-		return fileCoverageRate_.at(&file);
-	}
-}
+            moduleCoverageRate_.emplace(module.get(), moduleCoverageRate);
+            coverageRate_ += moduleCoverageRate;
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    std::vector<Plugin::ModuleCoverage*> CoverageRateComputer::SortModulesByCoverageRate() const
+    {
+        return SortByCoverageRate(coverageData_.GetModules(), moduleCoverageRate_);
+    }
+
+    //-------------------------------------------------------------------------
+    std::vector<Plugin::FileCoverage*>
+    CoverageRateComputer::SortFilesByCoverageRate(const Plugin::ModuleCoverage& modules) const
+    {
+        return SortByCoverageRate(modules.GetFiles(), fileCoverageRate_);
+    }
+
+    //-------------------------------------------------------------------------
+    const CoverageRate& CoverageRateComputer::GetCoverageRate() const
+    {
+        return coverageRate_;
+    }
+
+    //-------------------------------------------------------------------------
+    const CoverageRate&
+    CoverageRateComputer::GetCoverageRate(const Plugin::ModuleCoverage& module) const
+    {
+        return moduleCoverageRate_.at(&module);
+    }
+
+    //-------------------------------------------------------------------------
+    const CoverageRate&
+    CoverageRateComputer::GetCoverageRate(const Plugin::FileCoverage& file) const
+    {
+        return fileCoverageRate_.at(&file);
+    }
+} // namespace CppCoverage

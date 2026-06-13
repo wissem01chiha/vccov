@@ -16,109 +16,94 @@
 
 #pragma once
 
-#include <memory>
 #include <filesystem>
+#include <memory>
 
-// Disable: This header is deprecated. Use <boost/integer/integer_log2.hpp> instead.
+// Disable: This header is deprecated. Use <boost/integer/integer_log2.hpp>
+// instead.
 #define BOOST_ALLOW_DEPRECATED_HEADERS
-#include <boost/uuid/uuid_generators.hpp>
 #include "HtmlExport.h"
+#include <boost/uuid/uuid_generators.hpp>
 
 namespace CppCoverage
 {
-	class CoverageRate;
+    class CoverageRate;
 }
 
 namespace ctemplate
 {
-	class TemplateDictionary;
+    class TemplateDictionary;
 }
 
 namespace fs = std::filesystem;
 
 namespace Exporter
 {
-	class VCOV_HTMLEXPORT_DLL ITemplateExpander;
+    class VCOV_HTMLEXPORT_DLL ITemplateExpander;
 
-	class VCOV_HTMLEXPORT_DLL TemplateHtmlExporter
-	{
-	public:
-		static const std::string ExecutedLineTemplate;
-		static const std::string TitleTemplate;
-		static const std::string MainTemplateItemSection;
-		static const std::string UnExecutedLineTemplate;
-		static const std::string LinkTemplate;
-		static const std::string TotalLineTemplate;		
-		static const std::string NameTemplate;
-		static const std::string ItemLinkSection;
-		static const std::string ItemNoLinkSection;
-		static const std::string ItemSimpleText;
-		static const std::string BodyOnLoadTemplate;
-		static const std::string SourceWarningMessageTemplate;
-		static const std::string BodyOnLoadFct;
-		static const std::string SyntaxHighlightingDisabledMsg;
-		static const std::string MainMessageTemplate;
-		static const std::string CoverRateTemplate;
-		static const std::string UncoverRateTemplate;
-		static const std::string CodeTemplate;
-		static const std::string IdTemplate;
-		static const std::string ThirdPartyPathTemplate;
-		static const std::string OCCProjectLink;
-		static const std::string OCCVersion;
-		static const std::string ActualProjectLink;
+    class VCOV_HTMLEXPORT_DLL TemplateHtmlExporter
+    {
+      public:
+        static const std::string ExecutedLineTemplate;
+        static const std::string TitleTemplate;
+        static const std::string MainTemplateItemSection;
+        static const std::string UnExecutedLineTemplate;
+        static const std::string LinkTemplate;
+        static const std::string TotalLineTemplate;
+        static const std::string NameTemplate;
+        static const std::string ItemLinkSection;
+        static const std::string ItemNoLinkSection;
+        static const std::string ItemSimpleText;
+        static const std::string BodyOnLoadTemplate;
+        static const std::string SourceWarningMessageTemplate;
+        static const std::string BodyOnLoadFct;
+        static const std::string SyntaxHighlightingDisabledMsg;
+        static const std::string MainMessageTemplate;
+        static const std::string CoverRateTemplate;
+        static const std::string UncoverRateTemplate;
+        static const std::string CodeTemplate;
+        static const std::string IdTemplate;
+        static const std::string ThirdPartyPathTemplate;
+        static const std::string OCCProjectLink;
+        static const std::string OCCVersion;
+        static const std::string ActualProjectLink;
 
-	public:
-		explicit TemplateHtmlExporter(
-			const fs::path& mainTemplatePath,
-			const fs::path& fileTemplatePath);
+      public:
+        explicit TemplateHtmlExporter(const fs::path& mainTemplatePath,
+                                      const fs::path& fileTemplatePath);
 
-		std::unique_ptr<ctemplate::TemplateDictionary>	
-		CreateTemplateDictionary(const std::wstring& title, const std::wstring& message) const;
+        std::unique_ptr<ctemplate::TemplateDictionary>
+        CreateTemplateDictionary(const std::wstring& title, const std::wstring& message) const;
 
-		void AddFileSectionToDictionary(
-			const fs::path& originalFilename,
-			const CppCoverage::CoverageRate& coverageRate,
-			bool isSimpleText,
-			const fs::path* fileOutput,
-			ctemplate::TemplateDictionary& moduleTemplateDictionary);
+        void AddFileSectionToDictionary(const fs::path&                  originalFilename,
+                                        const CppCoverage::CoverageRate& coverageRate,
+                                        bool isSimpleText, const fs::path* fileOutput,
+                                        ctemplate::TemplateDictionary& moduleTemplateDictionary);
 
-		void AddModuleSectionToDictionary(
-			const fs::path& originalFilename,
-			const CppCoverage::CoverageRate& coverageRate,
-			bool isSimpleText,
-			const fs::path* moduleOutput,
-			ctemplate::TemplateDictionary& projectDictionary);
+        void AddModuleSectionToDictionary(const fs::path&                  originalFilename,
+                                          const CppCoverage::CoverageRate& coverageRate,
+                                          bool isSimpleText, const fs::path* moduleOutput,
+                                          ctemplate::TemplateDictionary& projectDictionary);
 
-		void GenerateModuleTemplate(
-			const ctemplate::TemplateDictionary& templateDictionary,
-			const fs::path&) const;
+        void GenerateModuleTemplate(const ctemplate::TemplateDictionary& templateDictionary,
+                                    const fs::path&) const;
 
-		void GenerateProjectTemplate(
-			const ctemplate::TemplateDictionary& templateDictionary,
-			const fs::path&) const;
+        void GenerateProjectTemplate(const ctemplate::TemplateDictionary& templateDictionary,
+                                     const fs::path&) const;
 
-		void GenerateSourceTemplate(
-			const std::wstring& title, 
-			const std::wstring& codeContent,
-			bool enableCodePrettify,
-			const fs::path& output) const;
+        void GenerateSourceTemplate(const std::wstring& title, const std::wstring& codeContent,
+                                    bool enableCodePrettify, const fs::path& output) const;
 
-	private:
-		TemplateHtmlExporter(const TemplateHtmlExporter&) = delete;
-		TemplateHtmlExporter& operator=(const TemplateHtmlExporter&) = delete;
-		std::string GetUuid();
-		void FillSection(
-			ctemplate::TemplateDictionary&,
-			bool isSimpleText,
-			const fs::path* link,
-			const CppCoverage::CoverageRate&,
-			const fs::path& originalFilename);
+      private:
+        TemplateHtmlExporter(const TemplateHtmlExporter&)            = delete;
+        TemplateHtmlExporter& operator=(const TemplateHtmlExporter&) = delete;
+        std::string           GetUuid();
+        void FillSection(ctemplate::TemplateDictionary&, bool isSimpleText, const fs::path* link,
+                         const CppCoverage::CoverageRate&, const fs::path& originalFilename);
 
-	private:
-		fs::path mainTemplatePath_;		
-		fs::path fileTemplatePath_;
-		boost::uuids::random_generator uuidGenerator_;
-	};
-}
-
-
+      private:
+        fs::path                       mainTemplatePath_;
+        fs::path                       fileTemplatePath_;
+        boost::uuids::random_generator uuidGenerator_;
+    };
+} // namespace Exporter

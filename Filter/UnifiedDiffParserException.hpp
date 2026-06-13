@@ -17,26 +17,26 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <string>
 #include <stdexcept>
+#include <string>
 
 #pragma warning(push)
-#pragma warning(disable: 4275) // warning C4275: non dll-interface class 'std::exception' used as base for dll-interface class
+#pragma warning(disable : 4275) // warning C4275: non dll-interface class 'std::exception'
+                                // used as base for dll-interface class
 
 namespace FileFilter
 {
-	class VCOV_FILTEREXPORT_DLL UnifiedDiffParserException : public std::runtime_error
-	{
-	public:
-		static const std::wstring ErrorContextHunks;
-		static const std::wstring ErrorNoFilenameBeforeHunks;
-		static const std::wstring ErrorCannotReadLine;
-		static const std::wstring ErrorExpectFromFilePrefix;
-		static const std::wstring ErrorInvalidHunks;
+    class VCOV_FILTEREXPORT_DLL UnifiedDiffParserException : public std::runtime_error
+    {
+      public:
+        static const std::wstring ErrorContextHunks;
+        static const std::wstring ErrorNoFilenameBeforeHunks;
+        static const std::wstring ErrorCannotReadLine;
+        static const std::wstring ErrorExpectFromFilePrefix;
+        static const std::wstring ErrorInvalidHunks;
 
-		explicit UnifiedDiffParserException(const std::wstring& message);
-	};	
-}
+        explicit UnifiedDiffParserException(const std::wstring& message);
+    };
+} // namespace FileFilter
 
 #pragma warning(pop)
-

@@ -20,11 +20,9 @@
 
 namespace TestCoverageConsole
 {
-	//-------------------------------------------------------------------------
-	inline std::filesystem::path GetDebugInformationEnumeratorTestPath()
-	{
-		return std::filesystem::path(__FILE__)
-		    .replace_extension("cpp")
-		    .filename();
-	}
-}
+    //-------------------------------------------------------------------------
+    inline std::filesystem::path GetDebugInformationEnumeratorTestPath()
+    {
+        return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
+    }
+} // namespace TestCoverageConsole

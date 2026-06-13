@@ -14,104 +14,104 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "UnifiedDiffCoverageFilter.hpp"
+#include "AmbiguousPathException.hpp"
+#include "File.hpp"
+#include "Log.hpp"
+#include "UnifiedDiffParser.hpp"
 #include "stdafx.h"
+#include <boost/optional/optional.hpp>
 #include <fstream>
 #include <sstream>
-#include <boost/optional/optional.hpp>
-#include "Log.hpp"
-#include "UnifiedDiffCoverageFilter.hpp"
-#include "UnifiedDiffParser.hpp"
-#include "File.hpp"
-#include "AmbiguousPathException.hpp"
 
 namespace FileFilter
 {
-	namespace
-	{
-		//---------------------------------------------------------------------
-		std::vector<File> ParseUnifiedDiff(const std::filesystem::path& unifiedDiffPath)
-		{
-			std::wifstream ifs(unifiedDiffPath.wstring());
+    namespace
+    {
+        //---------------------------------------------------------------------
+        std::vector<File> ParseUnifiedDiff(const std::filesystem::path& unifiedDiffPath)
+        {
+            std::wifstream ifs(unifiedDiffPath.wstring());
 
-			if (!ifs)
-				// fix https://github.com/wissem01chiha/vcov/issues/3
-				throw std::runtime_error("The file " + unifiedDiffPath.string() + " cannot be opened.");
+            if (!ifs)
+                // fix https://github.com/wissem01chiha/vcov/issues/3
+                throw std::runtime_error("The file " + unifiedDiffPath.string() +
+                                         " cannot be opened.");
 
-			auto files = UnifiedDiffParser{}.Parse(ifs);
-			LOG_DEBUG << L"Unified diff: " << unifiedDiffPath;
-			for (const auto& file : files)
-			{
-				LOG_DEBUG << L"Selected lines for " << file.GetPath().wstring() << L": ";
-				LOG_DEBUG << file.GetSelectedLines();
-			}
-			return files;
-		}
-	}
+            auto files = UnifiedDiffParser{}.Parse(ifs);
+            LOG_DEBUG << L"Unified diff: " << unifiedDiffPath;
+            for (const auto& file : files)
+            {
+                LOG_DEBUG << L"Selected lines for " << file.GetPath().wstring() << L": ";
+                LOG_DEBUG << file.GetSelectedLines();
+            }
+            return files;
+        }
+    } // namespace
 
-	//-------------------------------------------------------------------------
-	UnifiedDiffCoverageFilter::UnifiedDiffCoverageFilter(
-		const std::filesystem::path& unifiedDiffPath,
-		const boost::optional<std::filesystem::path>& rootDiffFolder)
-		: UnifiedDiffCoverageFilter{ ParseUnifiedDiff(unifiedDiffPath), rootDiffFolder }
-	{
-	}
+    //-------------------------------------------------------------------------
+    UnifiedDiffCoverageFilter::UnifiedDiffCoverageFilter(
+        const std::filesystem::path&                  unifiedDiffPath,
+        const boost::optional<std::filesystem::path>& rootDiffFolder)
+        : UnifiedDiffCoverageFilter{ ParseUnifiedDiff(unifiedDiffPath), rootDiffFolder }
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	UnifiedDiffCoverageFilter::UnifiedDiffCoverageFilter(
-		std::vector<File>&& files,
-		const boost::optional<std::filesystem::path>& rootDiffFolder)
-		: pathMatcher_{ std::move(files), rootDiffFolder }
-		, lastFile_ {nullptr}
-	{
-	}
+    //-------------------------------------------------------------------------
+    UnifiedDiffCoverageFilter::UnifiedDiffCoverageFilter(
+        std::vector<File>&& files, const boost::optional<std::filesystem::path>& rootDiffFolder)
+        : pathMatcher_{ std::move(files), rootDiffFolder }, lastFile_{ nullptr }
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	bool UnifiedDiffCoverageFilter::IsSourceFileSelected(const std::filesystem::path& path)
-	{
-		return SearchFile(path) != nullptr;
-	}
+    //-------------------------------------------------------------------------
+    bool UnifiedDiffCoverageFilter::IsSourceFileSelected(const std::filesystem::path& path)
+    {
+        return SearchFile(path) != nullptr;
+    }
 
-	//-------------------------------------------------------------------------
-	bool UnifiedDiffCoverageFilter::IsLineSelected(const std::filesystem::path& path, int lineNumber)
-	{
-		auto file = SearchFile(path);
+    //-------------------------------------------------------------------------
+    bool UnifiedDiffCoverageFilter::IsLineSelected(const std::filesystem::path& path,
+                                                   int                          lineNumber)
+    {
+        auto file = SearchFile(path);
 
-		if (!file)
-			return false;
+        if (!file)
+            return false;
 
-		return file->IsLineSelected(lineNumber);
-	}
+        return file->IsLineSelected(lineNumber);
+    }
 
-	//-------------------------------------------------------------------------
-	File* UnifiedDiffCoverageFilter::SearchFile(const std::filesystem::path& path)
-	{
-		if (path == lastPath_)
-			return lastFile_;
+    //-------------------------------------------------------------------------
+    File* UnifiedDiffCoverageFilter::SearchFile(const std::filesystem::path& path)
+    {
+        if (path == lastPath_)
+            return lastFile_;
 
-		try
-		{
-			auto file = pathMatcher_.Match(path);
-			lastFile_ = file;
-		}
-		catch (const AmbiguousPathException& e)
-		{
-			std::ostringstream ostr;
+        try
+        {
+            auto file = pathMatcher_.Match(path);
+            lastFile_ = file;
+        }
+        catch (const AmbiguousPathException& e)
+        {
+            std::ostringstream ostr;
 
-			ostr << "A path is ambiguous in the unified diff file." << std::endl;
-			ostr << e.GetPostFixPath() << " can be either " << e.GetFirstPossiblePath();
-			ostr << " or " << e.GetSecondPossiblePath() << std::endl;
-			ostr << "Please specify root folder. See help for more information.";
+            ostr << "A path is ambiguous in the unified diff file." << std::endl;
+            ostr << e.GetPostFixPath() << " can be either " << e.GetFirstPossiblePath();
+            ostr << " or " << e.GetSecondPossiblePath() << std::endl;
+            ostr << "Please specify root folder. See help for more information.";
 
-			throw std::runtime_error(ostr.str());
-		}
+            throw std::runtime_error(ostr.str());
+        }
 
-		lastPath_ = path;
-		return lastFile_;
-	}
+        lastPath_ = path;
+        return lastFile_;
+    }
 
-	//-------------------------------------------------------------------------
-	std::vector<std::filesystem::path> UnifiedDiffCoverageFilter::GetUnmatchedPaths() const
-	{
-		return pathMatcher_.GetUnmatchedPaths();
-	}
-}
+    //-------------------------------------------------------------------------
+    std::vector<std::filesystem::path> UnifiedDiffCoverageFilter::GetUnmatchedPaths() const
+    {
+        return pathMatcher_.GetUnmatchedPaths();
+    }
+} // namespace FileFilter

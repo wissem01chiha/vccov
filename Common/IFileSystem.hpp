@@ -16,19 +16,19 @@
 
 #pragma once
 
+#include "CommonExport.h"
 #include <boost/optional/optional_fwd.hpp>
 #include <ctime>
-#include "CommonExport.h"
 #include <filesystem>
 
 namespace CppCoverage
 {
-	class VCOV_COMMONEXPORT_DLL IFileSystem
-	{
-	  public:
-		virtual ~IFileSystem() = default;
+    class VCOV_COMMONEXPORT_DLL IFileSystem
+    {
+      public:
+        virtual ~IFileSystem() = default;
 
-		virtual boost::optional<std::filesystem::file_time_type>
-		GetLastWriteTime(const std::filesystem::path&) const = 0;
-	};
-}
+        virtual boost::optional<std::filesystem::file_time_type>
+        GetLastWriteTime(const std::filesystem::path&) const = 0;
+    };
+} // namespace CppCoverage

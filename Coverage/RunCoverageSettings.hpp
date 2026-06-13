@@ -16,55 +16,53 @@
 
 #pragma once
 
-#include <vector>
-#include "StartInfo.hpp"
-#include "UnifiedDiffSettings.hpp"
-#include "CoverageFilterSettings.hpp"
 #include "CoverageExport.h"
+#include "CoverageFilterSettings.hpp"
+#include "StartInfo.hpp"
 #include "SubstitutePdbSourcePath.hpp"
+#include "UnifiedDiffSettings.hpp"
+#include <vector>
 
 namespace CppCoverage
 {
-	class VCOV_COVERAGEEXPORT_DLL RunCoverageSettings
-	{
-	public:
-		RunCoverageSettings(
-			const StartInfo&,
-			const CoverageFilterSettings&,
-			const std::vector<UnifiedDiffSettings>&,
-			const std::vector<std::wstring>& excludedLineRegexes,
-			const std::vector<SubstitutePdbSourcePath>&);
+    class VCOV_COVERAGEEXPORT_DLL RunCoverageSettings
+    {
+      public:
+        RunCoverageSettings(const StartInfo&, const CoverageFilterSettings&,
+                            const std::vector<UnifiedDiffSettings>&,
+                            const std::vector<std::wstring>& excludedLineRegexes,
+                            const std::vector<SubstitutePdbSourcePath>&);
 
-		RunCoverageSettings(const RunCoverageSettings&) = delete;
-		RunCoverageSettings& operator=(const RunCoverageSettings&) = delete;
+        RunCoverageSettings(const RunCoverageSettings&)            = delete;
+        RunCoverageSettings& operator=(const RunCoverageSettings&) = delete;
 
-		void SetCoverChildren(bool);
-		void SetContinueAfterCppException(bool);
+        void SetCoverChildren(bool);
+        void SetContinueAfterCppException(bool);
         void SetStopOnAssert(bool);
         void SetMaxUnmatchPathsForWarning(size_t);
-		void SetOptimizedBuildSupport(bool);
+        void SetOptimizedBuildSupport(bool);
 
-		const StartInfo& GetStartInfo() const;
-		const CoverageFilterSettings& GetCoverageFilterSettings() const;
-		const std::vector<UnifiedDiffSettings>& GetUnifiedDiffSettings() const;
-		bool GetCoverChildren() const;
-		bool GetContinueAfterCppException() const;
-        bool GetStopOnAssert() const;
-        size_t GetMaxUnmatchPathsForWarning() const;
-		bool GetOptimizedBuildSupport() const;
-		const std::vector<std::wstring>& GetExcludedLineRegexes() const;
-		const std::vector<SubstitutePdbSourcePath>& GetSubstitutePdbSourcePaths() const;
+        const StartInfo&                            GetStartInfo() const;
+        const CoverageFilterSettings&               GetCoverageFilterSettings() const;
+        const std::vector<UnifiedDiffSettings>&     GetUnifiedDiffSettings() const;
+        bool                                        GetCoverChildren() const;
+        bool                                        GetContinueAfterCppException() const;
+        bool                                        GetStopOnAssert() const;
+        size_t                                      GetMaxUnmatchPathsForWarning() const;
+        bool                                        GetOptimizedBuildSupport() const;
+        const std::vector<std::wstring>&            GetExcludedLineRegexes() const;
+        const std::vector<SubstitutePdbSourcePath>& GetSubstitutePdbSourcePaths() const;
 
-	private:
-		StartInfo startInfo_;
-		CoverageFilterSettings coverageFilterSettings_;
-		std::vector<UnifiedDiffSettings> unifiedDiffSettings_;
-		bool coverChildren_;
-		bool continueAfterCppException_;
-        bool stopOnAssert_;
-        size_t maxUnmatchPathsForWarning_;
-		bool optimizedBuildSupport_;
-		std::vector<std::wstring> excludedLineRegexes_;
-		std::vector<SubstitutePdbSourcePath> substitutePdbSourcePath_;
-	};
-}
+      private:
+        StartInfo                            startInfo_;
+        CoverageFilterSettings               coverageFilterSettings_;
+        std::vector<UnifiedDiffSettings>     unifiedDiffSettings_;
+        bool                                 coverChildren_;
+        bool                                 continueAfterCppException_;
+        bool                                 stopOnAssert_;
+        size_t                               maxUnmatchPathsForWarning_;
+        bool                                 optimizedBuildSupport_;
+        std::vector<std::wstring>            excludedLineRegexes_;
+        std::vector<SubstitutePdbSourcePath> substitutePdbSourcePath_;
+    };
+} // namespace CppCoverage

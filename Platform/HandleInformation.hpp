@@ -17,21 +17,19 @@
 #pragma once
 
 #include "PlatformExport.h"
-#include <string>
 #include <Windows.h>
+#include <string>
 
 namespace CppCoverage
 {
-	class VCOV_PLATFORMEXPORT_DLL HandleInformation
-	{
-	public:
-		HandleInformation();
-		std::wstring ComputeFilename(HANDLE hfile) const;
+    class VCOV_PLATFORMEXPORT_DLL HandleInformation
+    {
+      public:
+        HandleInformation();
+        std::wstring ComputeFilename(HANDLE hfile) const;
 
-	private:
-		HandleInformation(const HandleInformation&) = delete;
-		HandleInformation& operator=(const HandleInformation&) = delete;
-	};
-}
-
-
+      private:
+        HandleInformation(const HandleInformation&)            = delete;
+        HandleInformation& operator=(const HandleInformation&) = delete;
+    };
+} // namespace CppCoverage

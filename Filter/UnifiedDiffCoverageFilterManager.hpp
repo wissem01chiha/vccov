@@ -16,60 +16,58 @@
 
 #pragma once
 
-#include <vector>
+#include "FilterExport.h"
+#include <filesystem>
 #include <memory>
 #include <set>
-#include <filesystem>
-#include "FilterExport.h"
+#include <vector>
 
 namespace FileFilter
 {
-	class UnifiedDiffCoverageFilter;
-	class FileInfo;
-	class LineInfo;
-}
+    class UnifiedDiffCoverageFilter;
+    class FileInfo;
+    class LineInfo;
+} // namespace FileFilter
 
 namespace CppCoverage
 {
-	class UnifiedDiffSettings;
+    class UnifiedDiffSettings;
 
-	class VCOV_FILTEREXPORT_DLL UnifiedDiffCoverageFilterManager
-	{
-	public:
-		explicit UnifiedDiffCoverageFilterManager(
-			const std::vector<UnifiedDiffSettings>&);
+    class VCOV_FILTEREXPORT_DLL UnifiedDiffCoverageFilterManager
+    {
+      public:
+        explicit UnifiedDiffCoverageFilterManager(const std::vector<UnifiedDiffSettings>&);
 
-		using UnifiedDiffCoverageFilters = std::vector<std::unique_ptr<FileFilter::UnifiedDiffCoverageFilter>>;
+        using UnifiedDiffCoverageFilters =
+            std::vector<std::unique_ptr<FileFilter::UnifiedDiffCoverageFilter>>;
 
-		explicit UnifiedDiffCoverageFilterManager(
-			UnifiedDiffCoverageFilters&&);
+        explicit UnifiedDiffCoverageFilterManager(UnifiedDiffCoverageFilters&&);
 
-		~UnifiedDiffCoverageFilterManager();
+        ~UnifiedDiffCoverageFilterManager();
 
-		bool IsSourceFileSelected(const std::wstring& filename);
-		bool IsLineSelected(
-			const FileFilter::FileInfo&,
-			const FileFilter::LineInfo&);
+        bool IsSourceFileSelected(const std::wstring& filename);
+        bool IsLineSelected(const FileFilter::FileInfo&, const FileFilter::LineInfo&);
 
-		std::vector<std::wstring> ComputeWarningMessageLines(size_t maxUnmatchPaths) const;
+        std::vector<std::wstring> ComputeWarningMessageLines(size_t maxUnmatchPaths) const;
 
-	private:
-		UnifiedDiffCoverageFilterManager(const UnifiedDiffCoverageFilterManager&) = delete;
-		UnifiedDiffCoverageFilterManager& operator=(const UnifiedDiffCoverageFilterManager&) = delete;
+      private:
+        UnifiedDiffCoverageFilterManager(const UnifiedDiffCoverageFilterManager&) = delete;
+        UnifiedDiffCoverageFilterManager&
+        operator=(const UnifiedDiffCoverageFilterManager&) = delete;
 
-		std::vector<std::wstring> ComputeWarningMessageLines(
-			const std::set<std::filesystem::path>& unmatchPaths,
-			size_t maxUnmatchPaths) const;
+        std::vector<std::wstring>
+        ComputeWarningMessageLines(const std::set<std::filesystem::path>& unmatchPaths,
+                                   size_t                                 maxUnmatchPaths) const;
 
-		const std::set<int>& GetExecutableLinesSet(const FileFilter::FileInfo&);
-		const UnifiedDiffCoverageFilters unifiedDiffCoverageFilters_;
+        const std::set<int>&             GetExecutableLinesSet(const FileFilter::FileInfo&);
+        const UnifiedDiffCoverageFilters unifiedDiffCoverageFilters_;
 
-		struct ExecutableLineCache
-		{
-			std::filesystem::path currentFilePath;
-			std::set<int> executableLinesSet;
-		};
+        struct ExecutableLineCache
+        {
+            std::filesystem::path currentFilePath;
+            std::set<int>         executableLinesSet;
+        };
 
-		ExecutableLineCache executableLineCache_;
-	};
-}
+        ExecutableLineCache executableLineCache_;
+    };
+} // namespace CppCoverage

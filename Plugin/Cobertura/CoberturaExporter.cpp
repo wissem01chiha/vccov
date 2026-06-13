@@ -18,8 +18,8 @@
 #include "CoverageData.hpp"
 #include "CoverageRateComputer.hpp"
 #include "FileCoverage.hpp"
-#include "ModuleCoverage.hpp"
 #include "InvalidOutputFileException.hpp"
+#include "ModuleCoverage.hpp"
 #include "Tool.hpp"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
@@ -27,154 +27,164 @@
 #include <unordered_set>
 
 namespace property_tree = boost::property_tree;
-namespace fs = std::filesystem;
+namespace fs            = std::filesystem;
 
-namespace Exporter {
-//-------------------------------------------------------------------------
-property_tree::wptree &AddChild(property_tree::wptree &tree,
-                                const std::wstring &name) {
-  return tree.add_child(name, property_tree::wptree{});
-}
-
-//-------------------------------------------------------------------------
-std::wstring ToUft8WString(const fs::path &path) {
-  auto str = Tools::ToUtf8String(path.wstring());
-  auto utf8Str = Tools::LocalToWString(str);
-  return utf8Str;
-}
-
-//-------------------------------------------------------------------------
-void SetCoverage(property_tree::wptree &node,
-                 const CppCoverage::CoverageRate &coverageRate) {
-  node.put(L"<xmlattr>.line-rate", coverageRate.GetRate());
-  node.put(L"<xmlattr>.branch-rate", 0);
-  node.put(L"<xmlattr>.complexity", 0);
-}
-
-//-------------------------------------------------------------------------
-void FillFileTree(const CppCoverage::CoverageRateComputer &coverageRateComputer,
-                  property_tree::wptree &fileTree,
-                  const Plugin::FileCoverage &file) {
-  const auto &path = file.GetPath();
-  auto res = path.relative_path();
-  const auto &coverageRate = coverageRateComputer.GetCoverageRate(file);
-
-  fileTree.put(L"<xmlattr>.name", ToUft8WString(path.filename()));
-  fileTree.put(L"<xmlattr>.filename", ToUft8WString(path.relative_path()));
-  SetCoverage(fileTree, coverageRate);
-  AddChild(fileTree, L"methods");
-
-  property_tree::wptree &linesTree = AddChild(fileTree, L"lines");
-
-  for (const auto &line : file.GetLines()) {
-    property_tree::wptree &lineTree = AddChild(linesTree, L"line");
-
-    lineTree.put(L"<xmlattr>.number", std::to_wstring(line.GetLineNumber()));
-    lineTree.put(L"<xmlattr>.hits", line.HasBeenExecuted() ? L"1" : L"0");
-  }
-}
-
-//-------------------------------------------------------------------------
-void WriteSourceRoots(const Plugin::CoverageData &coverageData,
-                      property_tree::wptree &coverageTree) {
-  std::unordered_set<std::wstring> rootPaths;
-
-  for (const auto &module : coverageData.GetModules()) {
-    for (const auto &file : module->GetFiles()) {
-      const auto &path = file->GetPath();
-      rootPaths.insert(path.root_name().wstring());
+namespace Exporter
+{
+    //-------------------------------------------------------------------------
+    property_tree::wptree& AddChild(property_tree::wptree& tree, const std::wstring& name)
+    {
+        return tree.add_child(name, property_tree::wptree{});
     }
-  }
 
-  auto &sourcesTree = AddChild(coverageTree, L"sources");
-
-  for (const auto &rootPath : rootPaths)
-    sourcesTree.add(L"source", rootPath);
-}
-
-//-------------------------------------------------------------------------
-void SetCoverageAttributes(property_tree::wptree &coverageTree,
-                           const CppCoverage::CoverageRate &coverageRate) {
-  coverageTree.put(L"<xmlattr>.branches-covered", 0);
-  coverageTree.put(L"<xmlattr>.branches-valid", 0);
-
-  auto now = std::chrono::system_clock::now();
-  auto timestamp =
-      std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch())
-          .count();
-  coverageTree.put(L"<xmlattr>.timestamp", timestamp);
-  coverageTree.put(L"<xmlattr>.lines-covered",
-                   coverageRate.GetExecutedLinesCount());
-  coverageTree.put(L"<xmlattr>.lines-valid", coverageRate.GetTotalLinesCount());
-  coverageTree.put(L"<xmlattr>.version", 0);
-}
-
-//-------------------------------------------------------------------------
-void FillCoverageTree(property_tree::wptree &root,
-                      const Plugin::CoverageData &coverageData) {
-  CppCoverage::CoverageRateComputer coverageRateComputer(coverageData);
-  auto &coverageTree = AddChild(root, L"coverage");
-  const auto &coverageRate = coverageRateComputer.GetCoverageRate();
-  SetCoverage(coverageTree, coverageRate);
-  SetCoverageAttributes(coverageTree, coverageRate);
-
-  WriteSourceRoots(coverageData, coverageTree);
-
-  property_tree::wptree &packagesTree = AddChild(coverageTree, L"packages");
-
-  for (const auto &module : coverageData.GetModules()) {
-    // Do not create package if no files exists -> Coverage will not be visible
-    // by module
-    if (!module->GetFiles().empty()) {
-      property_tree::wptree &packageTree = AddChild(packagesTree, L"package");
-      property_tree::wptree &classesTree = AddChild(packageTree, L"classes");
-      const auto &coverageRate = coverageRateComputer.GetCoverageRate(*module);
-
-      packageTree.put(L"<xmlattr>.name", ToUft8WString(module->GetPath()));
-      SetCoverage(packageTree, coverageRate);
-
-      for (const auto &file : module->GetFiles()) {
-        property_tree::wptree &fileTree = AddChild(classesTree, L"class");
-        FillFileTree(coverageRateComputer, fileTree, *file);
-      }
+    //-------------------------------------------------------------------------
+    std::wstring ToUft8WString(const fs::path& path)
+    {
+        auto str     = Tools::ToUtf8String(path.wstring());
+        auto utf8Str = Tools::LocalToWString(str);
+        return utf8Str;
     }
-  }
-}
 
-//-------------------------------------------------------------------------
-CoberturaExporter::CoberturaExporter() = default;
+    //-------------------------------------------------------------------------
+    void SetCoverage(property_tree::wptree& node, const CppCoverage::CoverageRate& coverageRate)
+    {
+        node.put(L"<xmlattr>.line-rate", coverageRate.GetRate());
+        node.put(L"<xmlattr>.branch-rate", 0);
+        node.put(L"<xmlattr>.complexity", 0);
+    }
 
-//-------------------------------------------------------------------------
-std::filesystem::path
-CoberturaExporter::GetDefaultPath(const std::wstring &prefix) const {
-  std::filesystem::path path{prefix};
+    //-------------------------------------------------------------------------
+    void FillFileTree(const CppCoverage::CoverageRateComputer& coverageRateComputer,
+                      property_tree::wptree& fileTree, const Plugin::FileCoverage& file)
+    {
+        const auto& path         = file.GetPath();
+        auto        res          = path.relative_path();
+        const auto& coverageRate = coverageRateComputer.GetCoverageRate(file);
 
-  path += "Coverage.xml";
+        fileTree.put(L"<xmlattr>.name", ToUft8WString(path.filename()));
+        fileTree.put(L"<xmlattr>.filename", ToUft8WString(path.relative_path()));
+        SetCoverage(fileTree, coverageRate);
+        AddChild(fileTree, L"methods");
 
-  return path;
-}
+        property_tree::wptree& linesTree = AddChild(fileTree, L"lines");
 
-//-------------------------------------------------------------------------
-void CoberturaExporter::Export(const Plugin::CoverageData &coverageData,
-                               const std::filesystem::path &output) {
-  Tools::CreateParentFolderIfNeeded(output);
-  std::wofstream ofs{output.string().c_str()};
+        for (const auto& line : file.GetLines())
+        {
+            property_tree::wptree& lineTree = AddChild(linesTree, L"line");
 
-  if (!ofs)
-    throw InvalidOutputFileException(output, "cobertura");
-  Export(coverageData, ofs);
-  Tools::ShowOutputMessage(L"Cobertura report generated: ", output);
-}
+            lineTree.put(L"<xmlattr>.number", std::to_wstring(line.GetLineNumber()));
+            lineTree.put(L"<xmlattr>.hits", line.HasBeenExecuted() ? L"1" : L"0");
+        }
+    }
 
-//-------------------------------------------------------------------------
-void CoberturaExporter::Export(const Plugin::CoverageData &coverageData,
-                               std::wostream &ostream) const {
-  using Ptree = property_tree::wptree;
-  Ptree root;
+    //-------------------------------------------------------------------------
+    void WriteSourceRoots(const Plugin::CoverageData& coverageData,
+                          property_tree::wptree&      coverageTree)
+    {
+        std::unordered_set<std::wstring> rootPaths;
 
-  FillCoverageTree(root, coverageData);
+        for (const auto& module : coverageData.GetModules())
+        {
+            for (const auto& file : module->GetFiles())
+            {
+                const auto& path = file->GetPath();
+                rootPaths.insert(path.root_name().wstring());
+            }
+        }
 
-  property_tree::xml_writer_settings<Ptree::key_type> settings(' ', 2);
-  property_tree::xml_parser::write_xml(ostream, root, settings);
-}
+        auto& sourcesTree = AddChild(coverageTree, L"sources");
+
+        for (const auto& rootPath : rootPaths)
+            sourcesTree.add(L"source", rootPath);
+    }
+
+    //-------------------------------------------------------------------------
+    void SetCoverageAttributes(property_tree::wptree&           coverageTree,
+                               const CppCoverage::CoverageRate& coverageRate)
+    {
+        coverageTree.put(L"<xmlattr>.branches-covered", 0);
+        coverageTree.put(L"<xmlattr>.branches-valid", 0);
+
+        auto now = std::chrono::system_clock::now();
+        auto timestamp =
+            std::chrono::duration_cast<std::chrono::seconds>(now.time_since_epoch()).count();
+        coverageTree.put(L"<xmlattr>.timestamp", timestamp);
+        coverageTree.put(L"<xmlattr>.lines-covered", coverageRate.GetExecutedLinesCount());
+        coverageTree.put(L"<xmlattr>.lines-valid", coverageRate.GetTotalLinesCount());
+        coverageTree.put(L"<xmlattr>.version", 0);
+    }
+
+    //-------------------------------------------------------------------------
+    void FillCoverageTree(property_tree::wptree& root, const Plugin::CoverageData& coverageData)
+    {
+        CppCoverage::CoverageRateComputer coverageRateComputer(coverageData);
+        auto&                             coverageTree = AddChild(root, L"coverage");
+        const auto&                       coverageRate = coverageRateComputer.GetCoverageRate();
+        SetCoverage(coverageTree, coverageRate);
+        SetCoverageAttributes(coverageTree, coverageRate);
+
+        WriteSourceRoots(coverageData, coverageTree);
+
+        property_tree::wptree& packagesTree = AddChild(coverageTree, L"packages");
+
+        for (const auto& module : coverageData.GetModules())
+        {
+            // Do not create package if no files exists -> Coverage will not be visible
+            // by module
+            if (!module->GetFiles().empty())
+            {
+                property_tree::wptree& packageTree  = AddChild(packagesTree, L"package");
+                property_tree::wptree& classesTree  = AddChild(packageTree, L"classes");
+                const auto&            coverageRate = coverageRateComputer.GetCoverageRate(*module);
+
+                packageTree.put(L"<xmlattr>.name", ToUft8WString(module->GetPath()));
+                SetCoverage(packageTree, coverageRate);
+
+                for (const auto& file : module->GetFiles())
+                {
+                    property_tree::wptree& fileTree = AddChild(classesTree, L"class");
+                    FillFileTree(coverageRateComputer, fileTree, *file);
+                }
+            }
+        }
+    }
+
+    //-------------------------------------------------------------------------
+    CoberturaExporter::CoberturaExporter() = default;
+
+    //-------------------------------------------------------------------------
+    std::filesystem::path CoberturaExporter::GetDefaultPath(const std::wstring& prefix) const
+    {
+        std::filesystem::path path{ prefix };
+
+        path += "Coverage.xml";
+
+        return path;
+    }
+
+    //-------------------------------------------------------------------------
+    void CoberturaExporter::Export(const Plugin::CoverageData&  coverageData,
+                                   const std::filesystem::path& output)
+    {
+        Tools::CreateParentFolderIfNeeded(output);
+        std::wofstream ofs{ output.string().c_str() };
+
+        if (!ofs)
+            throw InvalidOutputFileException(output, "cobertura");
+        Export(coverageData, ofs);
+        Tools::ShowOutputMessage(L"Cobertura report generated: ", output);
+    }
+
+    //-------------------------------------------------------------------------
+    void CoberturaExporter::Export(const Plugin::CoverageData& coverageData,
+                                   std::wostream&              ostream) const
+    {
+        using Ptree = property_tree::wptree;
+        Ptree root;
+
+        FillCoverageTree(root, coverageData);
+
+        property_tree::xml_writer_settings<Ptree::key_type> settings(' ', 2);
+        property_tree::xml_parser::write_xml(ostream, root, settings);
+    }
 } // namespace Exporter

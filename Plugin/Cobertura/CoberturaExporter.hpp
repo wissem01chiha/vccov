@@ -16,30 +16,30 @@
 
 #pragma once
 
-#include <iosfwd>
-#include <filesystem>
 #include "CoberturaExport.h"
 #include "IExporter.hpp"
+#include <filesystem>
+#include <iosfwd>
 
 namespace Plugin
 {
-	class CoverageData;
+    class CoverageData;
 }
 
 namespace Exporter
 {
-	class VCOV_COBERTURAEXPORT_DLL CoberturaExporter: public IExporter
-	{
-	public:
-		CoberturaExporter() ;
+    class VCOV_COBERTURAEXPORT_DLL CoberturaExporter : public IExporter
+    {
+      public:
+        CoberturaExporter();
 
-		std::filesystem::path GetDefaultPath(const std::wstring& runningCommandFilename) const override;
-		void Export(const Plugin::CoverageData&, const std::filesystem::path& output) override;
-		void Export(const Plugin::CoverageData&, std::wostream&) const;
+        std::filesystem::path
+             GetDefaultPath(const std::wstring& runningCommandFilename) const override;
+        void Export(const Plugin::CoverageData&, const std::filesystem::path& output) override;
+        void Export(const Plugin::CoverageData&, std::wostream&) const;
 
-	private:
-		CoberturaExporter(const CoberturaExporter&) = delete;
-		CoberturaExporter& operator=(const CoberturaExporter&) = delete;
-	};
-}
-
+      private:
+        CoberturaExporter(const CoberturaExporter&)            = delete;
+        CoberturaExporter& operator=(const CoberturaExporter&) = delete;
+    };
+} // namespace Exporter

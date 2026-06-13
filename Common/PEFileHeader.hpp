@@ -21,22 +21,19 @@
 
 namespace Tools
 {
-	class VCOV_COMMONEXPORT_DLL IPEFileHeaderHandler
-	{
-	  public:
-		virtual ~IPEFileHeaderHandler() = default;
-		virtual void OnNtHeader32(HANDLE hProcess,
-		                          DWORD64 baseOfImage,
-		                          const IMAGE_NT_HEADERS32&) = 0;
-		virtual void OnNtHeader64(HANDLE hProcess,
-		                          DWORD64 baseOfImage,
-		                          const IMAGE_NT_HEADERS64&) = 0;
-	};
+    class VCOV_COMMONEXPORT_DLL IPEFileHeaderHandler
+    {
+      public:
+        virtual ~IPEFileHeaderHandler()                      = default;
+        virtual void OnNtHeader32(HANDLE hProcess, DWORD64 baseOfImage,
+                                  const IMAGE_NT_HEADERS32&) = 0;
+        virtual void OnNtHeader64(HANDLE hProcess, DWORD64 baseOfImage,
+                                  const IMAGE_NT_HEADERS64&) = 0;
+    };
 
-	class VCOV_COMMONEXPORT_DLL PEFileHeader
-	{
-	  public:
-		void
-		Load(HANDLE hProcess, DWORD64 baseOfImage, IPEFileHeaderHandler&) const;
-	};
-}
+    class VCOV_COMMONEXPORT_DLL PEFileHeader
+    {
+      public:
+        void Load(HANDLE hProcess, DWORD64 baseOfImage, IPEFileHeaderHandler&) const;
+    };
+} // namespace Tools

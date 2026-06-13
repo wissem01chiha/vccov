@@ -16,58 +16,58 @@
 
 #include "TemporaryPath.hpp"
 #include "stdafx.h"
-#include <system_error>
 #include <random>
+#include <system_error>
 
 namespace fs = std::filesystem;
 
 namespace Testing
 {
-	//-------------------------------------------------------------------------	
-	TemporaryPath::TemporaryPath(TemporaryPathOption temporaryPathOption)
-	{
-		auto now = std::chrono::system_clock::now().time_since_epoch();
-		auto seed = static_cast<unsigned int>(now.count());
-		std::default_random_engine generator(seed);
-		std::uniform_int_distribution<int> distribution;
-		auto temp_directory = fs::temp_directory_path();
+    //-------------------------------------------------------------------------
+    TemporaryPath::TemporaryPath(TemporaryPathOption temporaryPathOption)
+    {
+        auto                       now  = std::chrono::system_clock::now().time_since_epoch();
+        auto                       seed = static_cast<unsigned int>(now.count());
+        std::default_random_engine generator(seed);
+        std::uniform_int_distribution<int> distribution;
+        auto                               temp_directory = fs::temp_directory_path();
 
-		do
-		{
-			path_ = fs::absolute(temp_directory / std::to_string(distribution(generator)));
-		} while (Tools::FileExists(path_));
+        do
+        {
+            path_ = fs::absolute(temp_directory / std::to_string(distribution(generator)));
+        } while (Tools::FileExists(path_));
 
-		if (temporaryPathOption == TemporaryPathOption::CreateAsFolder)
-			fs::create_directories(path_);
-		else if (temporaryPathOption == TemporaryPathOption::CreateAsFile)		
-			CreateEmptyFile(path_);
-	}
+        if (temporaryPathOption == TemporaryPathOption::CreateAsFolder)
+            fs::create_directories(path_);
+        else if (temporaryPathOption == TemporaryPathOption::CreateAsFile)
+            CreateEmptyFile(path_);
+    }
 
-	//-------------------------------------------------------------------------
-	TemporaryPath::~TemporaryPath()
-	{
-		std::error_code error;
-		if (!fs::remove_all(path_, error))
-		{
-			LOG_ERROR << error;
-		}
-	}
+    //-------------------------------------------------------------------------
+    TemporaryPath::~TemporaryPath()
+    {
+        std::error_code error;
+        if (!fs::remove_all(path_, error))
+        {
+            LOG_ERROR << error;
+        }
+    }
 
-	//-------------------------------------------------------------------------
-	TemporaryPath::operator const std::filesystem::path& () const
-	{
-		return GetPath();
-	}
+    //-------------------------------------------------------------------------
+    TemporaryPath::operator const std::filesystem::path&() const
+    {
+        return GetPath();
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path& TemporaryPath::GetPath() const
-	{
-		return path_;
-	}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path& TemporaryPath::GetPath() const
+    {
+        return path_;
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path* TemporaryPath::operator->() const
-	{
-		return &path_;
-	}
-}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path* TemporaryPath::operator->() const
+    {
+        return &path_;
+    }
+} // namespace Testing

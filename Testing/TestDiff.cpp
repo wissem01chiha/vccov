@@ -18,14 +18,14 @@
 
 namespace TestCoverageConsole
 {
-	//-----------------------------------------------------------------------------
-	void FilterByDiff()
-	{
-		int value1 = 0;
-		if (true)			// In Diff
-			int value2 = 0; // In Diff
-		if (false)			// In Diff
-			int value3 = 0;	// In Diff
-		int value4 = 0;
-	}
-}
+    //-----------------------------------------------------------------------------
+    void FilterByDiff()
+    {
+        int value1 = 0;
+        if (true)           // In Diff
+            int value2 = 0; // In Diff
+        if (false)          // In Diff
+            int value3 = 0; // In Diff
+        int value4 = 0;
+    }
+} // namespace TestCoverageConsole

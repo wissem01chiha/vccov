@@ -16,27 +16,25 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
 #include "FilterExport.h"
 #include "Patterns.hpp"
+#include <string>
+#include <vector>
 
 namespace CppCoverage
 {
-	class VCOV_FILTEREXPORT_DLL CoverageFilterSettings
-	{	
-	public:
-		CoverageFilterSettings(const Patterns& modulePatterns, const Patterns& sourcePatterns);
-		CoverageFilterSettings(const CoverageFilterSettings&) = default;
-		CoverageFilterSettings& operator=(const CoverageFilterSettings&) = delete;
+    class VCOV_FILTEREXPORT_DLL CoverageFilterSettings
+    {
+      public:
+        CoverageFilterSettings(const Patterns& modulePatterns, const Patterns& sourcePatterns);
+        CoverageFilterSettings(const CoverageFilterSettings&)            = default;
+        CoverageFilterSettings& operator=(const CoverageFilterSettings&) = delete;
 
-		const Patterns& GetModulePatterns() const;
-		const Patterns& GetSourcePatterns() const;
+        const Patterns& GetModulePatterns() const;
+        const Patterns& GetSourcePatterns() const;
 
-	private:
-		Patterns modulePatterns_;
-		Patterns sourcePatterns_;
-	};
-}
-
-
+      private:
+        Patterns modulePatterns_;
+        Patterns sourcePatterns_;
+    };
+} // namespace CppCoverage

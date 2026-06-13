@@ -24,43 +24,36 @@
 
 namespace Exporter
 {
-	template <typename T>
-	class PluginLoader : public IPluginLoader<T>
-	{
-	  public:
-		//-------------------------------------------------------------------------
-		std::unique_ptr<LoadedPlugin<T>>
-		TryLoadPlugin(const std::filesystem::path& pluginPath,
-		              const std::string& pluginFactoryFctName) const override
-		{
-			auto libModule = LoadLibraryW(pluginPath.c_str());
+    template <typename T> class PluginLoader : public IPluginLoader<T>
+    {
+      public:
+        //-------------------------------------------------------------------------
+        std::unique_ptr<LoadedPlugin<T>>
+        TryLoadPlugin(const std::filesystem::path& pluginPath,
+                      const std::string&           pluginFactoryFctName) const override
+        {
+            auto libModule = LoadLibraryW(pluginPath.c_str());
 
-			if (!libModule)
-				throw std::runtime_error("LoadLibrary failed.");
+            if (!libModule)
+                throw std::runtime_error("LoadLibrary failed.");
 
-			auto plugin = std::make_unique<LoadedPlugin<T>>(libModule);
+            auto plugin = std::make_unique<LoadedPlugin<T>>(libModule);
 
-			auto address =
-			    GetProcAddress(libModule, pluginFactoryFctName.c_str());
-			if (!address)
-				throw std::runtime_error("Cannot find C function " +
-				                         pluginFactoryFctName + '.');
-			auto pluginFactory = reinterpret_cast<T* (*)()>(address);
+            auto address = GetProcAddress(libModule, pluginFactoryFctName.c_str());
+            if (!address)
+                throw std::runtime_error("Cannot find C function " + pluginFactoryFctName + '.');
+            auto pluginFactory = reinterpret_cast<T* (*)()>(address);
 
-			T* rawPlugin = Tools::Try<std::runtime_error>(
-			    [&]() { return pluginFactory(); },
-			    [&](const auto& error) {
-				    return "Error when calling " + pluginFactoryFctName + ": " +
-				           error;
-			    });
+            T* rawPlugin = Tools::Try<std::runtime_error>(
+                [&]() { return pluginFactory(); }, [&](const auto& error)
+                { return "Error when calling " + pluginFactoryFctName + ": " + error; });
 
-			if (!rawPlugin)
-				throw std::runtime_error(pluginFactoryFctName +
-				                         " returns null.");
+            if (!rawPlugin)
+                throw std::runtime_error(pluginFactoryFctName + " returns null.");
 
-			plugin->Set(std::unique_ptr<T>{rawPlugin});
+            plugin->Set(std::unique_ptr<T>{ rawPlugin });
 
-			return plugin;
-		}
-	};
-}
+            return plugin;
+        }
+    };
+} // namespace Exporter

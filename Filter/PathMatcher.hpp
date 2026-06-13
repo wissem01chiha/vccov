@@ -17,39 +17,37 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <vector>
-#include <memory>
-#include <filesystem>
 #include <boost/optional/optional_fwd.hpp>
+#include <filesystem>
+#include <memory>
+#include <vector>
 
 namespace FileFilter
 {
-	class File;
+    class File;
 
-	class VCOV_FILTEREXPORT_DLL PathMatcher
-	{
-	public:
-		explicit PathMatcher(
-			std::vector<File>&&,
-			const boost::optional<std::filesystem::path>& parentPath);
-		~PathMatcher();
+    class VCOV_FILTEREXPORT_DLL PathMatcher
+    {
+      public:
+        explicit PathMatcher(std::vector<File>&&,
+                             const boost::optional<std::filesystem::path>& parentPath);
+        ~PathMatcher();
 
-		File* Match(const std::filesystem::path&);
+        File* Match(const std::filesystem::path&);
 
-		using PathCollection = std::vector<std::filesystem::path>;
-		PathCollection GetUnmatchedPaths() const;
+        using PathCollection = std::vector<std::filesystem::path>;
+        PathCollection GetUnmatchedPaths() const;
 
-	private:
-		PathMatcher(const PathMatcher&) = delete;
-		PathMatcher& operator=(const PathMatcher&) = delete;
-		PathMatcher(PathMatcher&&) = delete;
-		PathMatcher& operator=(PathMatcher&&) = delete;
+      private:
+        PathMatcher(const PathMatcher&)            = delete;
+        PathMatcher& operator=(const PathMatcher&) = delete;
+        PathMatcher(PathMatcher&&)                 = delete;
+        PathMatcher& operator=(PathMatcher&&)      = delete;
 
-		class IPathMatcherEngine;
-		class PostFixPathMatcherEngine;
-		class FullPathMatcherEngine;
+        class IPathMatcherEngine;
+        class PostFixPathMatcherEngine;
+        class FullPathMatcherEngine;
 
-		std::unique_ptr<IPathMatcherEngine> pathMatcherEngine_;
-	};
-}
-
+        std::unique_ptr<IPathMatcherEngine> pathMatcherEngine_;
+    };
+} // namespace FileFilter

@@ -16,9 +16,9 @@
 
 #pragma once
 
-#include <filesystem>
 #include "CoreExport.h"
 #include "SubstitutePdbSourcePath.hpp"
+#include <filesystem>
 
 struct IDiaSession;
 struct IDiaLineNumber;
@@ -26,53 +26,45 @@ struct IDiaSourceFile;
 
 namespace CppCoverage
 {
-	//-------------------------------------------------------------------------
-	class VCOV_COREEXPORT_DLL IDebugInformationHandler
-	{
-	  public:
-		struct Line
-		{
-			Line(unsigned long lineNumber,
-			     int64_t virtualAddress,
-			     unsigned long symbolIndex)
-			    : lineNumber_{lineNumber},
-			      virtualAddress_{virtualAddress},
-			      symbolIndex_{symbolIndex}
-			{
-			}
-			Line(const Line&) = default;
+    //-------------------------------------------------------------------------
+    class VCOV_COREEXPORT_DLL IDebugInformationHandler
+    {
+      public:
+        struct Line
+        {
+            Line(unsigned long lineNumber, int64_t virtualAddress, unsigned long symbolIndex)
+                : lineNumber_{ lineNumber }, virtualAddress_{ virtualAddress },
+                  symbolIndex_{ symbolIndex }
+            {
+            }
+            Line(const Line&) = default;
 
-			Line& operator=(const Line&) = default;
+            Line& operator=(const Line&) = default;
 
-			unsigned long lineNumber_;
-			unsigned long symbolIndex_;
-			int64_t virtualAddress_;
-		};
+            unsigned long lineNumber_;
+            unsigned long symbolIndex_;
+            int64_t       virtualAddress_;
+        };
 
-		virtual ~IDebugInformationHandler() = default;
-		virtual bool IsSourceFileSelected(const std::filesystem::path&) = 0;
-		virtual void OnSourceFile(const std::filesystem::path&,
-		                          const std::vector<Line>&) = 0;
-	};
+        virtual ~IDebugInformationHandler()                                               = default;
+        virtual bool IsSourceFileSelected(const std::filesystem::path&)                   = 0;
+        virtual void OnSourceFile(const std::filesystem::path&, const std::vector<Line>&) = 0;
+    };
 
-	//-------------------------------------------------------------------------
-	class VCOV_COREEXPORT_DLL DebugInformationEnumerator
-	{
-	  public:
-		explicit DebugInformationEnumerator(const std::vector<SubstitutePdbSourcePath>&);
-		bool Enumerate(const std::filesystem::path&,
-		               IDebugInformationHandler&);
+    //-------------------------------------------------------------------------
+    class VCOV_COREEXPORT_DLL DebugInformationEnumerator
+    {
+      public:
+        explicit DebugInformationEnumerator(const std::vector<SubstitutePdbSourcePath>&);
+        bool Enumerate(const std::filesystem::path&, IDebugInformationHandler&);
 
-	  private:
-		void
-		EnumLines(IDiaSession&, IDiaSourceFile&, IDebugInformationHandler&);
-		void
-		OnNewLine(IDiaSession&, IDiaLineNumber&, IDebugInformationHandler&);
+      private:
+        void EnumLines(IDiaSession&, IDiaSourceFile&, IDebugInformationHandler&);
+        void OnNewLine(IDiaSession&, IDiaLineNumber&, IDebugInformationHandler&);
 
-		std::filesystem::path
-		GetSourceFileName(IDiaSourceFile&) const;
+        std::filesystem::path GetSourceFileName(IDiaSourceFile&) const;
 
-		std::vector<IDebugInformationHandler::Line> lines_;
-		const std::vector<SubstitutePdbSourcePath> substitutePdbSourcePaths_;
-	};
-}
+        std::vector<IDebugInformationHandler::Line> lines_;
+        const std::vector<SubstitutePdbSourcePath>  substitutePdbSourcePaths_;
+    };
+} // namespace CppCoverage

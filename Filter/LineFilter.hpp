@@ -18,45 +18,44 @@
 
 #include "FilterExport.h"
 #include <filesystem>
-#include <vector>
-#include <string>
 #include <regex>
+#include <string>
+#include <vector>
 
 namespace Tools
 {
-	class MappedFile;
+    class MappedFile;
 }
 
 namespace FileFilter
-{	
-	class FileInfo;
-	class LineInfo;
+{
+    class FileInfo;
+    class LineInfo;
 
-	class VCOV_FILTEREXPORT_DLL LineFilter
-	{
-	public:
-		explicit LineFilter(
-			const std::vector<std::wstring>& excludedLineRegexes,
-			bool enableLog = true);
-		~LineFilter();
+    class VCOV_FILTEREXPORT_DLL LineFilter
+    {
+      public:
+        explicit LineFilter(const std::vector<std::wstring>& excludedLineRegexes,
+                            bool                             enableLog = true);
+        ~LineFilter();
 
-		bool IsLineSelected(const FileInfo&, const LineInfo&);
-		bool IsLineSelected(const std::filesystem::path&, int lineNumber);
-		int GetFileReadCount() const;
+        bool IsLineSelected(const FileInfo&, const LineInfo&);
+        bool IsLineSelected(const std::filesystem::path&, int lineNumber);
+        int  GetFileReadCount() const;
 
-	private:
-		LineFilter(const LineFilter&) = delete;
-		LineFilter& operator=(const LineFilter&) = delete;
-		LineFilter(LineFilter&&) = delete;
-		LineFilter& operator=(LineFilter&&) = delete;
+      private:
+        LineFilter(const LineFilter&)            = delete;
+        LineFilter& operator=(const LineFilter&) = delete;
+        LineFilter(LineFilter&&)                 = delete;
+        LineFilter& operator=(LineFilter&&)      = delete;
 
-		const std::vector<std::string>* GetLines(const std::filesystem::path&);
-		bool IsLineSelected(const std::string& line) const;
+        const std::vector<std::string>* GetLines(const std::filesystem::path&);
+        bool                            IsLineSelected(const std::string& line) const;
 
-		std::vector<std::regex> excludedLineRegexes_;
-		std::filesystem::path filePath_;
-		std::unique_ptr<Tools::MappedFile> mappedFileForFilePath_;
-		int fileReadCount_;
-		const bool enableLog_;
-	};
-}
+        std::vector<std::regex>            excludedLineRegexes_;
+        std::filesystem::path              filePath_;
+        std::unique_ptr<Tools::MappedFile> mappedFileForFilePath_;
+        int                                fileReadCount_;
+        const bool                         enableLog_;
+    };
+} // namespace FileFilter

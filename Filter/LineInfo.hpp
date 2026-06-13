@@ -16,25 +16,22 @@
 
 #pragma once
 
-#include <vector>
 #include <minwindef.h>
+#include <vector>
 
 namespace FileFilter
-{	
-	class LineInfo
-	{
-	public:
-		LineInfo(
-			int lineNumber,
-			DWORD64 virtualAddress,
-			ULONG symbolIndex)
-			: lineNumber_{ lineNumber }
-			, virtualAddress_{ virtualAddress }
-			, symbolIndex_{ symbolIndex }
-		{}
+{
+    class LineInfo
+    {
+      public:
+        LineInfo(int lineNumber, DWORD64 virtualAddress, ULONG symbolIndex)
+            : lineNumber_{ lineNumber }, virtualAddress_{ virtualAddress },
+              symbolIndex_{ symbolIndex }
+        {
+        }
 
-		const int lineNumber_;
-		const ULONG symbolIndex_;
-		const DWORD64 virtualAddress_;
-	};
-}
+        const int     lineNumber_;
+        const ULONG   symbolIndex_;
+        const DWORD64 virtualAddress_;
+    };
+} // namespace FileFilter

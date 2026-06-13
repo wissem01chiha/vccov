@@ -16,23 +16,21 @@
 
 #pragma once
 
-#include <memory>
 #include <filesystem>
+#include <memory>
 #include <stdexcept>
 
 namespace Exporter
 {
-	template <typename T>
-	class LoadedPlugin;
+    template <typename T> class LoadedPlugin;
 
-	template <typename T>
-	class IPluginLoader
-	{
-	  public:
-		virtual ~IPluginLoader() = default;
+    template <typename T> class IPluginLoader
+    {
+      public:
+        virtual ~IPluginLoader() = default;
 
-		virtual std::unique_ptr<LoadedPlugin<T>>
-		TryLoadPlugin(const std::filesystem::path& pluginPath,
-		              const std::string& pluginFactoryFctName) const = 0;
-	};
-}
+        virtual std::unique_ptr<LoadedPlugin<T>>
+        TryLoadPlugin(const std::filesystem::path& pluginPath,
+                      const std::string&           pluginFactoryFctName) const = 0;
+    };
+} // namespace Exporter

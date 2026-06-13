@@ -21,21 +21,21 @@
 
 namespace Plugin
 {
-	class CoverageData;
+    class CoverageData;
 }
 
 namespace CppCoverage
 {
-	class VCOV_COVERAGEEXPORT_DLL CoverageDataMerger
-	{
-	public:
-		CoverageDataMerger() = default;
-		
-		Plugin::CoverageData Merge(const std::vector<Plugin::CoverageData>&) const;
-		void MergeFileCoverage(Plugin::CoverageData&) const;
+    class VCOV_COVERAGEEXPORT_DLL CoverageDataMerger
+    {
+      public:
+        CoverageDataMerger() = default;
 
-	private:
-		CoverageDataMerger(const CoverageDataMerger&) = delete;
-		CoverageDataMerger& operator=(const CoverageDataMerger&) = delete;
-	};
-}
+        Plugin::CoverageData Merge(const std::vector<Plugin::CoverageData>&) const;
+        void                 MergeFileCoverage(Plugin::CoverageData&) const;
+
+      private:
+        CoverageDataMerger(const CoverageDataMerger&)            = delete;
+        CoverageDataMerger& operator=(const CoverageDataMerger&) = delete;
+    };
+} // namespace CppCoverage

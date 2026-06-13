@@ -16,63 +16,62 @@
 
 #pragma once
 
-#include <boost/program_options.hpp>
 #include "OptionExport.h"
+#include <boost/program_options.hpp>
 
 namespace CppCoverage
 {
-	class IOptionParser;
+    class IOptionParser;
 
-	class VCOV_OPTIONEXPORT_DLL ProgramOptions
-	{
-	public:
-		static const std::string SelectedModulesOption;
-		static const std::string ExcludedModulesOption;
-		static const std::string SelectedSourcesOption;
-		static const std::string ExcludedSourcesOption;
-		static const std::string VerboseOption;
-		static const std::string QuietOption;
-		static const std::string PluginOption;
-		static const std::string VerboseShortOption;
-		static const std::string QuietShortOption;
-		static const std::string HelpOption;
-		static const std::string HelpShortOption;
-		static const std::string ConfigFileOption;
-		static const std::string WorkingDirectoryOption;
-		static const std::string CoverChildrenOption;
-		static const std::string NoAggregateByFileOption;
+    class VCOV_OPTIONEXPORT_DLL ProgramOptions
+    {
+      public:
+        static const std::string SelectedModulesOption;
+        static const std::string ExcludedModulesOption;
+        static const std::string SelectedSourcesOption;
+        static const std::string ExcludedSourcesOption;
+        static const std::string VerboseOption;
+        static const std::string QuietOption;
+        static const std::string PluginOption;
+        static const std::string VerboseShortOption;
+        static const std::string QuietShortOption;
+        static const std::string HelpOption;
+        static const std::string HelpShortOption;
+        static const std::string ConfigFileOption;
+        static const std::string WorkingDirectoryOption;
+        static const std::string CoverChildrenOption;
+        static const std::string NoAggregateByFileOption;
         static const std::string StopOnAssertOption;
         static const std::string ProgramToRunOption;
-		static const std::string ProgramToRunArgOption;
-		static const std::string InputCoverageValue;
-		static const std::string UnifiedDiffOption;
-		static const std::string ContinueAfterCppExceptionOption;
-		static const std::string OptimizedBuildOption;
-		static const std::string ExcludedLineRegexOption;
-		static const std::string SubstitutePdbSourcePathOption;
+        static const std::string ProgramToRunArgOption;
+        static const std::string InputCoverageValue;
+        static const std::string UnifiedDiffOption;
+        static const std::string ContinueAfterCppExceptionOption;
+        static const std::string OptimizedBuildOption;
+        static const std::string ExcludedLineRegexOption;
+        static const std::string SubstitutePdbSourcePathOption;
 
-		explicit ProgramOptions(const std::vector<std::unique_ptr<IOptionParser>>&);
+        explicit ProgramOptions(const std::vector<std::unique_ptr<IOptionParser>>&);
 
-		void FillVariableMap(
-			int argc,
-			const char** argv,
-			boost::program_options::variables_map& variables) const;
+        void FillVariableMap(int argc, const char** argv,
+                             boost::program_options::variables_map& variables) const;
 
-		void FillVariableMap(std::istream&, boost::program_options::variables_map& variables) const;
-				
-		friend VCOV_OPTIONEXPORT_DLL std::wostream& operator<<(std::wostream&, const ProgramOptions&);
+        void FillVariableMap(std::istream&, boost::program_options::variables_map& variables) const;
 
-	private:
-		ProgramOptions(const ProgramOptions&) = delete;
-		ProgramOptions& operator=(const ProgramOptions&) = delete;
+        friend VCOV_OPTIONEXPORT_DLL std::wostream& operator<<(std::wostream&,
+                                                               const ProgramOptions&);
 
-		boost::program_options::options_description genericOptions_;
-		boost::program_options::options_description configurationOptions_;
-		boost::program_options::options_description hiddenOptions_;
+      private:
+        ProgramOptions(const ProgramOptions&)            = delete;
+        ProgramOptions& operator=(const ProgramOptions&) = delete;
 
-		boost::program_options::options_description commandLineOptions_;
-		boost::program_options::options_description visibleOptions_;
-		boost::program_options::options_description configFileOptions_;
-		boost::program_options::positional_options_description positionalOptions_;		
-	};
-}
+        boost::program_options::options_description genericOptions_;
+        boost::program_options::options_description configurationOptions_;
+        boost::program_options::options_description hiddenOptions_;
+
+        boost::program_options::options_description            commandLineOptions_;
+        boost::program_options::options_description            visibleOptions_;
+        boost::program_options::options_description            configFileOptions_;
+        boost::program_options::positional_options_description positionalOptions_;
+    };
+} // namespace CppCoverage

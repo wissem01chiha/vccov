@@ -14,38 +14,35 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "AmbiguousPathException.hpp"
+#include "stdafx.h"
 
 namespace FileFilter
-{	
-	//-------------------------------------------------------------------------
-	AmbiguousPathException::AmbiguousPathException(
-		const std::filesystem::path& postFixPath,
-		const std::filesystem::path& firstPossiblePath,
-		const std::filesystem::path& secondPossiblePath)
-		: std::runtime_error{"AmbiguousPathException"}
-		, postFixPath_{ postFixPath }
-		, firstPossiblePath_{ firstPossiblePath }
-		, secondPossiblePath_{ secondPossiblePath }
-	{
-	}
+{
+    //-------------------------------------------------------------------------
+    AmbiguousPathException::AmbiguousPathException(const std::filesystem::path& postFixPath,
+                                                   const std::filesystem::path& firstPossiblePath,
+                                                   const std::filesystem::path& secondPossiblePath)
+        : std::runtime_error{ "AmbiguousPathException" }, postFixPath_{ postFixPath },
+          firstPossiblePath_{ firstPossiblePath }, secondPossiblePath_{ secondPossiblePath }
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path& AmbiguousPathException::GetPostFixPath() const
-	{
-		return postFixPath_;
-	}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path& AmbiguousPathException::GetPostFixPath() const
+    {
+        return postFixPath_;
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path& AmbiguousPathException::GetFirstPossiblePath() const
-	{
-		return firstPossiblePath_;
-	}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path& AmbiguousPathException::GetFirstPossiblePath() const
+    {
+        return firstPossiblePath_;
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path& AmbiguousPathException::GetSecondPossiblePath() const
-	{
-		return secondPossiblePath_;
-	}
-}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path& AmbiguousPathException::GetSecondPossiblePath() const
+    {
+        return secondPossiblePath_;
+    }
+} // namespace FileFilter

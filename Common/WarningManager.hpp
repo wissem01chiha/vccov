@@ -22,15 +22,15 @@
 
 namespace Tools
 {
-	class VCOV_COMMONEXPORT_DLL WarningManager
-	{
-	public:
-		WarningManager() = default;
+    class VCOV_COMMONEXPORT_DLL WarningManager
+    {
+      public:
+        WarningManager() = default;
 
-		void AddWarning(const std::wstring&);
-		void DisplayWarnings() const;
-		
-	private:
-		std::vector<std::wstring> warnings_;
-	};
-}
+        void AddWarning(const std::wstring&);
+        void DisplayWarnings() const;
+
+      private:
+        std::vector<std::wstring> warnings_;
+    };
+} // namespace Tools

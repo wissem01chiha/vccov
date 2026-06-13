@@ -14,11 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "TestCppCli.hpp"
+#include "stdafx.h"
 
 namespace TestCoverageSharedLib
 {
-	//-------------------------------------------------------------------------
-	int Return42() { return 42; }
-}
+    //-------------------------------------------------------------------------
+    int Return42()
+    {
+        return 42;
+    }
+} // namespace TestCoverageSharedLib

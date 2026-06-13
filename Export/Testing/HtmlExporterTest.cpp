@@ -17,12 +17,12 @@
 #include "stdafx.h"
 
 #include "Plugin/Exporter/CoverageData.hpp"
-#include "Plugin/Exporter/ModuleCoverage.hpp"
 #include "Plugin/Exporter/FileCoverage.hpp"
+#include "Plugin/Exporter/ModuleCoverage.hpp"
 #include "TestHelper/TemporaryPath.hpp"
 
-#include <fstream>
 #include <filesystem>
+#include <fstream>
 
 #include "Exporter/Html/HtmlExporter.hpp"
 #include "Exporter/Html/HtmlFolderStructure.hpp"
@@ -35,130 +35,127 @@ namespace fs = std::filesystem;
 
 namespace ExporterTest
 {
-	//-------------------------------------------------------------------------
-	struct HtmlExporterTest : public ::testing::Test
-	{
-		//-------------------------------------------------------------------------
-		HtmlExporterTest()
-			: htmlExporter_{ fs::canonical(OUT_DIR) / "Template" }
-		{
+    //-------------------------------------------------------------------------
+    struct HtmlExporterTest : public ::testing::Test
+    {
+        //-------------------------------------------------------------------------
+        HtmlExporterTest() : htmlExporter_{ fs::canonical(OUT_DIR) / "Template" }
+        {
+        }
 
-		}
+        //---------------------------------------------------------------------
+        bool Contains(std::wistream& istr, const std::wstring& str)
+        {
+            std::wstring line;
 
-		//---------------------------------------------------------------------
-		bool Contains(std::wistream& istr, const std::wstring& str)
-		{			
-			std::wstring line;
+            while (std::getline(istr, line))
+            {
+                if (line.find(str) != std::string::npos)
+                    return true;
+            }
 
-			while (std::getline(istr, line))
-			{
-				if (line.find(str) != std::string::npos)
-					return true;
-			}
+            return false;
+        }
 
-			return false;
-		}
+        //---------------------------------------------------------------------
+        void CheckWarningInIndex(bool expectedValue)
+        {
+            auto indexPath = output_.GetPath() / "index.html";
+            ASSERT_TRUE(Tools::FileExists(indexPath));
+            std::wifstream ifs{ indexPath.string() };
+            bool hasWarning = Contains(ifs, Exporter::HtmlExporter::WarningExitCodeMessage);
 
-		//---------------------------------------------------------------------
-		void CheckWarningInIndex(bool expectedValue)
-		{
-			auto indexPath = output_.GetPath() / "index.html";
-			ASSERT_TRUE(Tools::FileExists(indexPath));
-			std::wifstream ifs{ indexPath.string()};
-			bool hasWarning = Contains(ifs, Exporter::HtmlExporter::WarningExitCodeMessage);
-			
-			ASSERT_EQ(expectedValue, hasWarning);
-		}
+            ASSERT_EQ(expectedValue, hasWarning);
+        }
 
-		Exporter::HtmlExporter htmlExporter_;
-		TestHelper::TemporaryPath output_;
-	};	
+        Exporter::HtmlExporter    htmlExporter_;
+        TestHelper::TemporaryPath output_;
+    };
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlExporterTest, Export)
-	{	
-		fs::path testFolder = fs::path(PROJECT_DIR) / "Data";
-		Plugin::CoverageData data{ L"Test", 0};
-		std::wstring filename1{ L"TestFile1.cpp"};
-		std::wstring filename2{ L"TestFile2.cpp"};
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlExporterTest, Export)
+    {
+        fs::path             testFolder = fs::path(PROJECT_DIR) / "Data";
+        Plugin::CoverageData data{ L"Test", 0 };
+        std::wstring         filename1{ L"TestFile1.cpp" };
+        std::wstring         filename2{ L"TestFile2.cpp" };
 
-		auto& module1 = data.AddModule(L"Module1.exe");
-		auto& file1 = module1.AddFile(testFolder / filename1);
-		auto& file2 = module1.AddFile(testFolder / filename2);
-		
-		file1.AddLine(0, true);
-		file2.AddLine(0, true);
-		
-		data.AddModule(L"Module2.exe");		
+        auto& module1 = data.AddModule(L"Module1.exe");
+        auto& file1   = module1.AddFile(testFolder / filename1);
+        auto& file2   = module1.AddFile(testFolder / filename2);
 
-		htmlExporter_.Export(data, output_);
+        file1.AddLine(0, true);
+        file2.AddLine(0, true);
 
-		auto modulesPath = output_.GetPath() / Exporter::HtmlFolderStructure::FolderModules;
-		ASSERT_TRUE(Tools::FileExists(output_.GetPath() / "index.html"));
-		ASSERT_TRUE(Tools::FileExists(modulesPath / "module1.html"));
-		ASSERT_FALSE(Tools::FileExists(modulesPath / "module2.html"));
-		ASSERT_TRUE(Tools::FileExists(modulesPath / "module1" / (filename1 + L".html")));
-		ASSERT_TRUE(Tools::FileExists(modulesPath / "module1" / (filename2 + L".html")));
-	}
+        data.AddModule(L"Module2.exe");
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlExporterTest, NoWarning)
-	{
-		Plugin::CoverageData data{ L"Test", 0 };
+        htmlExporter_.Export(data, output_);
 
-		htmlExporter_.Export(data, output_);		
-		CheckWarningInIndex(false);
-	}
+        auto modulesPath = output_.GetPath() / Exporter::HtmlFolderStructure::FolderModules;
+        ASSERT_TRUE(Tools::FileExists(output_.GetPath() / "index.html"));
+        ASSERT_TRUE(Tools::FileExists(modulesPath / "module1.html"));
+        ASSERT_FALSE(Tools::FileExists(modulesPath / "module2.html"));
+        ASSERT_TRUE(Tools::FileExists(modulesPath / "module1" / (filename1 + L".html")));
+        ASSERT_TRUE(Tools::FileExists(modulesPath / "module1" / (filename2 + L".html")));
+    }
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlExporterTest, Warning)
-	{
-		Plugin::CoverageData data{ L"Test", 42};
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlExporterTest, NoWarning)
+    {
+        Plugin::CoverageData data{ L"Test", 0 };
 
-		htmlExporter_.Export(data, output_);	
-		CheckWarningInIndex(true);
-	}
+        htmlExporter_.Export(data, output_);
+        CheckWarningInIndex(false);
+    }
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlExporterTest, SubFolderDoesNotExist)
-	{
-		Plugin::CoverageData data{ L"Test", 42 };
-		auto outputFolder = output_.GetPath() / "SubFolder1" / "SubFolder2";
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlExporterTest, Warning)
+    {
+        Plugin::CoverageData data{ L"Test", 42 };
 
-		ASSERT_FALSE(Tools::FileExists(outputFolder));
-		htmlExporter_.Export(data, outputFolder);
-		ASSERT_TRUE(Tools::FileExists(outputFolder));
-	}
+        htmlExporter_.Export(data, output_);
+        CheckWarningInIndex(true);
+    }
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlExporterTest, OutputExists)
-	{
-		Plugin::CoverageData data{ L"Test", 42 };
-		TestHelper::TemporaryPath outputFolder{ TestHelper::TemporaryPathOption::CreateAsFolder };
-		
-		ASSERT_NO_THROW(htmlExporter_.Export(data, outputFolder));
-	}
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlExporterTest, SubFolderDoesNotExist)
+    {
+        Plugin::CoverageData data{ L"Test", 42 };
+        auto                 outputFolder = output_.GetPath() / "SubFolder1" / "SubFolder2";
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlExporterTest, SameModuleSameSourceFile)
-	{
-		Plugin::CoverageData data{ L"Test", 0 };
-		const std::wstring filename = L"TestFile1.cpp";
-		const auto moduleName = L"Module.exe";
-		
-		auto& module = data.AddModule(moduleName);
-		module.AddFile(fs::path(PROJECT_DIR) / "Data" / filename).AddLine(0, true);
-		module.AddFile(fs::path(PROJECT_DIR) / "Data" / filename);
-		data.AddModule(moduleName).AddFile("file").AddLine(0, true);
-		
-		htmlExporter_.Export(data, output_);
+        ASSERT_FALSE(Tools::FileExists(outputFolder));
+        htmlExporter_.Export(data, outputFolder);
+        ASSERT_TRUE(Tools::FileExists(outputFolder));
+    }
 
-		auto modulesPath = output_.GetPath() / Exporter::HtmlFolderStructure::FolderModules;
-		ASSERT_TRUE(Tools::FileExists(modulesPath / "module2"));
-		ASSERT_TRUE(Tools::FileExists(modulesPath / "module2.html"));
-		ASSERT_TRUE(Tools::FileExists(modulesPath / "module" / (filename + L".html")));
-		ASSERT_TRUE(Tools::FileExists(modulesPath / "module" / (filename + L"2.html")));
-		ASSERT_TRUE(Tools::FileExists(modulesPath / "module.html"));
-	}
-}
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlExporterTest, OutputExists)
+    {
+        Plugin::CoverageData      data{ L"Test", 42 };
+        TestHelper::TemporaryPath outputFolder{ TestHelper::TemporaryPathOption::CreateAsFolder };
 
+        ASSERT_NO_THROW(htmlExporter_.Export(data, outputFolder));
+    }
+
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlExporterTest, SameModuleSameSourceFile)
+    {
+        Plugin::CoverageData data{ L"Test", 0 };
+        const std::wstring   filename   = L"TestFile1.cpp";
+        const auto           moduleName = L"Module.exe";
+
+        auto& module = data.AddModule(moduleName);
+        module.AddFile(fs::path(PROJECT_DIR) / "Data" / filename).AddLine(0, true);
+        module.AddFile(fs::path(PROJECT_DIR) / "Data" / filename);
+        data.AddModule(moduleName).AddFile("file").AddLine(0, true);
+
+        htmlExporter_.Export(data, output_);
+
+        auto modulesPath = output_.GetPath() / Exporter::HtmlFolderStructure::FolderModules;
+        ASSERT_TRUE(Tools::FileExists(modulesPath / "module2"));
+        ASSERT_TRUE(Tools::FileExists(modulesPath / "module2.html"));
+        ASSERT_TRUE(Tools::FileExists(modulesPath / "module" / (filename + L".html")));
+        ASSERT_TRUE(Tools::FileExists(modulesPath / "module" / (filename + L"2.html")));
+        ASSERT_TRUE(Tools::FileExists(modulesPath / "module.html"));
+    }
+} // namespace ExporterTest

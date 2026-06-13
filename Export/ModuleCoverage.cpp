@@ -14,43 +14,42 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "FileCoverage.hpp"
 #include "ModuleCoverage.hpp"
+#include "FileCoverage.hpp"
+#include "LineCoverage.hpp"
 #include "stdafx.h"
 #include <vector>
-#include "LineCoverage.hpp"
 
 namespace Plugin
 {
-	//-------------------------------------------------------------------------
-	ModuleCoverage::ModuleCoverage(const std::filesystem::path& path)
-		: path_(path)
-	{
-	}
+    //-------------------------------------------------------------------------
+    ModuleCoverage::ModuleCoverage(const std::filesystem::path& path) : path_(path)
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	ModuleCoverage::~ModuleCoverage()
-	{
-	}
+    //-------------------------------------------------------------------------
+    ModuleCoverage::~ModuleCoverage()
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	FileCoverage& ModuleCoverage::AddFile(const std::filesystem::path& filePath)
-	{
-		files_.push_back(std::unique_ptr<FileCoverage>(new FileCoverage(filePath)));
+    //-------------------------------------------------------------------------
+    FileCoverage& ModuleCoverage::AddFile(const std::filesystem::path& filePath)
+    {
+        files_.push_back(std::unique_ptr<FileCoverage>(new FileCoverage(filePath)));
 
-		return *files_.back();
-	}
+        return *files_.back();
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path& ModuleCoverage::GetPath() const
-	{
-		return path_;
-	}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path& ModuleCoverage::GetPath() const
+    {
+        return path_;
+    }
 
-	//-------------------------------------------------------------------------
-	const ModuleCoverage::T_FileCoverageCollection& ModuleCoverage::GetFiles() const
-	{
-		return files_;
-	}
+    //-------------------------------------------------------------------------
+    const ModuleCoverage::T_FileCoverageCollection& ModuleCoverage::GetFiles() const
+    {
+        return files_;
+    }
 
-};
+}; // namespace Plugin

@@ -16,20 +16,25 @@
 
 #include "CoverageFilterSettings.hpp"
 
-namespace CppCoverage {
-//-------------------------------------------------------------------------
-CoverageFilterSettings::CoverageFilterSettings(const Patterns &modulePatterns,
-                                               const Patterns &sourcePatterns)
-    : modulePatterns_(modulePatterns), sourcePatterns_(sourcePatterns) {}
+namespace CppCoverage
+{
+    //-------------------------------------------------------------------------
+    CoverageFilterSettings::CoverageFilterSettings(const Patterns& modulePatterns,
+                                                   const Patterns& sourcePatterns)
+        : modulePatterns_(modulePatterns), sourcePatterns_(sourcePatterns)
+    {
+    }
 
-//-------------------------------------------------------------------------
-const Patterns &CoverageFilterSettings::GetModulePatterns() const {
-  return modulePatterns_;
-}
+    //-------------------------------------------------------------------------
+    const Patterns& CoverageFilterSettings::GetModulePatterns() const
+    {
+        return modulePatterns_;
+    }
 
-//-------------------------------------------------------------------------
-const Patterns &CoverageFilterSettings::GetSourcePatterns() const {
-  return sourcePatterns_;
-}
+    //-------------------------------------------------------------------------
+    const Patterns& CoverageFilterSettings::GetSourcePatterns() const
+    {
+        return sourcePatterns_;
+    }
 
 } // namespace CppCoverage

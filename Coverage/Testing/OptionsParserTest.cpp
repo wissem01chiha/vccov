@@ -16,282 +16,296 @@
 
 #include "stdafx.h"
 
-#include <filesystem>
 #include "CppCoverage/Options.hpp"
 #include "CppCoverage/ProgramOptions.hpp"
+#include <filesystem>
 
 #include "CppCoverageTest/TestTools.hpp"
 
-#include "Tools/Tool.hpp"
 #include "TestHelper/TemporaryPath.hpp"
+#include "Tools/Tool.hpp"
 
 namespace cov = CppCoverage;
-namespace fs = std::filesystem;
+namespace fs  = std::filesystem;
 
 namespace CppCoverageTest
 {
-	namespace
-	{
-		const std::string optionShortPrefix = "-";		
-	}
-		
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, Default)
-	{
-		cov::OptionsParser parser;
+    namespace
+    {
+        const std::string optionShortPrefix = "-";
+    }
 
-		auto options = TestTools::Parse(parser, {});
-		ASSERT_TRUE(static_cast<bool>(options));
-		ASSERT_EQ(cov::LogLevel::Normal, options->GetLogLevel());
-		ASSERT_FALSE(options->IsPlugingModeEnabled());
-		ASSERT_FALSE(options->IsCoverChildrenModeEnabled());
-		ASSERT_TRUE(options->IsAggregateByFileModeEnabled());
-		ASSERT_FALSE(options->IsContinueAfterCppExceptionModeEnabled());
-		ASSERT_FALSE(options->IsOptimizedBuildSupportEnabled());
-		ASSERT_TRUE(options->GetExcludedLineRegexes().empty());
-		ASSERT_TRUE(options->GetSubstitutePdbSourcePaths().empty());
-	}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, Default)
+    {
+        cov::OptionsParser parser;
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, Help)
-	{
-		cov::OptionsParser parser;
-		std::wostringstream ostr;
+        auto options = TestTools::Parse(parser, {});
+        ASSERT_TRUE(static_cast<bool>(options));
+        ASSERT_EQ(cov::LogLevel::Normal, options->GetLogLevel());
+        ASSERT_FALSE(options->IsPlugingModeEnabled());
+        ASSERT_FALSE(options->IsCoverChildrenModeEnabled());
+        ASSERT_TRUE(options->IsAggregateByFileModeEnabled());
+        ASSERT_FALSE(options->IsContinueAfterCppExceptionModeEnabled());
+        ASSERT_FALSE(options->IsOptimizedBuildSupportEnabled());
+        ASSERT_TRUE(options->GetExcludedLineRegexes().empty());
+        ASSERT_TRUE(options->GetSubstitutePdbSourcePaths().empty());
+    }
 
-		ASSERT_FALSE(static_cast<bool>(TestTools::Parse(parser,
-		{ optionShortPrefix + cov::ProgramOptions::HelpShortOption }, false, &ostr)));
-		
-		ASSERT_NE(L"", ostr.str());
-		ASSERT_FALSE(static_cast<bool>(TestTools::Parse(parser,
-		{ TestTools::GetOptionPrefix() + cov::ProgramOptions::HelpOption }, false)));
-	}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, Help)
+    {
+        cov::OptionsParser  parser;
+        std::wostringstream ostr;
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, Verbose)
-	{
-		cov::OptionsParser parser;
+        ASSERT_FALSE(static_cast<bool>(TestTools::Parse(
+            parser, { optionShortPrefix + cov::ProgramOptions::HelpShortOption }, false, &ostr)));
 
-		ASSERT_EQ(cov::LogLevel::Verbose, TestTools::Parse(parser,
-			{ optionShortPrefix + cov::ProgramOptions::VerboseShortOption })->GetLogLevel());
-		ASSERT_EQ(cov::LogLevel::Verbose, TestTools::Parse(parser,
-			{ TestTools::GetOptionPrefix() + cov::ProgramOptions::VerboseOption })->GetLogLevel());
-	}
-	
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, Quiet)
-	{
-		cov::OptionsParser parser;
+        ASSERT_NE(L"", ostr.str());
+        ASSERT_FALSE(static_cast<bool>(TestTools::Parse(
+            parser, { TestTools::GetOptionPrefix() + cov::ProgramOptions::HelpOption }, false)));
+    }
 
-		ASSERT_EQ(cov::LogLevel::Quiet, TestTools::Parse(parser,
-		{ optionShortPrefix + cov::ProgramOptions::QuietShortOption })->GetLogLevel());
-		ASSERT_EQ(cov::LogLevel::Quiet, TestTools::Parse(parser,
-		{ TestTools::GetOptionPrefix() + cov::ProgramOptions::QuietOption })->GetLogLevel());
-	}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, Verbose)
+    {
+        cov::OptionsParser parser;
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, Plugin)
-	{
-		cov::OptionsParser parser;
+        ASSERT_EQ(cov::LogLevel::Verbose,
+                  TestTools::Parse(parser,
+                                   { optionShortPrefix + cov::ProgramOptions::VerboseShortOption })
+                      ->GetLogLevel());
+        ASSERT_EQ(cov::LogLevel::Verbose,
+                  TestTools::Parse(
+                      parser, { TestTools::GetOptionPrefix() + cov::ProgramOptions::VerboseOption })
+                      ->GetLogLevel());
+    }
 
-		ASSERT_TRUE(TestTools::Parse(parser,
-		{ TestTools::GetOptionPrefix() + cov::ProgramOptions::PluginOption })->IsPlugingModeEnabled());
-	}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, Quiet)
+    {
+        cov::OptionsParser parser;
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, CoverChildren)
-	{
-		cov::OptionsParser parser;
+        ASSERT_EQ(
+            cov::LogLevel::Quiet,
+            TestTools::Parse(parser, { optionShortPrefix + cov::ProgramOptions::QuietShortOption })
+                ->GetLogLevel());
+        ASSERT_EQ(cov::LogLevel::Quiet,
+                  TestTools::Parse(
+                      parser, { TestTools::GetOptionPrefix() + cov::ProgramOptions::QuietOption })
+                      ->GetLogLevel());
+    }
 
-		ASSERT_TRUE(TestTools::Parse(parser,
-		{ TestTools::GetOptionPrefix() + cov::ProgramOptions::CoverChildrenOption })->IsCoverChildrenModeEnabled());
-	}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, Plugin)
+    {
+        cov::OptionsParser parser;
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, FileAggregate)
-	{
-		cov::OptionsParser parser;
+        ASSERT_TRUE(TestTools::Parse(parser, { TestTools::GetOptionPrefix() +
+                                               cov::ProgramOptions::PluginOption })
+                        ->IsPlugingModeEnabled());
+    }
 
-		ASSERT_FALSE(TestTools::Parse(parser,
-		{ TestTools::GetOptionPrefix() + cov::ProgramOptions::NoAggregateByFileOption })->IsAggregateByFileModeEnabled());
-	}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, CoverChildren)
+    {
+        cov::OptionsParser parser;
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, ContinueAfterCppException)
-	{
-		cov::OptionsParser parser;
+        ASSERT_TRUE(TestTools::Parse(parser, { TestTools::GetOptionPrefix() +
+                                               cov::ProgramOptions::CoverChildrenOption })
+                        ->IsCoverChildrenModeEnabled());
+    }
 
-		ASSERT_TRUE(TestTools::Parse(parser,
-		{ TestTools::GetOptionPrefix() + cov::ProgramOptions::ContinueAfterCppExceptionOption })
-			->IsContinueAfterCppExceptionModeEnabled());
-	}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, FileAggregate)
+    {
+        cov::OptionsParser parser;
+
+        ASSERT_FALSE(TestTools::Parse(parser, { TestTools::GetOptionPrefix() +
+                                                cov::ProgramOptions::NoAggregateByFileOption })
+                         ->IsAggregateByFileModeEnabled());
+    }
+
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, ContinueAfterCppException)
+    {
+        cov::OptionsParser parser;
+
+        ASSERT_TRUE(
+            TestTools::Parse(parser, { TestTools::GetOptionPrefix() +
+                                       cov::ProgramOptions::ContinueAfterCppExceptionOption })
+                ->IsContinueAfterCppExceptionModeEnabled());
+    }
 
     //-------------------------------------------------------------------------
     TEST(OptionsParserTest, StopOnAssert)
     {
-      cov::OptionsParser parser;
+        cov::OptionsParser parser;
 
-      ASSERT_TRUE(TestTools::Parse(parser,
-        { TestTools::GetOptionPrefix() + cov::ProgramOptions::StopOnAssertOption })
-        ->IsStopOnAssertModeEnabled());
+        ASSERT_TRUE(TestTools::Parse(parser, { TestTools::GetOptionPrefix() +
+                                               cov::ProgramOptions::StopOnAssertOption })
+                        ->IsStopOnAssertModeEnabled());
     }
-    
+
     //-------------------------------------------------------------------------
-	TEST(OptionsParserTest, WorkingDirectory)
-	{
-		cov::OptionsParser parser;
-		const std::string folder = ".";
+    TEST(OptionsParserTest, WorkingDirectory)
+    {
+        cov::OptionsParser parser;
+        const std::string  folder = ".";
 
-		auto options = TestTools::Parse(parser,
-		{ TestTools::GetOptionPrefix() + cov::ProgramOptions::WorkingDirectoryOption, folder });
-		ASSERT_TRUE(static_cast<bool>(options));
-		ASSERT_NE(nullptr, options->GetStartInfo());
+        auto options = TestTools::Parse(
+            parser,
+            { TestTools::GetOptionPrefix() + cov::ProgramOptions::WorkingDirectoryOption, folder });
+        ASSERT_TRUE(static_cast<bool>(options));
+        ASSERT_NE(nullptr, options->GetStartInfo());
 
-		const auto* workingDirectory = options->GetStartInfo()->GetWorkingDirectory();
+        const auto* workingDirectory = options->GetStartInfo()->GetWorkingDirectory();
 
-		ASSERT_NE(nullptr, workingDirectory);
-		ASSERT_EQ(Tools::LocalToWString(folder), *workingDirectory);
-	}
-		
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, Program)
-	{
-		cov::OptionsParser parser;		
-		const std::string arg1 = "arg1";
-		const std::string arg2 = "arg2";
-		const std::vector<std::wstring> expectedArgs =
-			{	Tools::LocalToWString(TestTools::GetProgramToRun()), 
-				Tools::LocalToWString(arg1), 
-				Tools::LocalToWString(arg2) };
+        ASSERT_NE(nullptr, workingDirectory);
+        ASSERT_EQ(Tools::LocalToWString(folder), *workingDirectory);
+    }
 
-		auto options = TestTools::Parse(parser, { TestTools::GetProgramToRun(), arg1, arg2 }, false);
-		ASSERT_TRUE(static_cast<bool>(options));
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, Program)
+    {
+        cov::OptionsParser              parser;
+        const std::string               arg1         = "arg1";
+        const std::string               arg2         = "arg2";
+        const std::vector<std::wstring> expectedArgs = {
+            Tools::LocalToWString(TestTools::GetProgramToRun()), Tools::LocalToWString(arg1),
+            Tools::LocalToWString(arg2)
+        };
 
-		const auto* startInfo = options->GetStartInfo();		
-		ASSERT_NE(nullptr, startInfo);
-		ASSERT_EQ(TestTools::GetProgramToRun(), startInfo->GetPath().string());
-		ASSERT_EQ(expectedArgs, startInfo->GetArguments());
-	}
+        auto options =
+            TestTools::Parse(parser, { TestTools::GetProgramToRun(), arg1, arg2 }, false);
+        ASSERT_TRUE(static_cast<bool>(options));
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, UnknownOption)
-	{
-		cov::OptionsParser parser;
-		std::wostringstream ostr;
-		ASSERT_FALSE(TestTools::Parse(parser, { "--unknownOption" }, true, &ostr));
-		ASSERT_NE(L"", ostr.str());
-	}
-				
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, OptionOstream)
-	{ 
-		cov::OptionsParser parser;
-		auto options = TestTools::Parse(parser, { TestTools::GetOptionPrefix() + cov::ProgramOptions::SelectedSourcesOption, "source1" });
-		
-		std::wostringstream ostr;
+        const auto* startInfo = options->GetStartInfo();
+        ASSERT_NE(nullptr, startInfo);
+        ASSERT_EQ(TestTools::GetProgramToRun(), startInfo->GetPath().string());
+        ASSERT_EQ(expectedArgs, startInfo->GetArguments());
+    }
 
-		ASSERT_TRUE(static_cast<bool>(options));
-		ostr << *options;
-		ASSERT_LT(L"", ostr.str());
-	}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, UnknownOption)
+    {
+        cov::OptionsParser  parser;
+        std::wostringstream ostr;
+        ASSERT_FALSE(TestTools::Parse(parser, { "--unknownOption" }, true, &ostr));
+        ASSERT_NE(L"", ostr.str());
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, InputCoverage)
-	{
-		cov::OptionsParser parser;		
-		TestHelper::TemporaryPath temporaryPath{ TestHelper::TemporaryPathOption::CreateAsFile };
-		auto pathStr = temporaryPath.GetPath().string();
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, OptionOstream)
+    {
+        cov::OptionsParser parser;
+        auto               options = TestTools::Parse(
+            parser, { TestTools::GetOptionPrefix() + cov::ProgramOptions::SelectedSourcesOption,
+                                    "source1" });
 
-		auto options = TestTools::Parse(parser, 
-			{ TestTools::GetOptionPrefix() + cov::ProgramOptions::InputCoverageValue, pathStr });
-		ASSERT_TRUE(static_cast<bool>(options));
-		ASSERT_EQ(pathStr, options->GetInputCoveragePaths().at(0).string());		
-	}
+        std::wostringstream ostr;
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, InvalidInputCoverage)
-	{
-		cov::OptionsParser parser;
-		std::wostringstream ostr;
-		ASSERT_FALSE(static_cast<bool>(TestTools::Parse(parser,
-		{ TestTools::GetOptionPrefix() + cov::ProgramOptions::InputCoverageValue, "invalidPath" }, true, &ostr)));
-		ASSERT_NE(L"", ostr.str());		
-	}
+        ASSERT_TRUE(static_cast<bool>(options));
+        ostr << *options;
+        ASSERT_LT(L"", ostr.str());
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, OptimizedBuild)
-	{
-		cov::OptionsParser parser;
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, InputCoverage)
+    {
+        cov::OptionsParser        parser;
+        TestHelper::TemporaryPath temporaryPath{ TestHelper::TemporaryPathOption::CreateAsFile };
+        auto                      pathStr = temporaryPath.GetPath().string();
 
-		ASSERT_TRUE(TestTools::Parse(parser,
-		{ TestTools::GetOptionPrefix() + cov::ProgramOptions::OptimizedBuildOption })
-			->IsOptimizedBuildSupportEnabled());
-	}
+        auto options = TestTools::Parse(
+            parser,
+            { TestTools::GetOptionPrefix() + cov::ProgramOptions::InputCoverageValue, pathStr });
+        ASSERT_TRUE(static_cast<bool>(options));
+        ASSERT_EQ(pathStr, options->GetInputCoveragePaths().at(0).string());
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, ExcludedLineRegex)
-	{
-		cov::OptionsParser parser;
-		const auto excludedLineRegex = ".*";
-		auto option = TestTools::Parse(parser, 
-			{	TestTools::GetOptionPrefix() + cov::ProgramOptions::ExcludedLineRegexOption,
-				excludedLineRegex });
-		ASSERT_TRUE(option.is_initialized());
-		ASSERT_THAT(
-			option->GetExcludedLineRegexes(), 
-			testing::ElementsAre(Tools::LocalToWString(excludedLineRegex)));
-	}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, InvalidInputCoverage)
+    {
+        cov::OptionsParser  parser;
+        std::wostringstream ostr;
+        ASSERT_FALSE(static_cast<bool>(TestTools::Parse(
+            parser,
+            { TestTools::GetOptionPrefix() + cov::ProgramOptions::InputCoverageValue,
+              "invalidPath" },
+            true, &ostr)));
+        ASSERT_NE(L"", ostr.str());
+    }
 
-	namespace
-	{
-		//-------------------------------------------------------------------------
-		boost::optional<cov::Options> ParseSubstitutePdbSourcePath(
-			const fs::path& pdbStartPath,
-			const fs::path& localPath)
-		{
-			cov::OptionsParser parser;
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, OptimizedBuild)
+    {
+        cov::OptionsParser parser;
 
-			return TestTools::Parse(
-				parser,
-				{ TestTools::GetOptionPrefix() +
-				cov::ProgramOptions::SubstitutePdbSourcePathOption,
-				pdbStartPath.string() + cov::OptionsParser::PathSeparator +
-				localPath.string() });
-		}
-	}
+        ASSERT_TRUE(TestTools::Parse(parser, { TestTools::GetOptionPrefix() +
+                                               cov::ProgramOptions::OptimizedBuildOption })
+                        ->IsOptimizedBuildSupportEnabled());
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, SubstitutePdbSourcePath)
-	{
-		TestHelper::TemporaryPath pdbStartPath;
-		TestHelper::TemporaryPath localPath{ TestHelper::TemporaryPathOption::CreateAsFile };
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, ExcludedLineRegex)
+    {
+        cov::OptionsParser parser;
+        const auto         excludedLineRegex = ".*";
+        auto               option            = TestTools::Parse(
+            parser, { TestTools::GetOptionPrefix() + cov::ProgramOptions::ExcludedLineRegexOption,
+                                               excludedLineRegex });
+        ASSERT_TRUE(option.is_initialized());
+        ASSERT_THAT(option->GetExcludedLineRegexes(),
+                    testing::ElementsAre(Tools::LocalToWString(excludedLineRegex)));
+    }
 
-		const auto& option = ParseSubstitutePdbSourcePath(pdbStartPath, localPath);
+    namespace
+    {
+        //-------------------------------------------------------------------------
+        boost::optional<cov::Options> ParseSubstitutePdbSourcePath(const fs::path& pdbStartPath,
+                                                                   const fs::path& localPath)
+        {
+            cov::OptionsParser parser;
 
-		ASSERT_TRUE(option.is_initialized());
-		const auto& substitutePdbSourcePaths = option->GetSubstitutePdbSourcePaths();
-		ASSERT_EQ(1, substitutePdbSourcePaths.size());
-		ASSERT_EQ(pdbStartPath.GetPath(),
-		          substitutePdbSourcePaths.at(0).GetPdbStartPath());
-		ASSERT_EQ(localPath.GetPath(),
-		          substitutePdbSourcePaths.at(0).GetLocalPath());
-	}
+            return TestTools::Parse(
+                parser,
+                { TestTools::GetOptionPrefix() + cov::ProgramOptions::SubstitutePdbSourcePathOption,
+                  pdbStartPath.string() + cov::OptionsParser::PathSeparator + localPath.string() });
+        }
+    } // namespace
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, SubstitutePdbSourcePathTargetNotExist)
-	{
-		TestHelper::TemporaryPath pdbStartPath;
-		TestHelper::TemporaryPath localPath;
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, SubstitutePdbSourcePath)
+    {
+        TestHelper::TemporaryPath pdbStartPath;
+        TestHelper::TemporaryPath localPath{ TestHelper::TemporaryPathOption::CreateAsFile };
 
-		ASSERT_FALSE(ParseSubstitutePdbSourcePath(pdbStartPath, localPath));
-	}
+        const auto& option = ParseSubstitutePdbSourcePath(pdbStartPath, localPath);
 
-	//-------------------------------------------------------------------------
-	TEST(OptionsParserTest, SubstitutePdbSourcePathPdbStartPathInvalid)
-	{
-		TestHelper::TemporaryPath validPath;
-		TestHelper::TemporaryPath localPath{ TestHelper::TemporaryPathOption::CreateAsFile };
+        ASSERT_TRUE(option.is_initialized());
+        const auto& substitutePdbSourcePaths = option->GetSubstitutePdbSourcePaths();
+        ASSERT_EQ(1, substitutePdbSourcePaths.size());
+        ASSERT_EQ(pdbStartPath.GetPath(), substitutePdbSourcePaths.at(0).GetPdbStartPath());
+        ASSERT_EQ(localPath.GetPath(), substitutePdbSourcePaths.at(0).GetLocalPath());
+    }
 
-		ASSERT_TRUE(ParseSubstitutePdbSourcePath(validPath, localPath));
-		ASSERT_FALSE(ParseSubstitutePdbSourcePath("C:\\Dev/Invalid", localPath));
-	}
-}
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, SubstitutePdbSourcePathTargetNotExist)
+    {
+        TestHelper::TemporaryPath pdbStartPath;
+        TestHelper::TemporaryPath localPath;
+
+        ASSERT_FALSE(ParseSubstitutePdbSourcePath(pdbStartPath, localPath));
+    }
+
+    //-------------------------------------------------------------------------
+    TEST(OptionsParserTest, SubstitutePdbSourcePathPdbStartPathInvalid)
+    {
+        TestHelper::TemporaryPath validPath;
+        TestHelper::TemporaryPath localPath{ TestHelper::TemporaryPathOption::CreateAsFile };
+
+        ASSERT_TRUE(ParseSubstitutePdbSourcePath(validPath, localPath));
+        ASSERT_FALSE(ParseSubstitutePdbSourcePath("C:\\Dev/Invalid", localPath));
+    }
+} // namespace CppCoverageTest

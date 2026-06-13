@@ -28,3 +28,8 @@ build_script:
   - cmd: if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2022" (set CMAKE_GENERATOR=Visual Studio 17 2022) else (set CMAKE_GENERATOR=Visual Studio 16 2019)
   - cmd: cmake -G "%CMAKE_GENERATOR%" -A %platform% -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -S . -B build
   - cmd: cmake --build build --config %configuration%
+
+cache:
+  - c:\tools\vcpkg\installed\
+  - c:\tools\vcpkg\buildtrees\
+  - c:\tools\vcpkg\packages\

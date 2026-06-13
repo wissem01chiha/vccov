@@ -16,63 +16,62 @@
 
 #pragma once
 
+#include "CoreExport.h"
 #include "CppCoverageException.hpp"
 #include "Log.hpp"
 #include "Tool.hpp"
-#include "CoreExport.h"
 #include <boost/optional/optional.hpp>
 
 namespace CppCoverage
 {
-	template <typename T_Handle, typename T_Releaser>
-	class Handle
-	{
-	  public:
-		//---------------------------------------------------------------------
-		Handle(T_Handle handle, T_Releaser releaser)
-		    : handle_(handle), releaser_(releaser)
-		{
-			if (!handle_)
-				THROW(L"Handle is not valid");
-			if (!releaser_)
-				THROW(L"Releaser is not valid");
-		}
+    template <typename T_Handle, typename T_Releaser> class Handle
+    {
+      public:
+        //---------------------------------------------------------------------
+        Handle(T_Handle handle, T_Releaser releaser) : handle_(handle), releaser_(releaser)
+        {
+            if (!handle_)
+                THROW(L"Handle is not valid");
+            if (!releaser_)
+                THROW(L"Releaser is not valid");
+        }
 
-		//---------------------------------------------------------------------
-		Handle(Handle&& handle) = default;
+        //---------------------------------------------------------------------
+        Handle(Handle&& handle) = default;
 
-		//---------------------------------------------------------------------
-		~Handle()
-		{
-			Tools::Try([&] {
-				if (handle_ && !releaser_(handle_))
-				{
-					LOG_ERROR << "Cannot release handler";
-				}
-			});
-		}
+        //---------------------------------------------------------------------
+        ~Handle()
+        {
+            Tools::Try(
+                [&]
+                {
+                    if (handle_ && !releaser_(handle_))
+                    {
+                        LOG_ERROR << "Cannot release handler";
+                    }
+                });
+        }
 
-		//---------------------------------------------------------------------
-		const T_Handle& GetValue() const
-		{
-			return handle_;
-		}
+        //---------------------------------------------------------------------
+        const T_Handle& GetValue() const
+        {
+            return handle_;
+        }
 
-	  private:
-		Handle(const Handle&) = delete;
-		Handle& operator=(const Handle&) = delete;
-		Handle& operator=(Handle&&) = delete;
+      private:
+        Handle(const Handle&)            = delete;
+        Handle& operator=(const Handle&) = delete;
+        Handle& operator=(Handle&&)      = delete;
 
-	  private:
-		T_Handle handle_;
-		T_Releaser releaser_;
-	};
+      private:
+        T_Handle   handle_;
+        T_Releaser releaser_;
+    };
 
-	//-------------------------------------------------------------------------
-	template <typename T_Handle, typename T_Releaser>
-	Handle<T_Handle, T_Releaser> CreateHandle(T_Handle handle,
-	                                          T_Releaser releaser)
-	{
-		return Handle<T_Handle, T_Releaser>(handle, releaser);
-	}
-}
+    //-------------------------------------------------------------------------
+    template <typename T_Handle, typename T_Releaser>
+    Handle<T_Handle, T_Releaser> CreateHandle(T_Handle handle, T_Releaser releaser)
+    {
+        return Handle<T_Handle, T_Releaser>(handle, releaser);
+    }
+} // namespace CppCoverage

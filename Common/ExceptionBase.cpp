@@ -14,22 +14,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "ExceptionBase.hpp"
 #include "Tool.hpp"
+#include "stdafx.h"
 #include <filesystem>
 
 namespace Tools
 {
-	//-------------------------------------------------------------------------
-	ExceptionBase::ExceptionBase(const std::wstring& message)
-		: std::exception(ToLocalString(message).c_str())
-	{
-	}
+    //-------------------------------------------------------------------------
+    ExceptionBase::ExceptionBase(const std::wstring& message)
+        : std::exception(ToLocalString(message).c_str())
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	std::wstring GetFilename(const char* path)
-	{
-		return std::filesystem::path{ path }.filename().wstring();
-	}
-}
+    //-------------------------------------------------------------------------
+    std::wstring GetFilename(const char* path)
+    {
+        return std::filesystem::path{ path }.filename().wstring();
+    }
+} // namespace Tools

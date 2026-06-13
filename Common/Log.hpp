@@ -16,58 +16,56 @@
 
 #pragma once
 
-#include <set>
-#include <iosfwd>
-#include <filesystem>
 #include "CommonExport.h"
-#include <boost/log/trivial.hpp>
 #include <boost/log/sources/global_logger_storage.hpp>
+#include <boost/log/trivial.hpp>
+#include <filesystem>
+#include <iosfwd>
+#include <set>
 
 // Define the logger
-BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(globalLogger, boost::log::sources::wseverity_logger<boost::log::trivial::severity_level >)
+BOOST_LOG_INLINE_GLOBAL_LOGGER_DEFAULT(
+    globalLogger, boost::log::sources::wseverity_logger<boost::log::trivial::severity_level>)
 
-#define LOG_TRACE BOOST_LOG_SEV  (globalLogger::get(), boost::log::trivial::trace) 
-#define LOG_DEBUG BOOST_LOG_SEV  (globalLogger::get(), boost::log::trivial::debug) 
-#define LOG_INFO BOOST_LOG_SEV   (globalLogger::get(), boost::log::trivial::info) 
-#define LOG_WARNING BOOST_LOG_SEV(globalLogger::get(), boost::log::trivial::warning) 
-#define LOG_ERROR BOOST_LOG_SEV  (globalLogger::get(), boost::log::trivial::error) 
+#define LOG_TRACE BOOST_LOG_SEV(globalLogger::get(), boost::log::trivial::trace)
+#define LOG_DEBUG BOOST_LOG_SEV(globalLogger::get(), boost::log::trivial::debug)
+#define LOG_INFO BOOST_LOG_SEV(globalLogger::get(), boost::log::trivial::info)
+#define LOG_WARNING BOOST_LOG_SEV(globalLogger::get(), boost::log::trivial::warning)
+#define LOG_ERROR BOOST_LOG_SEV(globalLogger::get(), boost::log::trivial::error)
 
 namespace Tools
 {
-	void VCOV_COMMONEXPORT_DLL InitConsoleAndFileLog(const std::filesystem::path& logPath);
-	void VCOV_COMMONEXPORT_DLL SetLoggerMinSeverity(boost::log::trivial::severity_level minSeverity);
-	void VCOV_COMMONEXPORT_DLL EnableLogger(bool isEnabled);
-	void VCOV_COMMONEXPORT_DLL InitLoggerOstream(const boost::shared_ptr<std::ostringstream>& ostr);
-}
+    void VCOV_COMMONEXPORT_DLL InitConsoleAndFileLog(const std::filesystem::path& logPath);
+    void VCOV_COMMONEXPORT_DLL
+    SetLoggerMinSeverity(boost::log::trivial::severity_level minSeverity);
+    void VCOV_COMMONEXPORT_DLL EnableLogger(bool isEnabled);
+    void VCOV_COMMONEXPORT_DLL InitLoggerOstream(const boost::shared_ptr<std::ostringstream>& ostr);
+} // namespace Tools
 
 namespace boost
 {
-	namespace log
-	{
-		//-----------------------------------------------------------------------
-		template <typename Collection>
-		wformatting_ostream& LogCollection(
-			wformatting_ostream& ostr, 
-			const Collection& collection)
-		{
-			ostr << L'[';
-			for (auto it = collection.begin(); it != collection.end(); ++it)
-			{
-				if (it != collection.begin())
-					ostr << L", ";
-				ostr << *it;
-			}
-			ostr << L']';
-			return ostr;
-		}
+    namespace log
+    {
+        //-----------------------------------------------------------------------
+        template <typename Collection>
+        wformatting_ostream& LogCollection(wformatting_ostream& ostr, const Collection& collection)
+        {
+            ostr << L'[';
+            for (auto it = collection.begin(); it != collection.end(); ++it)
+            {
+                if (it != collection.begin())
+                    ostr << L", ";
+                ostr << *it;
+            }
+            ostr << L']';
+            return ostr;
+        }
 
-		//-----------------------------------------------------------------------
-		template <typename T>
-		wformatting_ostream& operator<<(
-			wformatting_ostream& ostr, 
-			const std::set<T>& values)
-		{
-			return LogCollection(ostr, values);
-		}
-	}
-}
+        //-----------------------------------------------------------------------
+        template <typename T>
+        wformatting_ostream& operator<<(wformatting_ostream& ostr, const std::set<T>& values)
+        {
+            return LogCollection(ostr, values);
+        }
+    } // namespace log
+} // namespace boost

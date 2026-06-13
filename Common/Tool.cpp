@@ -14,162 +14,160 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "Tool.hpp"
+#include "Log.hpp"
+#include "ToolsException.hpp"
+#include "stdafx.h"
 #include <boost/optional/optional.hpp>
 #include <codecvt>
 #include <filesystem>
 #include <system_error>
-#include "Log.hpp"
-#include "ToolsException.hpp"
 
 namespace fs = std::filesystem;
 
 namespace Tools
 {
-	namespace
-	{
-		//-----------------------------------------------------------------------------
-		fs::path GetExecutablePath()
-		{
-			const int PathBufferSize = 40 * 1000;
-			std::vector<wchar_t> filename(PathBufferSize);
+    namespace
+    {
+        //-----------------------------------------------------------------------------
+        fs::path GetExecutablePath()
+        {
+            const int            PathBufferSize = 40 * 1000;
+            std::vector<wchar_t> filename(PathBufferSize);
 
-			if (!GetModuleFileNameW(nullptr, &filename[0], static_cast<int>(filename.size())))
-				THROW("Cannot get current executable path.");
+            if (!GetModuleFileNameW(nullptr, &filename[0], static_cast<int>(filename.size())))
+                THROW("Cannot get current executable path.");
 
-			return fs::path{ &filename[0] };
-		}
-		
-		//-------------------------------------------------------------------------
-		std::string ToString(unsigned int pageCode, const std::wstring& str)
-		{
-			if (str.empty())
-				return{};
+            return fs::path{ &filename[0] };
+        }
 
-			auto size = WideCharToMultiByte(pageCode, 0, str.c_str(),
-				static_cast<int>(str.size()), nullptr, 0, nullptr, nullptr);
-			std::vector<char> buffer(size);
+        //-------------------------------------------------------------------------
+        std::string ToString(unsigned int pageCode, const std::wstring& str)
+        {
+            if (str.empty())
+                return {};
 
-			if (!WideCharToMultiByte(pageCode, 0, str.c_str(), static_cast<int>(str.size()),
-				&buffer[0], static_cast<int>(buffer.size()), nullptr, nullptr))
-			{
-				throw std::runtime_error("Error in WideCharToMultiByte.");
-			}
+            auto size = WideCharToMultiByte(pageCode, 0, str.c_str(), static_cast<int>(str.size()),
+                                            nullptr, 0, nullptr, nullptr);
+            std::vector<char> buffer(size);
 
-			return{ buffer.begin(), buffer.end() };
-		}
+            if (!WideCharToMultiByte(pageCode, 0, str.c_str(), static_cast<int>(str.size()),
+                                     &buffer[0], static_cast<int>(buffer.size()), nullptr, nullptr))
+            {
+                throw std::runtime_error("Error in WideCharToMultiByte.");
+            }
 
-		//-------------------------------------------------------------------------
-		std::wstring ToWString(unsigned int pageCode, const std::string& str)
-		{
-			if (str.empty())
-				return{};
+            return { buffer.begin(), buffer.end() };
+        }
 
-			auto size = MultiByteToWideChar(pageCode, 0,
-				str.c_str(), static_cast<int>(str.size()), nullptr, 0);
-			std::vector<wchar_t> buffer(size);
+        //-------------------------------------------------------------------------
+        std::wstring ToWString(unsigned int pageCode, const std::string& str)
+        {
+            if (str.empty())
+                return {};
 
-			if (!MultiByteToWideChar(pageCode, 0, str.c_str(), static_cast<int>(str.size()),
-				&buffer[0], static_cast<int>(buffer.size())))
-			{
-				throw std::runtime_error("Error in MultiByteToWideChar for " + str);
-			}
+            auto size = MultiByteToWideChar(pageCode, 0, str.c_str(), static_cast<int>(str.size()),
+                                            nullptr, 0);
+            std::vector<wchar_t> buffer(size);
 
-			return{ buffer.begin(), buffer.end() };
-		}
-	}
+            if (!MultiByteToWideChar(pageCode, 0, str.c_str(), static_cast<int>(str.size()),
+                                     &buffer[0], static_cast<int>(buffer.size())))
+            {
+                throw std::runtime_error("Error in MultiByteToWideChar for " + str);
+            }
 
-	//-----------------------------------------------------------------------------
-	fs::path GetExecutableFolder()
-	{
-		fs::path executablePath = GetExecutablePath();
+            return { buffer.begin(), buffer.end() };
+        }
+    } // namespace
 
-		return executablePath.parent_path();
-	}
+    //-----------------------------------------------------------------------------
+    fs::path GetExecutableFolder()
+    {
+        fs::path executablePath = GetExecutablePath();
 
-	//-------------------------------------------------------------------------
-	std::string ToLocalString(const std::wstring& str)
-	{
-		return ToString(CP_ACP, str);
-	}
+        return executablePath.parent_path();
+    }
 
-	//-------------------------------------------------------------------------
-	std::string ToUtf8String(const std::wstring& str)
-	{
-		return ToString(CP_UTF8, str);
-	}
+    //-------------------------------------------------------------------------
+    std::string ToLocalString(const std::wstring& str)
+    {
+        return ToString(CP_ACP, str);
+    }
 
-	//-------------------------------------------------------------------------
-	std::wstring LocalToWString(const std::string& str)
-	{
-		return ToWString(CP_ACP, str);
-	}
+    //-------------------------------------------------------------------------
+    std::string ToUtf8String(const std::wstring& str)
+    {
+        return ToString(CP_UTF8, str);
+    }
 
-	//-------------------------------------------------------------------------
-	std::wstring Utf8ToWString(const std::string& str)
-	{
-		return ToWString(CP_UTF8, str);
-	}
+    //-------------------------------------------------------------------------
+    std::wstring LocalToWString(const std::string& str)
+    {
+        return ToWString(CP_ACP, str);
+    }
 
-	//-------------------------------------------------------------------------
-	boost::optional<std::wstring> Try(std::function<void()> action)
-	{
-		try
-		{
-			action();
-		}
-		catch (const std::exception& e)
-		{
-			return Tools::LocalToWString(e.what());
-		}
-		catch (...)
-		{
-			return std::wstring{L"Unkown exception"};
-		}
+    //-------------------------------------------------------------------------
+    std::wstring Utf8ToWString(const std::string& str)
+    {
+        return ToWString(CP_UTF8, str);
+    }
 
-		return boost::none;
-	}
+    //-------------------------------------------------------------------------
+    boost::optional<std::wstring> Try(std::function<void()> action)
+    {
+        try
+        {
+            action();
+        }
+        catch (const std::exception& e)
+        {
+            return Tools::LocalToWString(e.what());
+        }
+        catch (...)
+        {
+            return std::wstring{ L"Unkown exception" };
+        }
 
-	//-------------------------------------------------------------------------
-	void ShowOutputMessage(
-		const std::wstring& message, 
-		const std::filesystem::path& path)
-	{
-		LOG_INFO << GetSeparatorLine();
-		LOG_INFO << message << path.wstring();
-		LOG_INFO << GetSeparatorLine();
-	}
+        return boost::none;
+    }
 
-	//-------------------------------------------------------------------------
-	std::wstring GetSeparatorLine()
-	{
-		return L"----------------------------------------------------";
-	}
-	
-	//---------------------------------------------------------------------
-	void CreateParentFolderIfNeeded(const std::filesystem::path& path)
-	{
-		if (path.has_parent_path())
-		{
-			auto parentPath = path.parent_path();
-			std::error_code er;
+    //-------------------------------------------------------------------------
+    void ShowOutputMessage(const std::wstring& message, const std::filesystem::path& path)
+    {
+        LOG_INFO << GetSeparatorLine();
+        LOG_INFO << message << path.wstring();
+        LOG_INFO << GetSeparatorLine();
+    }
 
-			std::filesystem::create_directories(parentPath, er);
-			if (er)
-			{
-				THROW(L"Error when creating folder " << parentPath.wstring()
-					<< L" Error code:" << er.value());
-			}
-		}
-	}
+    //-------------------------------------------------------------------------
+    std::wstring GetSeparatorLine()
+    {
+        return L"----------------------------------------------------";
+    }
 
-	//---------------------------------------------------------------------
-	bool FileExists(const std::filesystem::path& path)
-	{
-		std::error_code ignoredErrorCode;
+    //---------------------------------------------------------------------
+    void CreateParentFolderIfNeeded(const std::filesystem::path& path)
+    {
+        if (path.has_parent_path())
+        {
+            auto            parentPath = path.parent_path();
+            std::error_code er;
 
-		// Error can happen when the drive is not ready (DVD for example).
-		return std::filesystem::exists(path, ignoredErrorCode);
-	}
-}
+            std::filesystem::create_directories(parentPath, er);
+            if (er)
+            {
+                THROW(L"Error when creating folder " << parentPath.wstring() << L" Error code:"
+                                                     << er.value());
+            }
+        }
+    }
+
+    //---------------------------------------------------------------------
+    bool FileExists(const std::filesystem::path& path)
+    {
+        std::error_code ignoredErrorCode;
+
+        // Error can happen when the drive is not ready (DVD for example).
+        return std::filesystem::exists(path, ignoredErrorCode);
+    }
+} // namespace Tools

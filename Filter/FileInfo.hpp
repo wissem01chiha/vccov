@@ -16,24 +16,22 @@
 
 #pragma once
 
-#include <windows.h>
-#include <vector>
-#include <filesystem>
 #include "LineInfo.hpp"
+#include <filesystem>
+#include <vector>
+#include <windows.h>
 
 namespace FileFilter
 {
-	class FileInfo
-	{
-	public:
-		FileInfo(
-			const std::filesystem::path& filePath,
-			std::vector<LineInfo>&& lineInfoColllection)
-			: filePath_{ filePath }
-			, lineInfoColllection_{ std::move(lineInfoColllection) }
-		{}
+    class FileInfo
+    {
+      public:
+        FileInfo(const std::filesystem::path& filePath, std::vector<LineInfo>&& lineInfoColllection)
+            : filePath_{ filePath }, lineInfoColllection_{ std::move(lineInfoColllection) }
+        {
+        }
 
-		const std::filesystem::path filePath_;
-		const std::vector<LineInfo> lineInfoColllection_;
-	};	
-}
+        const std::filesystem::path filePath_;
+        const std::vector<LineInfo> lineInfoColllection_;
+    };
+} // namespace FileFilter

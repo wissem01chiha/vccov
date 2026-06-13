@@ -16,46 +16,44 @@
 
 #pragma once
 
-#include <filesystem>
 #include "TestingExport.hpp"
+#include <filesystem>
 #include <functional>
 
 extern "C"
 {
-	void VCOV_TESTINGEXPORT_DLL TestUnloadDll();
+    void VCOV_TESTINGEXPORT_DLL TestUnloadDll();
 }
 
 namespace Testing
 {
-	std::filesystem::path VCOV_TESTINGEXPORT_DLL  GetTestUnloadDllFilename();
-	std::filesystem::path VCOV_TESTINGEXPORT_DLL  GetOutputBinaryPath();
+    std::filesystem::path VCOV_TESTINGEXPORT_DLL GetTestUnloadDllFilename();
+    std::filesystem::path VCOV_TESTINGEXPORT_DLL GetOutputBinaryPath();
 
-	void VCOV_TESTINGEXPORT_DLL CreateEmptyFile(const std::filesystem::path&);
+    void VCOV_TESTINGEXPORT_DLL CreateEmptyFile(const std::filesystem::path&);
 
-	std::string VCOV_TESTINGEXPORT_DLL RunProcess(
-		const std::filesystem::path& program,
-		const std::vector<std::string>& args);
+    std::string VCOV_TESTINGEXPORT_DLL RunProcess(const std::filesystem::path&    program,
+                                                  const std::vector<std::string>& args);
 
-	std::filesystem::path VCOV_TESTINGEXPORT_DLL GetVisualStudioPath();
+    std::filesystem::path VCOV_TESTINGEXPORT_DLL GetVisualStudioPath();
 
-	//-------------------------------------------------------------------------
-	template <typename ExceptionType, typename Fct>
-	void AssertThrow(Fct fct,
-	                 std::function<void(const ExceptionType&)> exceptionCheck)
-	{
-		try
-		{
-			fct();
-		}
-		catch (const ExceptionType& e)
-		{
-			exceptionCheck(e);
-			return;
-		}
-		catch (...)
-		{
-			throw std::runtime_error("Expected exception not raised.");
-		}
-		throw std::runtime_error("No exception raised.");
-	}
-}
+    //-------------------------------------------------------------------------
+    template <typename ExceptionType, typename Fct>
+    void AssertThrow(Fct fct, std::function<void(const ExceptionType&)> exceptionCheck)
+    {
+        try
+        {
+            fct();
+        }
+        catch (const ExceptionType& e)
+        {
+            exceptionCheck(e);
+            return;
+        }
+        catch (...)
+        {
+            throw std::runtime_error("Expected exception not raised.");
+        }
+        throw std::runtime_error("No exception raised.");
+    }
+} // namespace Testing

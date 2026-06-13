@@ -17,40 +17,41 @@
 #pragma once
 
 #include "CoverageExport.h"
-#include <unordered_map>
 #include "CoverageRate.hpp"
+#include <unordered_map>
 
 namespace Plugin
 {
-	class ModuleCoverage;
-	class FileCoverage;
-	class CoverageData;
-}
+    class ModuleCoverage;
+    class FileCoverage;
+    class CoverageData;
+} // namespace Plugin
 
 namespace CppCoverage
 {
-	class VCOV_COVERAGEEXPORT_DLL CoverageRateComputer
-	{
-	public:
-		explicit CoverageRateComputer(const Plugin::CoverageData&);
+    class VCOV_COVERAGEEXPORT_DLL CoverageRateComputer
+    {
+      public:
+        explicit CoverageRateComputer(const Plugin::CoverageData&);
 
-		std::vector<Plugin::ModuleCoverage*> SortModulesByCoverageRate() const;
-		std::vector<Plugin::FileCoverage*> SortFilesByCoverageRate(const Plugin::ModuleCoverage&) const;
-		
-		const CoverageRate& GetCoverageRate() const;
-		const CoverageRate& GetCoverageRate(const Plugin::ModuleCoverage&) const;
-		const CoverageRate& GetCoverageRate(const Plugin::FileCoverage&) const;
+        std::vector<Plugin::ModuleCoverage*> SortModulesByCoverageRate() const;
+        std::vector<Plugin::FileCoverage*>
+        SortFilesByCoverageRate(const Plugin::ModuleCoverage&) const;
 
-	private:
-		CoverageRateComputer(const CoverageRateComputer&) = delete;
-		CoverageRateComputer& operator=(const CoverageRateComputer&) = delete;
+        const CoverageRate& GetCoverageRate() const;
+        const CoverageRate& GetCoverageRate(const Plugin::ModuleCoverage&) const;
+        const CoverageRate& GetCoverageRate(const Plugin::FileCoverage&) const;
 
-		void ComputeCoverageRateCache(const Plugin::CoverageData& coverageData);
+      private:
+        CoverageRateComputer(const CoverageRateComputer&)            = delete;
+        CoverageRateComputer& operator=(const CoverageRateComputer&) = delete;
 
-		const Plugin::CoverageData& coverageData_;
+        void ComputeCoverageRateCache(const Plugin::CoverageData& coverageData);
 
-		std::unordered_map<const Plugin::ModuleCoverage*, CoverageRate> moduleCoverageRate_;
-		std::unordered_map<const Plugin::FileCoverage*, CoverageRate> fileCoverageRate_;
-		CoverageRate coverageRate_;
-	};
-}
+        const Plugin::CoverageData& coverageData_;
+
+        std::unordered_map<const Plugin::ModuleCoverage*, CoverageRate> moduleCoverageRate_;
+        std::unordered_map<const Plugin::FileCoverage*, CoverageRate>   fileCoverageRate_;
+        CoverageRate                                                    coverageRate_;
+    };
+} // namespace CppCoverage

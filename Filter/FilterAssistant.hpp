@@ -16,38 +16,36 @@
 
 #pragma once
 
-#include <boost/optional/optional_fwd.hpp>
-#include <memory>
-#include <filesystem>
 #include "FilterExport.h"
+#include <boost/optional/optional_fwd.hpp>
+#include <filesystem>
+#include <memory>
 
 namespace CppCoverage
 {
-	class IFileSystem;
+    class IFileSystem;
 
-	class VCOV_FILTEREXPORT_DLL FilterAssistant
-	{
-	  public:
-		explicit FilterAssistant(std::shared_ptr<IFileSystem>);
-		~FilterAssistant();
+    class VCOV_FILTEREXPORT_DLL FilterAssistant
+    {
+      public:
+        explicit FilterAssistant(std::shared_ptr<IFileSystem>);
+        ~FilterAssistant();
 
-		void OnNewModule(const std::filesystem::path&, bool isSelected);
-		boost::optional<std::filesystem::path>
-		ComputeSuggestedModuleFilter() const;
+        void OnNewModule(const std::filesystem::path&, bool isSelected);
+        boost::optional<std::filesystem::path> ComputeSuggestedModuleFilter() const;
 
-		void OnNewSourceFile(const std::filesystem::path&, bool isSelected);
-		boost::optional<std::filesystem::path>
-		ComputeSuggestedSourceFileFilter() const;
+        void OnNewSourceFile(const std::filesystem::path&, bool isSelected);
+        boost::optional<std::filesystem::path> ComputeSuggestedSourceFileFilter() const;
 
-		boost::optional<std::wstring> GetAdviceMessage() const;
+        boost::optional<std::wstring> GetAdviceMessage() const;
 
-		static const std::wstring NoModulesSelectedMsg;
-		static const std::wstring NoSourceFilesSelectedMsg;
+        static const std::wstring NoModulesSelectedMsg;
+        static const std::wstring NoSourceFilesSelectedMsg;
 
-	  private:
-		class SuggestedFilter;
+      private:
+        class SuggestedFilter;
 
-		std::unique_ptr<SuggestedFilter> suggestedModuleFilter_;
-		std::unique_ptr<SuggestedFilter> suggestedSourceFileFilter_;
-	};
-}
+        std::unique_ptr<SuggestedFilter> suggestedModuleFilter_;
+        std::unique_ptr<SuggestedFilter> suggestedSourceFileFilter_;
+    };
+} // namespace CppCoverage

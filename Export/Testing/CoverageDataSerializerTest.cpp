@@ -16,94 +16,92 @@
 
 #include "stdafx.h"
 
-#include <sstream>
-#include <random>
 #include <fstream>
+#include <random>
+#include <sstream>
 
+#include "Exporter/Binary/CoverageDataDeserializer.hpp"
+#include "Exporter/Binary/CoverageDataSerializer.hpp"
 #include "Plugin/Exporter/CoverageData.hpp"
-#include "Plugin/Exporter/ModuleCoverage.hpp"
 #include "Plugin/Exporter/FileCoverage.hpp"
 #include "Plugin/Exporter/LineCoverage.hpp"
-#include "Exporter/Binary/CoverageDataSerializer.hpp"
-#include "Exporter/Binary/CoverageDataDeserializer.hpp"
+#include "Plugin/Exporter/ModuleCoverage.hpp"
 
-#include "TestHelper/TemporaryPath.hpp"
 #include "TestHelper/CoverageDataComparer.hpp"
+#include "TestHelper/TemporaryPath.hpp"
 
 using namespace testing;
 
 namespace ExporterTest
 {
-	namespace
-	{					
-		//---------------------------------------------------------------------
-		void AddRandomFiles(
-			Plugin::ModuleCoverage& module,
-			std::default_random_engine& generator,
-			std::uniform_int_distribution<int>& distribution)
-		{
-			for (int fileIndex = 0; fileIndex < 10; ++fileIndex)
-			{
-				if (distribution(generator))
-				{
-					auto& file = module.AddFile(std::to_wstring(fileIndex));
+    namespace
+    {
+        //---------------------------------------------------------------------
+        void AddRandomFiles(Plugin::ModuleCoverage& module, std::default_random_engine& generator,
+                            std::uniform_int_distribution<int>& distribution)
+        {
+            for (int fileIndex = 0; fileIndex < 10; ++fileIndex)
+            {
+                if (distribution(generator))
+                {
+                    auto& file = module.AddFile(std::to_wstring(fileIndex));
 
-					for (int line = 0; line < 100; ++line)
-						file.AddLine(line, distribution(generator) != 0);
-				}
-			}
-		}
+                    for (int line = 0; line < 100; ++line)
+                        file.AddLine(line, distribution(generator) != 0);
+                }
+            }
+        }
 
-		//---------------------------------------------------------------------
-		Plugin::CoverageData CreateRandomCoverageData()
-		{
-			Plugin::CoverageData coverageData{ L"TestÈ", 42 };
-			std::default_random_engine generator;
-			std::uniform_int_distribution<int> distribution(0, 1);
-			
-			for (int moduleIndex = 0; moduleIndex < 100; ++moduleIndex)
-			{
-				if (distribution(generator))
-				{
-					auto& module = coverageData.AddModule(std::to_wstring(moduleIndex));
-					AddRandomFiles(module, generator, distribution);
-				}
-			}
+        //---------------------------------------------------------------------
+        Plugin::CoverageData CreateRandomCoverageData()
+        {
+            Plugin::CoverageData               coverageData{ L"TestÈ", 42 };
+            std::default_random_engine         generator;
+            std::uniform_int_distribution<int> distribution(0, 1);
 
-			coverageData.AddModule("ÈË‡").AddFile("ÈË‡").AddLine(0, true);
+            for (int moduleIndex = 0; moduleIndex < 100; ++moduleIndex)
+            {
+                if (distribution(generator))
+                {
+                    auto& module = coverageData.AddModule(std::to_wstring(moduleIndex));
+                    AddRandomFiles(module, generator, distribution);
+                }
+            }
 
-			return coverageData;
-		}
-	}
-	
-	//-------------------------------------------------------------------------
-	TEST(CoverageDataSerializerTest, SerializeAndDeserialize)
-	{
-		TestHelper::TemporaryPath path;
-		Exporter::CoverageDataSerializer serializer;
-		auto randomCoverageData = CreateRandomCoverageData();
+            coverageData.AddModule("ÈË‡").AddFile("ÈË‡").AddLine(0, true);
 
-		serializer.Serialize(randomCoverageData, path.GetPath().string());
+            return coverageData;
+        }
+    } // namespace
 
-		Exporter::CoverageDataDeserializer deserializer;		
-		auto coverageDataRestored = deserializer.Deserialize(path.GetPath().string(), "");
+    //-------------------------------------------------------------------------
+    TEST(CoverageDataSerializerTest, SerializeAndDeserialize)
+    {
+        TestHelper::TemporaryPath        path;
+        Exporter::CoverageDataSerializer serializer;
+        auto                             randomCoverageData = CreateRandomCoverageData();
 
-		TestHelper::CoverageDataComparer().AssertEquals(randomCoverageData, coverageDataRestored);
-	}
+        serializer.Serialize(randomCoverageData, path.GetPath().string());
 
-	//-------------------------------------------------------------------------
-	TEST(CoverageDataSerializerTest, InvalidFile)
-	{
-		Exporter::CoverageDataDeserializer deserializer;
-		TestHelper::TemporaryPath path;
-		std::ofstream ofs{ path.GetPath().string(), std::ios::binary};
+        Exporter::CoverageDataDeserializer deserializer;
+        auto coverageDataRestored = deserializer.Deserialize(path.GetPath().string(), "");
 
-		std::default_random_engine generator;		
-		std::uniform_int_distribution<int> distribution(0, 1);
+        TestHelper::CoverageDataComparer().AssertEquals(randomCoverageData, coverageDataRestored);
+    }
 
-		for (int i = 0; i < 100; ++i)
-			ofs << distribution(generator);
+    //-------------------------------------------------------------------------
+    TEST(CoverageDataSerializerTest, InvalidFile)
+    {
+        Exporter::CoverageDataDeserializer deserializer;
+        TestHelper::TemporaryPath          path;
+        std::ofstream                      ofs{ path.GetPath().string(), std::ios::binary };
 
-		ASSERT_THROW(deserializer.Deserialize(path.GetPath(), "todo"), std::runtime_error);
-	}
-}
+        std::default_random_engine         generator;
+        std::uniform_int_distribution<int> distribution(0, 1);
+
+        for (int i = 0; i < 100; ++i)
+            ofs << distribution(generator);
+
+        ASSERT_THROW(deserializer.Deserialize(path.GetPath(), "todo"), std::runtime_error);
+    }
+} // namespace ExporterTest

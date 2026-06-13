@@ -21,19 +21,19 @@
 
 namespace TestCoverageConsole
 {
-	void RunTestBasic();
-	void RunChildProcesses(int argc, _TCHAR* argv[]);
-	void UnloadReloadDll();
+    void RunTestBasic();
+    void RunChildProcesses(int argc, _TCHAR* argv[]);
+    void UnloadReloadDll();
 
-	//-------------------------------------------------------------------------
-	inline int GetTestBasicLine()
-	{
-		return 32;
-	}
+    //-------------------------------------------------------------------------
+    inline int GetTestBasicLine()
+    {
+        return 32;
+    }
 
-	//-------------------------------------------------------------------------
-	inline std::filesystem::path GetTestBasicFilename()
-	{
-		return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
-	}
-}
+    //-------------------------------------------------------------------------
+    inline std::filesystem::path GetTestBasicFilename()
+    {
+        return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
+    }
+} // namespace TestCoverageConsole

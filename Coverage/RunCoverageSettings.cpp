@@ -14,117 +14,113 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "RunCoverageSettings.hpp"
+#include "stdafx.h"
 
 namespace CppCoverage
 {
-	//-------------------------------------------------------------------------
-	RunCoverageSettings::RunCoverageSettings(
-	    const StartInfo& startInfo,
-	    const CoverageFilterSettings& settings,
-	    const std::vector<UnifiedDiffSettings>& unifiedDiffSettings,
-	    const std::vector<std::wstring>& excludedLineRegexes,
-	    const std::vector<SubstitutePdbSourcePath>& substitutePdbSourcePath)
-	    : startInfo_{startInfo},
-	      coverageFilterSettings_{settings},
-	      unifiedDiffSettings_{unifiedDiffSettings},
-	      coverChildren_{false},
-	      continueAfterCppException_{false},
-	      maxUnmatchPathsForWarning_{0},
-	      optimizedBuildSupport_{false},
-	      excludedLineRegexes_{excludedLineRegexes},
-	      substitutePdbSourcePath_{substitutePdbSourcePath}
-	{
-	}
+    //-------------------------------------------------------------------------
+    RunCoverageSettings::RunCoverageSettings(
+        const StartInfo& startInfo, const CoverageFilterSettings& settings,
+        const std::vector<UnifiedDiffSettings>&     unifiedDiffSettings,
+        const std::vector<std::wstring>&            excludedLineRegexes,
+        const std::vector<SubstitutePdbSourcePath>& substitutePdbSourcePath)
+        : startInfo_{ startInfo }, coverageFilterSettings_{ settings },
+          unifiedDiffSettings_{ unifiedDiffSettings }, coverChildren_{ false },
+          continueAfterCppException_{ false }, maxUnmatchPathsForWarning_{ 0 },
+          optimizedBuildSupport_{ false }, excludedLineRegexes_{ excludedLineRegexes },
+          substitutePdbSourcePath_{ substitutePdbSourcePath }
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	void RunCoverageSettings::SetCoverChildren(bool coverChildren)
-	{
-		coverChildren_ = coverChildren;
-	}
-	
-	//-------------------------------------------------------------------------
-	void RunCoverageSettings::SetContinueAfterCppException(bool continueAfterCppException)
-	{
-		continueAfterCppException_ = continueAfterCppException;
-	}
-	
+    //-------------------------------------------------------------------------
+    void RunCoverageSettings::SetCoverChildren(bool coverChildren)
+    {
+        coverChildren_ = coverChildren;
+    }
+
+    //-------------------------------------------------------------------------
+    void RunCoverageSettings::SetContinueAfterCppException(bool continueAfterCppException)
+    {
+        continueAfterCppException_ = continueAfterCppException;
+    }
+
     //-------------------------------------------------------------------------
     void RunCoverageSettings::SetStopOnAssert(bool stopOnAssert)
     {
-      stopOnAssert_ = stopOnAssert;
+        stopOnAssert_ = stopOnAssert;
     }
 
     //-------------------------------------------------------------------------
-	void RunCoverageSettings::SetMaxUnmatchPathsForWarning(size_t maxUnmatchPathsForWarning)
-	{
-		maxUnmatchPathsForWarning_ = maxUnmatchPathsForWarning;
-	}
+    void RunCoverageSettings::SetMaxUnmatchPathsForWarning(size_t maxUnmatchPathsForWarning)
+    {
+        maxUnmatchPathsForWarning_ = maxUnmatchPathsForWarning;
+    }
 
-	//-------------------------------------------------------------------------
-	void RunCoverageSettings::SetOptimizedBuildSupport(bool optimizedBuildSupport)
-	{
-		optimizedBuildSupport_ = optimizedBuildSupport;
-	}
+    //-------------------------------------------------------------------------
+    void RunCoverageSettings::SetOptimizedBuildSupport(bool optimizedBuildSupport)
+    {
+        optimizedBuildSupport_ = optimizedBuildSupport;
+    }
 
-	//-------------------------------------------------------------------------
-	const StartInfo& RunCoverageSettings::GetStartInfo() const
-	{
-		return startInfo_;
-	}
-	
-	//-------------------------------------------------------------------------
-	const CoverageFilterSettings& RunCoverageSettings::GetCoverageFilterSettings() const
-	{
-		return coverageFilterSettings_;
-	}
-	
-	//-------------------------------------------------------------------------
-	const std::vector<UnifiedDiffSettings>& RunCoverageSettings::GetUnifiedDiffSettings() const
-	{
-		return unifiedDiffSettings_;
-	}
-	
-	//-------------------------------------------------------------------------
-	bool RunCoverageSettings::GetCoverChildren() const
-	{
-		return coverChildren_;
-	}
-	
-	//-------------------------------------------------------------------------
-	bool RunCoverageSettings::GetContinueAfterCppException() const
-	{
-		return continueAfterCppException_;
-	}
-	
+    //-------------------------------------------------------------------------
+    const StartInfo& RunCoverageSettings::GetStartInfo() const
+    {
+        return startInfo_;
+    }
+
+    //-------------------------------------------------------------------------
+    const CoverageFilterSettings& RunCoverageSettings::GetCoverageFilterSettings() const
+    {
+        return coverageFilterSettings_;
+    }
+
+    //-------------------------------------------------------------------------
+    const std::vector<UnifiedDiffSettings>& RunCoverageSettings::GetUnifiedDiffSettings() const
+    {
+        return unifiedDiffSettings_;
+    }
+
+    //-------------------------------------------------------------------------
+    bool RunCoverageSettings::GetCoverChildren() const
+    {
+        return coverChildren_;
+    }
+
+    //-------------------------------------------------------------------------
+    bool RunCoverageSettings::GetContinueAfterCppException() const
+    {
+        return continueAfterCppException_;
+    }
+
     //-------------------------------------------------------------------------
     bool RunCoverageSettings::GetStopOnAssert() const
     {
-      return stopOnAssert_;
+        return stopOnAssert_;
     }
-    
+
     //-------------------------------------------------------------------------
-	size_t RunCoverageSettings::GetMaxUnmatchPathsForWarning() const
-	{
-		return maxUnmatchPathsForWarning_;
-	}
+    size_t RunCoverageSettings::GetMaxUnmatchPathsForWarning() const
+    {
+        return maxUnmatchPathsForWarning_;
+    }
 
-	//-------------------------------------------------------------------------
-	bool RunCoverageSettings::GetOptimizedBuildSupport() const
-	{
-		return optimizedBuildSupport_;
-	}
+    //-------------------------------------------------------------------------
+    bool RunCoverageSettings::GetOptimizedBuildSupport() const
+    {
+        return optimizedBuildSupport_;
+    }
 
-	//-------------------------------------------------------------------------
-	const std::vector<std::wstring>& RunCoverageSettings::GetExcludedLineRegexes() const
-	{
-		return excludedLineRegexes_;
-	}
+    //-------------------------------------------------------------------------
+    const std::vector<std::wstring>& RunCoverageSettings::GetExcludedLineRegexes() const
+    {
+        return excludedLineRegexes_;
+    }
 
-	//-------------------------------------------------------------------------
-	const std::vector<SubstitutePdbSourcePath>& RunCoverageSettings::GetSubstitutePdbSourcePaths() const
-	{
-		return substitutePdbSourcePath_;
-	}
-}
+    //-------------------------------------------------------------------------
+    const std::vector<SubstitutePdbSourcePath>&
+    RunCoverageSettings::GetSubstitutePdbSourcePaths() const
+    {
+        return substitutePdbSourcePath_;
+    }
+} // namespace CppCoverage

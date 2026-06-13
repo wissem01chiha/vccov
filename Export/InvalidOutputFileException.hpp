@@ -16,9 +16,9 @@
 
 #pragma once
 
-#include <stdexcept>
-#include <filesystem>
 #include "ExportExport.h"
+#include <filesystem>
+#include <stdexcept>
 
 namespace Exporter
 {
@@ -27,11 +27,11 @@ namespace Exporter
                                 // used as base for dll-interface class
                                 // 'Exporter::InvalidOutputFileException'
 
-	class VCOV_EXPORTEXPORT_DLL InvalidOutputFileException : public std::runtime_error
-	{
-	  public:
-		InvalidOutputFileException(const std::filesystem::path& output,
-		                           const std::string& outputKind);
-	};
+    class VCOV_EXPORTEXPORT_DLL InvalidOutputFileException : public std::runtime_error
+    {
+      public:
+        InvalidOutputFileException(const std::filesystem::path& output,
+                                   const std::string&           outputKind);
+    };
 #pragma warning(pop)
-}
+} // namespace Exporter

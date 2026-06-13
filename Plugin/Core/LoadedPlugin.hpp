@@ -22,39 +22,38 @@
 
 namespace Exporter
 {
-	template <typename T>
-	class LoadedPlugin
-	{
-	  public:
-		//---------------------------------------------------------------------
-		explicit LoadedPlugin(HMODULE libModule) : libModule_{libModule}
-		{
-		}
+    template <typename T> class LoadedPlugin
+    {
+      public:
+        //---------------------------------------------------------------------
+        explicit LoadedPlugin(HMODULE libModule) : libModule_{ libModule }
+        {
+        }
 
-		//---------------------------------------------------------------------
-		~LoadedPlugin()
-		{
-			plugin_.reset();
-			if (libModule_)
-				FreeLibrary(libModule_);
-		}
+        //---------------------------------------------------------------------
+        ~LoadedPlugin()
+        {
+            plugin_.reset();
+            if (libModule_)
+                FreeLibrary(libModule_);
+        }
 
-		//---------------------------------------------------------------------
-		void Set(std::unique_ptr<T> plugin)
-		{
-			plugin_ = std::move(plugin);
-		}
+        //---------------------------------------------------------------------
+        void Set(std::unique_ptr<T> plugin)
+        {
+            plugin_ = std::move(plugin);
+        }
 
-		//---------------------------------------------------------------------
-		T& Get() const
-		{
-			if (!plugin_)
-				THROW("Null plugin");
-			return *plugin_;
-		}
+        //---------------------------------------------------------------------
+        T& Get() const
+        {
+            if (!plugin_)
+                THROW("Null plugin");
+            return *plugin_;
+        }
 
-	  private:
-		const HMODULE libModule_;
-		std::unique_ptr<T> plugin_;
-	};
-}
+      private:
+        const HMODULE      libModule_;
+        std::unique_ptr<T> plugin_;
+    };
+} // namespace Exporter

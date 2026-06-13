@@ -14,43 +14,41 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "Address.hpp"
+#include "stdafx.h"
 #include <iostream>
 
 namespace CppCoverage
-{			
-	//-------------------------------------------------------------------------
-	Address::Address(HANDLE hProcess, void* value)
-	: hProcess_{ hProcess }
-	, value_{ value }
-	{
-	}
+{
+    //-------------------------------------------------------------------------
+    Address::Address(HANDLE hProcess, void* value) : hProcess_{ hProcess }, value_{ value }
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	HANDLE Address::GetProcessHandle() const
-	{
-		return hProcess_;
-	}
+    //-------------------------------------------------------------------------
+    HANDLE Address::GetProcessHandle() const
+    {
+        return hProcess_;
+    }
 
-	//-------------------------------------------------------------------------
-	void* Address::GetValue() const
-	{
-		return value_;
-	}
+    //-------------------------------------------------------------------------
+    void* Address::GetValue() const
+    {
+        return value_;
+    }
 
-	//-------------------------------------------------------------------------
-	bool Address::operator<(const Address& other) const
-	{
-		if (hProcess_ != other.hProcess_)
-			return hProcess_ < other.hProcess_;
+    //-------------------------------------------------------------------------
+    bool Address::operator<(const Address& other) const
+    {
+        if (hProcess_ != other.hProcess_)
+            return hProcess_ < other.hProcess_;
 
-		return value_ < other.value_;
-	}
+        return value_ < other.value_;
+    }
 
-	//-------------------------------------------------------------------------
-	std::wostream& operator<<(std::wostream& ostr, const Address& address)
-	{
-		return ostr << '[' << address.hProcess_ << "]: " << address.value_;
-	}
-}
+    //-------------------------------------------------------------------------
+    std::wostream& operator<<(std::wostream& ostr, const Address& address)
+    {
+        return ostr << '[' << address.hProcess_ << "]: " << address.value_;
+    }
+} // namespace CppCoverage

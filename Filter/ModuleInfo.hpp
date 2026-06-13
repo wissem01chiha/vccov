@@ -16,24 +16,22 @@
 
 #pragma once
 
-#include <windows.h>
 #include <filesystem>
+#include <windows.h>
 
 namespace FileFilter
 {
-	class ModuleInfo
-	{
-	public:
-		//---------------------------------------------------------------------------
-	  ModuleInfo(HANDLE hProcess,
-		         const std::filesystem::path& path,
-		         void* baseOfImage)
-		  : hProcess_{hProcess}, path_{path}, baseOfImage_{baseOfImage}
-	  {
-	  }
+    class ModuleInfo
+    {
+      public:
+        //---------------------------------------------------------------------------
+        ModuleInfo(HANDLE hProcess, const std::filesystem::path& path, void* baseOfImage)
+            : hProcess_{ hProcess }, path_{ path }, baseOfImage_{ baseOfImage }
+        {
+        }
 
-	  const HANDLE hProcess_;
-	  const std::filesystem::path path_;
-	  void* const baseOfImage_;
-	};
-}
+        const HANDLE                hProcess_;
+        const std::filesystem::path path_;
+        void* const                 baseOfImage_;
+    };
+} // namespace FileFilter

@@ -18,5 +18,5 @@
 
 namespace TestCoverageSharedLib
 {
-	__declspec(dllexport) int Return42();
+    __declspec(dllexport) int Return42();
 }

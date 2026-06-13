@@ -20,10 +20,10 @@
 
 namespace Testing
 {
-	enum class VCOV_TESTINGEXPORT_DLL TemporaryPathOption
-	{
-		DoNotCreate,
-		CreateAsFile,
-		CreateAsFolder
-	};
+    enum class VCOV_TESTINGEXPORT_DLL TemporaryPathOption
+    {
+        DoNotCreate,
+        CreateAsFile,
+        CreateAsFolder
+    };
 };

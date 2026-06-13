@@ -14,29 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "UnifiedDiffSettings.hpp"
+#include "stdafx.h"
 
 namespace CppCoverage
 {
-	//-------------------------------------------------------------------------
-	UnifiedDiffSettings::UnifiedDiffSettings(
-		const std::filesystem::path& unifiedDiffPath,
-		const boost::optional<std::filesystem::path>& rootDiffFolder)
-		: unifiedDiffPath_{unifiedDiffPath}
-		, rootDiffFolder_{rootDiffFolder}
-	{
-	}
+    //-------------------------------------------------------------------------
+    UnifiedDiffSettings::UnifiedDiffSettings(
+        const std::filesystem::path&                  unifiedDiffPath,
+        const boost::optional<std::filesystem::path>& rootDiffFolder)
+        : unifiedDiffPath_{ unifiedDiffPath }, rootDiffFolder_{ rootDiffFolder }
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path& UnifiedDiffSettings::GetUnifiedDiffPath() const
-	{
-		return unifiedDiffPath_;
-	}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path& UnifiedDiffSettings::GetUnifiedDiffPath() const
+    {
+        return unifiedDiffPath_;
+    }
 
-	//-------------------------------------------------------------------------
-	const boost::optional<std::filesystem::path>& UnifiedDiffSettings::GetRootDiffFolder() const
-	{
-		return rootDiffFolder_;
-	}
-}
+    //-------------------------------------------------------------------------
+    const boost::optional<std::filesystem::path>& UnifiedDiffSettings::GetRootDiffFolder() const
+    {
+        return rootDiffFolder_;
+    }
+} // namespace CppCoverage

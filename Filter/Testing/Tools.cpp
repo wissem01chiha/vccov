@@ -14,19 +14,19 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "Filter/File.hpp"
+#include "stdafx.h"
 
 namespace FileFilterTest
 {
-	//-----------------------------------------------------------------
-	std::vector<FileFilter::File> ToFiles(const std::vector<std::wstring>& filenames)
-	{
-		std::vector<FileFilter::File> files;
+    //-----------------------------------------------------------------
+    std::vector<FileFilter::File> ToFiles(const std::vector<std::wstring>& filenames)
+    {
+        std::vector<FileFilter::File> files;
 
-		for (auto& filename : filenames)
-			files.emplace_back(filename);
+        for (auto& filename : filenames)
+            files.emplace_back(filename);
 
-		return files;
-	}
-}
+        return files;
+    }
+} // namespace FileFilterTest

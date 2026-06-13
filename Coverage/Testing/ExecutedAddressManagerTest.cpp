@@ -16,115 +16,116 @@
 
 #include "stdafx.h"
 
-#include "CppCoverage/ExecutedAddressManager.hpp"
+#include "CppCoverage/Address.hpp"
 #include "CppCoverage/CppCoverageException.hpp"
+#include "CppCoverage/ExecutedAddressManager.hpp"
 #include "Plugin/Exporter/CoverageData.hpp"
-#include "Plugin/Exporter/ModuleCoverage.hpp"
 #include "Plugin/Exporter/FileCoverage.hpp"
 #include "Plugin/Exporter/LineCoverage.hpp"
-#include "CppCoverage/Address.hpp"
+#include "Plugin/Exporter/ModuleCoverage.hpp"
 
 namespace cov = CppCoverage;
 
 namespace CppCoverageTest
 {
-	namespace
-	{
-		#pragma warning(push)
-		#pragma warning(disable: 4312) // 'reinterpret_cast': conversion from 'int' to 'void *' of greater size
-		//-------------------------------------------------------------------------
-		cov::Address CreateAddress(int addressValue)
-		{
-			return cov::Address{ nullptr, reinterpret_cast<void*>(addressValue) };
-		}
+    namespace
+    {
+#pragma warning(push)
+#pragma warning(disable : 4312) // 'reinterpret_cast': conversion from 'int' to
+                                // 'void *' of greater size
+        //-------------------------------------------------------------------------
+        cov::Address CreateAddress(int addressValue)
+        {
+            return cov::Address{ nullptr, reinterpret_cast<void*>(addressValue) };
+        }
 
-		#pragma warning(pop)
-	}
+#pragma warning(pop)
+    } // namespace
 
-	//-------------------------------------------------------------------------
-	TEST(ExecutedAddressManagerTest, RegisterAddress)
-	{		
-		cov::ExecutedAddressManager manager;
-		cov::Address address = CreateAddress(0);
+    //-------------------------------------------------------------------------
+    TEST(ExecutedAddressManagerTest, RegisterAddress)
+    {
+        cov::ExecutedAddressManager manager;
+        cov::Address                address = CreateAddress(0);
 
-		ASSERT_THROW(manager.RegisterAddress(address, L"", 0, 0), cov::CppCoverageException);
+        ASSERT_THROW(manager.RegisterAddress(address, L"", 0, 0), cov::CppCoverageException);
 
-		manager.AddModule(L"", nullptr);
-		manager.RegisterAddress(address, L"", 0, 0);
-	}
+        manager.AddModule(L"", nullptr);
+        manager.RegisterAddress(address, L"", 0, 0);
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(ExecutedAddressManagerTest, MarkAddressAsExecuted)
-	{
-		cov::ExecutedAddressManager manager;
-		cov::Address address = CreateAddress(0);
+    //-------------------------------------------------------------------------
+    TEST(ExecutedAddressManagerTest, MarkAddressAsExecuted)
+    {
+        cov::ExecutedAddressManager manager;
+        cov::Address                address = CreateAddress(0);
 
-		manager.AddModule(L"", nullptr);
+        manager.AddModule(L"", nullptr);
 
-		ASSERT_EQ(boost::none, manager.MarkAddressAsExecuted(address));
+        ASSERT_EQ(boost::none, manager.MarkAddressAsExecuted(address));
 
-		manager.RegisterAddress(address, L"", 0, 0);
-		ASSERT_NO_THROW(manager.MarkAddressAsExecuted(address));
-	}	
+        manager.RegisterAddress(address, L"", 0, 0);
+        ASSERT_NO_THROW(manager.MarkAddressAsExecuted(address));
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(ExecutedAddressManagerTest, CreateCoverageData)
-	{
-		cov::ExecutedAddressManager manager;
-		
-		const std::wstring moduleName = L"module";
-		const std::wstring filename = L"filename";
-		const char instructionLine42 = 10;
-		const char instructionLine43 = 11;
-		cov::Address address1 = CreateAddress(1);
-		cov::Address address2 = CreateAddress(2); 
-		HANDLE hProcess = nullptr;
-		manager.AddModule(moduleName, nullptr);
-		manager.RegisterAddress(address1, filename, 42, instructionLine42);
-		manager.RegisterAddress(address2, filename, 43, instructionLine43);
-		manager.MarkAddressAsExecuted(address2);
-		manager.OnExitProcess(hProcess);
+    //-------------------------------------------------------------------------
+    TEST(ExecutedAddressManagerTest, CreateCoverageData)
+    {
+        cov::ExecutedAddressManager manager;
 
-		const Plugin::CoverageData coverageData = manager.CreateCoverageData(L"", 0);
-		
-		const auto& modules = coverageData.GetModules();
-		ASSERT_EQ(1, modules.size());
+        const std::wstring moduleName        = L"module";
+        const std::wstring filename          = L"filename";
+        const char         instructionLine42 = 10;
+        const char         instructionLine43 = 11;
+        cov::Address       address1          = CreateAddress(1);
+        cov::Address       address2          = CreateAddress(2);
+        HANDLE             hProcess          = nullptr;
+        manager.AddModule(moduleName, nullptr);
+        manager.RegisterAddress(address1, filename, 42, instructionLine42);
+        manager.RegisterAddress(address2, filename, 43, instructionLine43);
+        manager.MarkAddressAsExecuted(address2);
+        manager.OnExitProcess(hProcess);
 
-		const auto& module = *modules.front();
-		ASSERT_EQ(moduleName, module.GetPath());
+        const Plugin::CoverageData coverageData = manager.CreateCoverageData(L"", 0);
 
-		const auto& files = module.GetFiles();
-		ASSERT_EQ(1, files.size());
+        const auto& modules = coverageData.GetModules();
+        ASSERT_EQ(1, modules.size());
 
-		const auto& file = *files.front();
-		ASSERT_EQ(filename, file.GetPath());
+        const auto& module = *modules.front();
+        ASSERT_EQ(moduleName, module.GetPath());
 
-		const auto* line42 = file[42];
-		const auto* line43 = file[43];
+        const auto& files = module.GetFiles();
+        ASSERT_EQ(1, files.size());
 
-		ASSERT_NE(nullptr, line42);
-		ASSERT_FALSE(line42->HasBeenExecuted());
+        const auto& file = *files.front();
+        ASSERT_EQ(filename, file.GetPath());
 
-		ASSERT_NE(nullptr, line43);		
-		ASSERT_TRUE(line43->HasBeenExecuted());
-	}
+        const auto* line42 = file[42];
+        const auto* line43 = file[43];
 
-	//-------------------------------------------------------------------------
-	TEST(ExecutedAddressManagerTest, AddSameModuleTwice)
-	{
-		cov::ExecutedAddressManager manager;
-		const auto moduleName1 = L"moduleName1";
-		const auto moduleName2 = L"moduleName2";
+        ASSERT_NE(nullptr, line42);
+        ASSERT_FALSE(line42->HasBeenExecuted());
 
-		manager.AddModule(moduleName1, nullptr);
-		manager.AddModule(moduleName2, nullptr);
-		manager.AddModule(moduleName1, nullptr);
+        ASSERT_NE(nullptr, line43);
+        ASSERT_TRUE(line43->HasBeenExecuted());
+    }
 
-		auto coverageData = manager.CreateCoverageData(L"", 0);
+    //-------------------------------------------------------------------------
+    TEST(ExecutedAddressManagerTest, AddSameModuleTwice)
+    {
+        cov::ExecutedAddressManager manager;
+        const auto                  moduleName1 = L"moduleName1";
+        const auto                  moduleName2 = L"moduleName2";
 
-		const auto& modules = coverageData.GetModules();
-		ASSERT_EQ(2, modules.size());
-		ASSERT_EQ(moduleName1, modules.at(0)->GetPath().wstring());
-		ASSERT_EQ(moduleName2, modules.at(1)->GetPath().wstring());
-	}
-}
+        manager.AddModule(moduleName1, nullptr);
+        manager.AddModule(moduleName2, nullptr);
+        manager.AddModule(moduleName1, nullptr);
+
+        auto coverageData = manager.CreateCoverageData(L"", 0);
+
+        const auto& modules = coverageData.GetModules();
+        ASSERT_EQ(2, modules.size());
+        ASSERT_EQ(moduleName1, modules.at(0)->GetPath().wstring());
+        ASSERT_EQ(moduleName2, modules.at(1)->GetPath().wstring());
+    }
+} // namespace CppCoverageTest

@@ -43,9 +43,8 @@ using namespace System::Runtime::InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the value or you can default the Build and Revision Numbers
-// by using the '*' as shown below:
+// You can specify all the value or you can default the Build and Revision
+// Numbers by using the '*' as shown below:
 
 [assembly:AssemblyVersionAttribute("1.0.*")];
 [assembly:ComVisible(false)];
-

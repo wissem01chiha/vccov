@@ -20,40 +20,49 @@
 
 namespace TestCoverageOptimizedBuild
 {
-	//-------------------------------------------------------------------------
-	std::filesystem::path GetMainCppPath()
-	{
-		return __FILE__;
-	}
+    //-------------------------------------------------------------------------
+    std::filesystem::path GetMainCppPath()
+    {
+        return __FILE__;
+    }
 
-	//-------------------------------------------------------------------------
-	std::filesystem::path GetOutputBinaryPath()
-	{
-		return std::filesystem::path(OUT_DIR) / TARGET_FILE_NAME;
-	}
+    //-------------------------------------------------------------------------
+    std::filesystem::path GetOutputBinaryPath()
+    {
+        return std::filesystem::path(OUT_DIR) / TARGET_FILE_NAME;
+    }
 
-	//-------------------------------------------------------------------------
-	class CrashInOptimizedBuild
-	{
-	public:
-		explicit CrashInOptimizedBuild(int type)
-		{
-			switch (type)
-			{
-			case 0: x = 1; break;
-			case 1: x = 2; break;
-			case 2: x = 3; break;
-			case 3: x = 4; break;
-			default: throw std::runtime_error("Error");
-			};
-		}
+    //-------------------------------------------------------------------------
+    class CrashInOptimizedBuild
+    {
+      public:
+        explicit CrashInOptimizedBuild(int type)
+        {
+            switch (type)
+            {
+            case 0:
+                x = 1;
+                break;
+            case 1:
+                x = 2;
+                break;
+            case 2:
+                x = 3;
+                break;
+            case 3:
+                x = 4;
+                break;
+            default:
+                throw std::runtime_error("Error");
+            };
+        }
 
-		int x;
-	};
+        int x;
+    };
 
-	//-------------------------------------------------------------------------
-	void TestOptimizedBuild()
-	{
-		auto crashInOptimizedBuild = std::make_unique<CrashInOptimizedBuild>(0);
-	}
-}
+    //-------------------------------------------------------------------------
+    void TestOptimizedBuild()
+    {
+        auto crashInOptimizedBuild = std::make_unique<CrashInOptimizedBuild>(0);
+    }
+} // namespace TestCoverageOptimizedBuild

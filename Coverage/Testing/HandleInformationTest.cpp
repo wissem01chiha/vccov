@@ -25,23 +25,24 @@
 #include "TestTools.hpp"
 
 namespace cov = CppCoverage;
-namespace fs = std::filesystem;
+namespace fs  = std::filesystem;
 
 namespace CppCoverageTest
-{	
-	//-------------------------------------------------------------------------
-	TEST(HandleInformationTest, ComputeFilename)
-	{
-		auto outputBinaryPath = TestCoverageConsole::GetOutputBinaryPath();
-		fs::path path;
+{
+    //-------------------------------------------------------------------------
+    TEST(HandleInformationTest, ComputeFilename)
+    {
+        auto     outputBinaryPath = TestCoverageConsole::GetOutputBinaryPath();
+        fs::path path;
 
-		TestTools::GetHandles(outputBinaryPath, [&](HANDLE hProcess, HANDLE hFile)
-		{
-			cov::HandleInformation handleInformation;
+        TestTools::GetHandles(outputBinaryPath,
+                              [&](HANDLE hProcess, HANDLE hFile)
+                              {
+                                  cov::HandleInformation handleInformation;
 
-			path = handleInformation.ComputeFilename(hFile);
-		});
+                                  path = handleInformation.ComputeFilename(hFile);
+                              });
 
-		ASSERT_EQ(outputBinaryPath, path);
-	}
-}
+        ASSERT_EQ(outputBinaryPath, path);
+    }
+} // namespace CppCoverageTest

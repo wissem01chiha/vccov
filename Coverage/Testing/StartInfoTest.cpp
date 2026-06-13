@@ -24,37 +24,37 @@
 #include "TestCoverageConsole/TestCoverageConsole.hpp"
 
 namespace cov = CppCoverage;
-namespace fs = std::filesystem;
+namespace fs  = std::filesystem;
 
 namespace CppCoverageTest
 {
-	namespace
-	{
-		const std::wstring validFilename = TestCoverageConsole::GetOutputBinaryPath().wstring(); 
-	}
+    namespace
+    {
+        const std::wstring validFilename = TestCoverageConsole::GetOutputBinaryPath().wstring();
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(StartInfoTest, Constructor)
-	{
-		ASSERT_NO_THROW(cov::StartInfo s{ validFilename };);
-	}
+    //-------------------------------------------------------------------------
+    TEST(StartInfoTest, Constructor)
+    {
+        ASSERT_NO_THROW(cov::StartInfo s{ validFilename };);
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(StartInfoTest, SetWorkingDirectoryNotExists)
-	{
-		cov::StartInfo s(validFilename);
-		fs::path folder{ L"" };
-		
-		ASSERT_THROW(s.SetWorkingDirectory(folder), std::runtime_error);
-	}
+    //-------------------------------------------------------------------------
+    TEST(StartInfoTest, SetWorkingDirectoryNotExists)
+    {
+        cov::StartInfo s(validFilename);
+        fs::path       folder{ L"" };
 
-	//-------------------------------------------------------------------------
-	TEST(StartInfoTest, SetWorkingDirectoryExists)
-	{
-		cov::StartInfo s(validFilename);
-		fs::path folder{ L"." };
+        ASSERT_THROW(s.SetWorkingDirectory(folder), std::runtime_error);
+    }
 
-		ASSERT_NO_THROW(s.SetWorkingDirectory(folder));
-	}
+    //-------------------------------------------------------------------------
+    TEST(StartInfoTest, SetWorkingDirectoryExists)
+    {
+        cov::StartInfo s(validFilename);
+        fs::path       folder{ L"." };
 
-}
+        ASSERT_NO_THROW(s.SetWorkingDirectory(folder));
+    }
+
+} // namespace CppCoverageTest

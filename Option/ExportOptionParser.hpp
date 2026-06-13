@@ -16,35 +16,35 @@
 
 #pragma once
 
-#include <map>
+#include "ExportPluginDescription.hpp"
 #include "IOptionParser.hpp"
 #include "OptionExport.h"
 #include "OptionsExport.hpp"
-#include "ExportPluginDescription.hpp"
+#include <map>
 
 namespace CppCoverage
 {
-	class VCOV_OPTIONEXPORT_DLL ExportOptionParser : public IOptionParser
-	{
-	  public:
-		static const char ExportSeparator;
-		static const std::string ExportTypeOption;
-		static const std::string ExportTypeHtmlValue;
-		static const std::string ExportTypeCoberturaValue;
-		static const std::string ExportTypeBinaryValue;
+    class VCOV_OPTIONEXPORT_DLL ExportOptionParser : public IOptionParser
+    {
+      public:
+        static const char        ExportSeparator;
+        static const std::string ExportTypeOption;
+        static const std::string ExportTypeHtmlValue;
+        static const std::string ExportTypeCoberturaValue;
+        static const std::string ExportTypeBinaryValue;
 
-		explicit ExportOptionParser(std::vector<ExportPluginDescription>&&);
+        explicit ExportOptionParser(std::vector<ExportPluginDescription>&&);
 
-		ExportOptionParser(const ExportOptionParser&) = delete;
-		ExportOptionParser& operator=(const ExportOptionParser&) = delete;
+        ExportOptionParser(const ExportOptionParser&)            = delete;
+        ExportOptionParser& operator=(const ExportOptionParser&) = delete;
 
-		void ParseOption(const ProgramOptionsVariablesMap&, Options&) override;
-		void AddOption(boost::program_options::options_description&) override;
+        void ParseOption(const ProgramOptionsVariablesMap&, Options&) override;
+        void AddOption(boost::program_options::options_description&) override;
 
-	  private:
-		std::wstring GetExportTypeText() const;
+      private:
+        std::wstring GetExportTypeText() const;
 
-		std::map<std::wstring, OptionsExportType> exportTypes_;
-		std::vector<ExportPluginDescription> exportPluginDescriptions_;
-	};
-}
+        std::map<std::wstring, OptionsExportType> exportTypes_;
+        std::vector<ExportPluginDescription>      exportPluginDescriptions_;
+    };
+} // namespace CppCoverage

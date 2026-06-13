@@ -16,31 +16,30 @@
 
 #include "BinaryExporter.hpp"
 #include "CoverageDataSerializer.hpp"
-#include "stdafx.h"
 #include "Tool.hpp"
+#include "stdafx.h"
 #include <filesystem>
 #include <fstream>
 
 namespace Exporter
 {
-	//-------------------------------------------------------------------------
-	std::filesystem::path BinaryExporter::GetDefaultPath(const std::wstring& prefix) const
-	{
-		std::filesystem::path path{ prefix };
+    //-------------------------------------------------------------------------
+    std::filesystem::path BinaryExporter::GetDefaultPath(const std::wstring& prefix) const
+    {
+        std::filesystem::path path{ prefix };
 
-		path += ".cov";
+        path += ".cov";
 
-		return path;
-	}
+        return path;
+    }
 
-	//-------------------------------------------------------------------------
-	void BinaryExporter::Export(
-		const Plugin::CoverageData& coverageData, 
-		const std::filesystem::path& output)
-	{
-		CoverageDataSerializer coverageDataSerializer;
+    //-------------------------------------------------------------------------
+    void BinaryExporter::Export(const Plugin::CoverageData&  coverageData,
+                                const std::filesystem::path& output)
+    {
+        CoverageDataSerializer coverageDataSerializer;
 
-		coverageDataSerializer.Serialize(coverageData, output);
-		Tools::ShowOutputMessage(L"Coverage binary generated in file: ", output);
-	}
-}
+        coverageDataSerializer.Serialize(coverageData, output);
+        Tools::ShowOutputMessage(L"Coverage binary generated in file: ", output);
+    }
+} // namespace Exporter

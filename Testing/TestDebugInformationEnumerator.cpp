@@ -18,14 +18,14 @@
 
 namespace TestCoverageConsole
 {
-	//-------------------------------------------------------------------------
-	// Use dllexport to make sure this function is not removed by the linker as
-	// this function is never called.
-	void __declspec(dllexport) TestDebugInformationEnumerator()
-	{ // @DebugInfoExpected
-		if (false) // @DebugInfoExpected
-		{
-			int answer = 42; // @DebugInfoExpected
-		}
-	} // @DebugInfoExpected
-}
+    //-------------------------------------------------------------------------
+    // Use dllexport to make sure this function is not removed by the linker as
+    // this function is never called.
+    void __declspec(dllexport) TestDebugInformationEnumerator()
+    {              // @DebugInfoExpected
+        if (false) // @DebugInfoExpected
+        {
+            int answer = 42; // @DebugInfoExpected
+        }
+    } // @DebugInfoExpected
+} // namespace TestCoverageConsole

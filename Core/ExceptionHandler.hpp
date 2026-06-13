@@ -17,46 +17,46 @@
 #pragma once
 
 #include "CoreExport.h"
+#include <Windows.h>
 #include <iosfwd>
 #include <map>
 #include <string>
 #include <unordered_map>
-#include <Windows.h>
 
 namespace CppCoverage
-{	
-	enum class VCOV_COREEXPORT_DLL ExceptionHandlerStatus
-	{		
-		BreakPoint,
-		FirstChanceException,
-		Error,
-		CppError
-	};
+{
+    enum class VCOV_COREEXPORT_DLL ExceptionHandlerStatus
+    {
+        BreakPoint,
+        FirstChanceException,
+        Error,
+        CppError
+    };
 
-	class VCOV_COREEXPORT_DLL ExceptionHandler
-	{
-	public:
-		static const std::wstring UnhandledExceptionErrorMessage;
-		static const std::wstring ExceptionCpp;
-		static const std::wstring ExceptionAccesViolation;
-		static const std::wstring ExceptionUnknown;
-		static const int ExceptionEmulationX86ErrorCode;
-		static const int CppExceptionErrorCode;
+    class VCOV_COREEXPORT_DLL ExceptionHandler
+    {
+      public:
+        static const std::wstring UnhandledExceptionErrorMessage;
+        static const std::wstring ExceptionCpp;
+        static const std::wstring ExceptionAccesViolation;
+        static const std::wstring ExceptionUnknown;
+        static const int          ExceptionEmulationX86ErrorCode;
+        static const int          CppExceptionErrorCode;
 
-		ExceptionHandler();
+        ExceptionHandler();
 
-		ExceptionHandlerStatus HandleException(HANDLE hProcess, const EXCEPTION_DEBUG_INFO&, std::wostream&);
-		void OnExitProcess(HANDLE hProcess);
+        ExceptionHandlerStatus HandleException(HANDLE hProcess, const EXCEPTION_DEBUG_INFO&,
+                                               std::wostream&);
+        void                   OnExitProcess(HANDLE hProcess);
 
-	private:
-		ExceptionHandler(const ExceptionHandler&) = delete;
-		ExceptionHandler& operator=(const ExceptionHandler&) = delete;
+      private:
+        ExceptionHandler(const ExceptionHandler&)            = delete;
+        ExceptionHandler& operator=(const ExceptionHandler&) = delete;
 
-		void InitExceptionCode();
-		std::wstring GetExceptionStrFromCode(DWORD) const;
+        void         InitExceptionCode();
+        std::wstring GetExceptionStrFromCode(DWORD) const;
 
-		std::unordered_map<DWORD, std::wstring> exceptionCode_;
-		std::map<DWORD, std::vector<HANDLE>> breakPointExceptionCode_;
-	};
-}
-
+        std::unordered_map<DWORD, std::wstring> exceptionCode_;
+        std::map<DWORD, std::vector<HANDLE>>    breakPointExceptionCode_;
+    };
+} // namespace CppCoverage

@@ -16,46 +16,45 @@
 
 #pragma once
 
-#include <exception>
-#include <string>
-#include <sstream>
 #include "CommonExport.h"
+#include <exception>
+#include <sstream>
+#include <string>
 
 #pragma warning(push)
-//#pragma warning(disable: 4275) // warning C4275: non dll-interface class 'std::exception' used as base for dll-interface class
+// #pragma warning(disable: 4275) // warning C4275: non dll-interface class
+// 'std::exception' used as base for dll-interface class
 
 namespace Tools
 {
 
-	class VCOV_COMMONEXPORT_DLL ExceptionBase : public std::exception
-	{
-	protected:
-		ExceptionBase(const std::wstring& message);
-	};
+    class VCOV_COMMONEXPORT_DLL ExceptionBase : public std::exception
+    {
+      protected:
+        ExceptionBase(const std::wstring& message);
+    };
 
-	VCOV_COMMONEXPORT_DLL std::wstring GetFilename(const char*);
-}
+    VCOV_COMMONEXPORT_DLL std::wstring GetFilename(const char*);
+} // namespace Tools
 
 #pragma warning(pop)
 
-#define GENERATE_EXCEPTION_CLASS(namespaceName, exceptionName)	\
-namespace namespaceName											\
-{																\
-	class exceptionName : public Tools::ExceptionBase			\
-	{															\
-	public:														\
-			explicit exceptionName(const std::wstring& message) \
-			: ExceptionBase(message)							\
-		{														\
-		}														\
-	};															\
-}
+#define GENERATE_EXCEPTION_CLASS(namespaceName, exceptionName)                                     \
+    namespace namespaceName                                                                        \
+    {                                                                                              \
+        class exceptionName : public Tools::ExceptionBase                                          \
+        {                                                                                          \
+          public:                                                                                  \
+            explicit exceptionName(const std::wstring& message) : ExceptionBase(message)           \
+            {                                                                                      \
+            }                                                                                      \
+        };                                                                                         \
+    }
 
-#define THROW_BASE(namespaceName, className, message)                          \
-	do                                                                         \
-	{                                                                          \
-		std::wostringstream ostr;                                              \
-		ostr << Tools::GetFilename(__FILE__) << ':' << __LINE__ << ' '         \
-		     << message;                                                       \
-		throw namespaceName::className(ostr.str());                            \
-	} while (false)
+#define THROW_BASE(namespaceName, className, message)                                              \
+    do                                                                                             \
+    {                                                                                              \
+        std::wostringstream ostr;                                                                  \
+        ostr << Tools::GetFilename(__FILE__) << ':' << __LINE__ << ' ' << message;                 \
+        throw namespaceName::className(ostr.str());                                                \
+    } while (false)

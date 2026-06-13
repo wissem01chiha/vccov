@@ -16,28 +16,28 @@
 
 #pragma once
 
-#include <vector>
-#include <string>
-#include <memory>
-#include <filesystem>
 #include "CommonExport.h"
+#include <filesystem>
+#include <memory>
+#include <string>
+#include <vector>
 
 namespace Tools
 {
-	class VCOV_COMMONEXPORT_DLL MappedFile
-	{
-	public:
-		static std::unique_ptr<MappedFile> TryCreate(const std::filesystem::path&);
-		
-		const std::vector<std::string>& GetLines() const;
+    class VCOV_COMMONEXPORT_DLL MappedFile
+    {
+      public:
+        static std::unique_ptr<MappedFile> TryCreate(const std::filesystem::path&);
 
-		MappedFile(const MappedFile&) = delete;
-		MappedFile& operator=(const MappedFile&) = delete;
-		MappedFile(MappedFile&&) = default;
+        const std::vector<std::string>& GetLines() const;
 
-	private:
-		explicit MappedFile(const std::filesystem::path&);
+        MappedFile(const MappedFile&)            = delete;
+        MappedFile& operator=(const MappedFile&) = delete;
+        MappedFile(MappedFile&&)                 = default;
 
-		std::vector<std::string> lines_;
-	};
-}
+      private:
+        explicit MappedFile(const std::filesystem::path&);
+
+        std::vector<std::string> lines_;
+    };
+} // namespace Tools

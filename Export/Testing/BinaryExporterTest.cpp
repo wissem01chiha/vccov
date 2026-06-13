@@ -16,9 +16,9 @@
 
 #include "stdafx.h"
 
-#include "Plugin/Exporter/CoverageData.hpp"
 #include "Exporter/Binary/BinaryExporter.hpp"
 #include "Exporter/InvalidOutputFileException.hpp"
+#include "Plugin/Exporter/CoverageData.hpp"
 #include "TestHelper/TemporaryPath.hpp"
 #include "Tools/Tool.hpp"
 
@@ -26,39 +26,38 @@ namespace fs = std::filesystem;
 
 namespace ExporterTest
 {
-	//-------------------------------------------------------------------------
-	TEST(BinaryExporterTest, SubFolderDoesNotExist)
-	{
-		Plugin::CoverageData coverageData{ L"", 0 };
+    //-------------------------------------------------------------------------
+    TEST(BinaryExporterTest, SubFolderDoesNotExist)
+    {
+        Plugin::CoverageData coverageData{ L"", 0 };
 
-		TestHelper::TemporaryPath output;
-		auto outputPath = output.GetPath() / "SubFolder" / "output.cov";
+        TestHelper::TemporaryPath output;
+        auto                      outputPath = output.GetPath() / "SubFolder" / "output.cov";
 
-		ASSERT_FALSE(Tools::FileExists(outputPath));
-		Exporter::BinaryExporter().Export(coverageData, outputPath);
-		ASSERT_TRUE(Tools::FileExists(outputPath));
-	}
+        ASSERT_FALSE(Tools::FileExists(outputPath));
+        Exporter::BinaryExporter().Export(coverageData, outputPath);
+        ASSERT_TRUE(Tools::FileExists(outputPath));
+    }
 
-	//-------------------------------------------------------------------------
-	TEST(BinaryExporterTest, OutputExists)
-	{
-		Plugin::CoverageData coverageData{ L"", 0 };
+    //-------------------------------------------------------------------------
+    TEST(BinaryExporterTest, OutputExists)
+    {
+        Plugin::CoverageData coverageData{ L"", 0 };
 
-		TestHelper::TemporaryPath outputPath{ TestHelper::TemporaryPathOption::CreateAsFile };
-		
-		ASSERT_NO_THROW(Exporter::BinaryExporter().Export(coverageData, outputPath.GetPath()));
-	}
+        TestHelper::TemporaryPath outputPath{ TestHelper::TemporaryPathOption::CreateAsFile };
 
-	//-------------------------------------------------------------------------
-	TEST(BinaryExporterTest, InvalidFile)
-	{
-		Plugin::CoverageData coverageData{L"", 0};
+        ASSERT_NO_THROW(Exporter::BinaryExporter().Export(coverageData, outputPath.GetPath()));
+    }
 
-		TestHelper::TemporaryPath outputPath{
-		    TestHelper::TemporaryPathOption::CreateAsFolder};
+    //-------------------------------------------------------------------------
+    TEST(BinaryExporterTest, InvalidFile)
+    {
+        Plugin::CoverageData coverageData{ L"", 0 };
 
-		ASSERT_THROW(Exporter::BinaryExporter().Export(
-		                 coverageData, outputPath.GetPath() / "InvalidFile/"),
-		             Exporter::InvalidOutputFileException);
-	}
-}
+        TestHelper::TemporaryPath outputPath{ TestHelper::TemporaryPathOption::CreateAsFolder };
+
+        ASSERT_THROW(
+            Exporter::BinaryExporter().Export(coverageData, outputPath.GetPath() / "InvalidFile/"),
+            Exporter::InvalidOutputFileException);
+    }
+} // namespace ExporterTest

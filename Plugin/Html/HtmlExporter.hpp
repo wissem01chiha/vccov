@@ -16,65 +16,61 @@
 
 #pragma once
 
-#include <filesystem>
-#include "HtmlExport.h"
 #include "CTemplate.hpp"
-#include "TemplateHtmlExporter.hpp"
+#include "HtmlExport.h"
 #include "HtmlFileCoverageExporter.hpp"
 #include "IExporter.hpp"
+#include "TemplateHtmlExporter.hpp"
+#include <filesystem>
 
 namespace Plugin
 {
-	class CoverageData;
-	class FileCoverage;
-	class ModuleCoverage;
-}
+    class CoverageData;
+    class FileCoverage;
+    class ModuleCoverage;
+} // namespace Plugin
 
 namespace CppCoverage
 {
-	class CoverageRateComputer;
+    class CoverageRateComputer;
 }
 
 namespace boost
 {
-	template <typename T>
-	class optional;
+    template <typename T> class optional;
 }
 
 namespace Exporter
 {
-	class HtmlFolderStructure;
+    class HtmlFolderStructure;
 
-	class VCOV_HTMLEXPORT_DLL HtmlExporter: public IExporter
-	{
-	public:
-		static const std::wstring WarningExitCodeMessage;
+    class VCOV_HTMLEXPORT_DLL HtmlExporter : public IExporter
+    {
+      public:
+        static const std::wstring WarningExitCodeMessage;
 
-	public:
-		explicit HtmlExporter(const std::filesystem::path& templateFolder);
+      public:
+        explicit HtmlExporter(const std::filesystem::path& templateFolder);
 
-		std::filesystem::path GetDefaultPath(const std::wstring& prefix) const override;
-		void Export(const Plugin::CoverageData&, const std::filesystem::path& outputFolder) override;
+        std::filesystem::path GetDefaultPath(const std::wstring& prefix) const override;
+        void                  Export(const Plugin::CoverageData&,
+                                     const std::filesystem::path& outputFolder) override;
 
-	private:
-		HtmlExporter(const HtmlExporter&) = delete;
-		HtmlExporter& operator=(const HtmlExporter&) = delete;
+      private:
+        HtmlExporter(const HtmlExporter&)            = delete;
+        HtmlExporter& operator=(const HtmlExporter&) = delete;
 
-		boost::optional<std::filesystem::path> ExportFile(
-			const HtmlFolderStructure& htmlFolderStructure,
-			const Plugin::FileCoverage& fileCoverage) const;
+        boost::optional<std::filesystem::path>
+        ExportFile(const HtmlFolderStructure&  htmlFolderStructure,
+                   const Plugin::FileCoverage& fileCoverage) const;
 
-		void ExportFiles(
-			CppCoverage::CoverageRateComputer&,
-			const Plugin::ModuleCoverage& module,
-			const HtmlFolderStructure& htmlFolderStructure,
-			ctemplate::TemplateDictionary& moduleTemplateDictionary);
+        void ExportFiles(CppCoverage::CoverageRateComputer&, const Plugin::ModuleCoverage& module,
+                         const HtmlFolderStructure&     htmlFolderStructure,
+                         ctemplate::TemplateDictionary& moduleTemplateDictionary);
 
-	private:
-		TemplateHtmlExporter exporter_;
-		HtmlFileCoverageExporter fileCoverageExporter_;
-		std::filesystem::path templateFolder_;
-	};
-}
-
-
+      private:
+        TemplateHtmlExporter     exporter_;
+        HtmlFileCoverageExporter fileCoverageExporter_;
+        std::filesystem::path    templateFolder_;
+    };
+} // namespace Exporter

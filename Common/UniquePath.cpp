@@ -14,26 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "UniquePath.hpp"
+#include "stdafx.h"
 
-#include <string>
 #include <filesystem>
+#include <string>
 
 namespace Tools
 {
-	//-------------------------------------------------------------------------
-	std::filesystem::path UniquePath::GetUniquePath(const std::filesystem::path& path)
-	{
-		auto uniquePath = path;
-		auto filenameWithoutExtension = path.filename().replace_extension(L"");
+    //-------------------------------------------------------------------------
+    std::filesystem::path UniquePath::GetUniquePath(const std::filesystem::path& path)
+    {
+        auto uniquePath               = path;
+        auto filenameWithoutExtension = path.filename().replace_extension(L"");
 
-		for (int i = 2; existingPathSet_.count(uniquePath) != 0; ++i)
-		{
-			auto filename = filenameWithoutExtension.wstring() + std::to_wstring(i) + path.extension().wstring();
-			uniquePath = path.parent_path() / filename;
-		}
-		existingPathSet_.insert(uniquePath);
-		return uniquePath;
-	}
-}
+        for (int i = 2; existingPathSet_.count(uniquePath) != 0; ++i)
+        {
+            auto filename = filenameWithoutExtension.wstring() + std::to_wstring(i) +
+                            path.extension().wstring();
+            uniquePath = path.parent_path() / filename;
+        }
+        existingPathSet_.insert(uniquePath);
+        return uniquePath;
+    }
+} // namespace Tools

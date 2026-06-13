@@ -16,23 +16,22 @@
 
 #pragma once
 
-#include <iosfwd>
 #include "ConsoleExport.h"
+#include <iosfwd>
 
 namespace OpenCppCoverage
 {
-	const int FailureExitCode = 0x9F8C8E5C;
+    const int FailureExitCode = 0x9F8C8E5C;
 
-	class VCOV_CONSOLEEXPORT_DLL OpenCppCoverage
-	{
-	public:
-		OpenCppCoverage() = default;
+    class VCOV_CONSOLEEXPORT_DLL OpenCppCoverage
+    {
+      public:
+        OpenCppCoverage() = default;
 
-		int Run(int argc, const char** argv, std::wostream* emptyOptionsExplanation) const;
+        int Run(int argc, const char** argv, std::wostream* emptyOptionsExplanation) const;
 
-	private:
-		OpenCppCoverage(const OpenCppCoverage&) = delete;
-		OpenCppCoverage& operator=(const OpenCppCoverage&) = delete;
-	};
-}
-
+      private:
+        OpenCppCoverage(const OpenCppCoverage&)            = delete;
+        OpenCppCoverage& operator=(const OpenCppCoverage&) = delete;
+    };
+} // namespace OpenCppCoverage

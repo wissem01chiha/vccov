@@ -16,14 +16,14 @@
 
 #pragma once
 
-#include "stdafx.h"
 #include "Tools.hpp"
-#include <fstream>
-#include <filesystem>
-#include <boost/algorithm/string.hpp>
-#include <Poco/Process.h>
+#include "stdafx.h"
 #include <Poco/Pipe.h>
 #include <Poco/PipeStream.h>
+#include <Poco/Process.h>
+#include <boost/algorithm/string.hpp>
+#include <filesystem>
+#include <fstream>
 
 namespace fs = std::filesystem;
 
@@ -34,59 +34,54 @@ void TestUnloadDll()
 
 namespace Testing
 {
-	//-------------------------------------------------------------------------
-	fs::path GetTestUnloadDllFilename()
-	{
-		return fs::path(__FILE__).filename();
-	}
+    //-------------------------------------------------------------------------
+    fs::path GetTestUnloadDllFilename()
+    {
+        return fs::path(__FILE__).filename();
+    }
 
-	//-------------------------------------------------------------------------
-	fs::path GetOutputBinaryPath()
-	{		
-		return TARGET_FILE_NAME;
-	}
+    //-------------------------------------------------------------------------
+    fs::path GetOutputBinaryPath()
+    {
+        return TARGET_FILE_NAME;
+    }
 
-	//-------------------------------------------------------------------------
-	void CreateEmptyFile(const fs::path& path)
-	{
-		std::ofstream ofs;
-		ofs.open(path.string(), std::ios::out);
-	}
+    //-------------------------------------------------------------------------
+    void CreateEmptyFile(const fs::path& path)
+    {
+        std::ofstream ofs;
+        ofs.open(path.string(), std::ios::out);
+    }
 
-	//-------------------------------------------------------------------------
-	std::string RunProcess(const fs::path& program,
-	                       const std::vector<std::string>& args)
-	{
-		Poco::Pipe outPipe;
-		auto handle = Poco::Process::launch(
-		    program.string(), args, nullptr, &outPipe, nullptr);
-		Poco::PipeInputStream istr(outPipe);
-		std::string content{std::istreambuf_iterator<char>(istr),
-		                    std::istreambuf_iterator<char>()};
+    //-------------------------------------------------------------------------
+    std::string RunProcess(const fs::path& program, const std::vector<std::string>& args)
+    {
+        Poco::Pipe outPipe;
+        auto handle = Poco::Process::launch(program.string(), args, nullptr, &outPipe, nullptr);
+        Poco::PipeInputStream istr(outPipe);
+        std::string           content{ std::istreambuf_iterator<char>(istr),
+                             std::istreambuf_iterator<char>() };
 
-		int exitCode = handle.wait();
-		if (exitCode)
-			throw std::runtime_error("Error when running: " + program.string() +
-			                         " " + content);
-		return content;
-	}
+        int exitCode = handle.wait();
+        if (exitCode)
+            throw std::runtime_error("Error when running: " + program.string() + " " + content);
+        return content;
+    }
 
-	//------------------------------------------------------------------------ -
-	fs::path GetVisualStudioPath()
-	{
-		fs::path programFileX86 = std::getenv("ProgramFiles(x86)");
-		auto vswhere = programFileX86 / "Microsoft Visual Studio" /
-		               "Installer" / "vswhere.exe";
+    //------------------------------------------------------------------------ -
+    fs::path GetVisualStudioPath()
+    {
+        fs::path programFileX86 = std::getenv("ProgramFiles(x86)");
+        auto     vswhere = programFileX86 / "Microsoft Visual Studio" / "Installer" / "vswhere.exe";
 
-		std::vector<std::string> args = {
-		    "-latest", "-format", "value", "-property", "installationPath"};
-		std::string value = RunProcess(vswhere, args);
-		boost::trim(value);
-		fs::path installerPath{value};
+        std::vector<std::string> args  = { "-latest", "-format", "value", "-property",
+                                           "installationPath" };
+        std::string              value = RunProcess(vswhere, args);
+        boost::trim(value);
+        fs::path installerPath{ value };
 
-		if (!Tools::FileExists(installerPath))
-			throw std::runtime_error(
-			    "Invalid Visual Studio installation path: " + value);
-		return installerPath;
-	}
-}
+        if (!Tools::FileExists(installerPath))
+            throw std::runtime_error("Invalid Visual Studio installation path: " + value);
+        return installerPath;
+    }
+} // namespace Testing

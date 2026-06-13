@@ -22,16 +22,16 @@ namespace cov = CppCoverage;
 
 namespace CppCoverageTest
 {
-	
-	//-------------------------------------------------------------------------
-	TEST(CppCoverageException, GetErrorMessage)
-	{
-		ASSERT_NE(L"", cov::GetErrorMessage(1));
-	}
 
-	//-------------------------------------------------------------------------
-	TEST(CppCoverageException, GetErrorMessageInvalid)
-	{
-		ASSERT_NE(L"", cov::GetErrorMessage(-1));
-	}
-}
+    //-------------------------------------------------------------------------
+    TEST(CppCoverageException, GetErrorMessage)
+    {
+        ASSERT_NE(L"", cov::GetErrorMessage(1));
+    }
+
+    //-------------------------------------------------------------------------
+    TEST(CppCoverageException, GetErrorMessageInvalid)
+    {
+        ASSERT_NE(L"", cov::GetErrorMessage(-1));
+    }
+} // namespace CppCoverageTest

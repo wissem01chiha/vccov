@@ -19,49 +19,46 @@
 #include <memory>
 
 #include "FilterExport.h"
-#include "WildcardCoverageFilter.hpp"
 #include "ICoverageFilterManager.hpp"
-#include "UnifiedDiffCoverageFilterManager.hpp"
 #include "LineFilter.hpp"
+#include "UnifiedDiffCoverageFilterManager.hpp"
+#include "WildcardCoverageFilter.hpp"
 
 namespace FileFilter
 {
-	class ReleaseCoverageFilter;
+    class ReleaseCoverageFilter;
 }
 
 namespace CppCoverage
 {
-	class CoverageFilterSettings;
-	class UnifiedDiffSettings;
+    class CoverageFilterSettings;
+    class UnifiedDiffSettings;
 
-	class VCOV_FILTEREXPORT_DLL CoverageFilterManager: public ICoverageFilterManager
-	{
-	public:
-		explicit CoverageFilterManager(
-			const CoverageFilterSettings&,
-			const std::vector<UnifiedDiffSettings>&,
-			const std::vector<std::wstring>& excludedLineRegexes,
-			bool useReleaseCoverageFilter);
+    class VCOV_FILTEREXPORT_DLL CoverageFilterManager : public ICoverageFilterManager
+    {
+      public:
+        explicit CoverageFilterManager(const CoverageFilterSettings&,
+                                       const std::vector<UnifiedDiffSettings>&,
+                                       const std::vector<std::wstring>& excludedLineRegexes,
+                                       bool                             useReleaseCoverageFilter);
 
-		~CoverageFilterManager();
+        ~CoverageFilterManager();
 
-		bool IsModuleSelected(const std::wstring& filename) const override;
-		bool IsSourceFileSelected(const std::wstring& filename) override;
-		bool IsLineSelected(
-			const FileFilter::ModuleInfo&,
-			const FileFilter::FileInfo&,
-			const FileFilter::LineInfo&) override;
+        bool IsModuleSelected(const std::wstring& filename) const override;
+        bool IsSourceFileSelected(const std::wstring& filename) override;
+        bool IsLineSelected(const FileFilter::ModuleInfo&, const FileFilter::FileInfo&,
+                            const FileFilter::LineInfo&) override;
 
-		std::vector<std::wstring> ComputeWarningMessageLines(size_t maxUnmatchPaths) const;
+        std::vector<std::wstring> ComputeWarningMessageLines(size_t maxUnmatchPaths) const;
 
-	private:
-		CoverageFilterManager(const CoverageFilterManager&) = delete;
-		CoverageFilterManager& operator=(const CoverageFilterManager&) = delete;
+      private:
+        CoverageFilterManager(const CoverageFilterManager&)            = delete;
+        CoverageFilterManager& operator=(const CoverageFilterManager&) = delete;
 
-		const WildcardCoverageFilter wildcardCoverageFilter_;
-		UnifiedDiffCoverageFilterManager unifiedDiffCoverageFilterManager_;
-		FileFilter::LineFilter lineFilter_;
+        const WildcardCoverageFilter     wildcardCoverageFilter_;
+        UnifiedDiffCoverageFilterManager unifiedDiffCoverageFilterManager_;
+        FileFilter::LineFilter           lineFilter_;
 
-		const std::unique_ptr<FileFilter::ReleaseCoverageFilter> optionalReleaseCoverageFilter_;
-	};
-}
+        const std::unique_ptr<FileFilter::ReleaseCoverageFilter> optionalReleaseCoverageFilter_;
+    };
+} // namespace CppCoverage

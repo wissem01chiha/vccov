@@ -14,30 +14,29 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "InvalidOutputFileException.hpp"
+#include "stdafx.h"
 
 namespace Exporter
 {
-		//---------------------------------------------------------------------
-		std::string GetErrorMessage(const std::filesystem::path& output,
-		                            const std::string& outputKind)
-		{
-			auto error = "Cannot write " + outputKind +
-			             " export to the file: \"" + output.string() + "\".";
+    //---------------------------------------------------------------------
+    std::string GetErrorMessage(const std::filesystem::path& output, const std::string& outputKind)
+    {
+        auto error =
+            "Cannot write " + outputKind + " export to the file: \"" + output.string() + "\".";
 
-			if (std::filesystem::is_directory(output))
-			{
-				error += " The output \"" + output.string() +
-				         "\" is a directory whereas as it must be a file.";
-			}
-			return error;
-		}
-		
-	//-------------------------------------------------------------------------
-	InvalidOutputFileException::InvalidOutputFileException(
-	    const std::filesystem::path& output, const std::string& outputKind)
-	    : std::runtime_error(GetErrorMessage(output, outputKind))
-	{
-	}
-}
+        if (std::filesystem::is_directory(output))
+        {
+            error += " The output \"" + output.string() +
+                     "\" is a directory whereas as it must be a file.";
+        }
+        return error;
+    }
+
+    //-------------------------------------------------------------------------
+    InvalidOutputFileException::InvalidOutputFileException(const std::filesystem::path& output,
+                                                           const std::string&           outputKind)
+        : std::runtime_error(GetErrorMessage(output, outputKind))
+    {
+    }
+} // namespace Exporter

@@ -20,25 +20,23 @@
 
 namespace boost
 {
-	namespace program_options
-	{
-		class options_description;
-	}
-}
+    namespace program_options
+    {
+        class options_description;
+    }
+} // namespace boost
 
 namespace CppCoverage
 {
-	class Options;
-	class ProgramOptionsVariablesMap;
+    class Options;
+    class ProgramOptionsVariablesMap;
 
-	class VCOV_OPTIONEXPORT_DLL IOptionParser
-	{
-	  public:
-		virtual ~IOptionParser() = default;
+    class VCOV_OPTIONEXPORT_DLL IOptionParser
+    {
+      public:
+        virtual ~IOptionParser() = default;
 
-		virtual void ParseOption(const ProgramOptionsVariablesMap&,
-		                         Options&) = 0;
-		virtual void
-		AddOption(boost::program_options::options_description&) = 0;
-	};
-}
+        virtual void ParseOption(const ProgramOptionsVariablesMap&, Options&) = 0;
+        virtual void AddOption(boost::program_options::options_description&)  = 0;
+    };
+} // namespace CppCoverage

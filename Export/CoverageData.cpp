@@ -14,78 +14,77 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "CoverageData.hpp"
 #include "ModuleCoverage.hpp"
+#include "stdafx.h"
 
 namespace Plugin
 {
-	//-------------------------------------------------------------------------
-	CoverageData::CoverageData(const std::wstring& name, int exitCode)
-		: name_(name)
-		, exitCode_(exitCode)
-	{
-	}
+    //-------------------------------------------------------------------------
+    CoverageData::CoverageData(const std::wstring& name, int exitCode)
+        : name_(name), exitCode_(exitCode)
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	CoverageData::~CoverageData()
-	{
-	}
+    //-------------------------------------------------------------------------
+    CoverageData::~CoverageData()
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	CoverageData::CoverageData(CoverageData&& coverageData)
-	{
-		*this = std::move(coverageData);
-	}
+    //-------------------------------------------------------------------------
+    CoverageData::CoverageData(CoverageData&& coverageData)
+    {
+        *this = std::move(coverageData);
+    }
 
-	//-------------------------------------------------------------------------
-	CoverageData& CoverageData::operator=(CoverageData&& coverageData)
-	{
-		if (this != &coverageData)
-		{
-			std::swap(modules_, coverageData.modules_);
-			name_ = coverageData.name_;
-			exitCode_ = coverageData.exitCode_;
-		}
-		return *this;
-	}
+    //-------------------------------------------------------------------------
+    CoverageData& CoverageData::operator=(CoverageData&& coverageData)
+    {
+        if (this != &coverageData)
+        {
+            std::swap(modules_, coverageData.modules_);
+            name_     = coverageData.name_;
+            exitCode_ = coverageData.exitCode_;
+        }
+        return *this;
+    }
 
-	//-------------------------------------------------------------------------
-	ModuleCoverage& CoverageData::AddModule(const std::filesystem::path& path)
-	{
-		modules_.push_back(std::unique_ptr<ModuleCoverage>(new ModuleCoverage(path)));
+    //-------------------------------------------------------------------------
+    ModuleCoverage& CoverageData::AddModule(const std::filesystem::path& path)
+    {
+        modules_.push_back(std::unique_ptr<ModuleCoverage>(new ModuleCoverage(path)));
 
-		return *modules_.back();
-	}
+        return *modules_.back();
+    }
 
-	//-------------------------------------------------------------------------	
-	void CoverageData::SetName(const std::wstring& name)
-	{
-		name_ = name;
-	}
+    //-------------------------------------------------------------------------
+    void CoverageData::SetName(const std::wstring& name)
+    {
+        name_ = name;
+    }
 
-	//-------------------------------------------------------------------------
-	void CoverageData::SetExitCode(int exitCode)
-	{
-		exitCode_ = exitCode;
-	}
+    //-------------------------------------------------------------------------
+    void CoverageData::SetExitCode(int exitCode)
+    {
+        exitCode_ = exitCode;
+    }
 
-	//-------------------------------------------------------------------------
-	const CoverageData::T_ModuleCoverageCollection& CoverageData::GetModules() const
-	{
-		return modules_;
-	}
-	
-	//-------------------------------------------------------------------------	
-	const std::wstring& CoverageData::GetName() const
-	{
-		return name_;
-	}
-		
-	//-------------------------------------------------------------------------	
-	int CoverageData::GetExitCode() const
-	{
-		return exitCode_;
-	}
+    //-------------------------------------------------------------------------
+    const CoverageData::T_ModuleCoverageCollection& CoverageData::GetModules() const
+    {
+        return modules_;
+    }
 
-};
+    //-------------------------------------------------------------------------
+    const std::wstring& CoverageData::GetName() const
+    {
+        return name_;
+    }
+
+    //-------------------------------------------------------------------------
+    int CoverageData::GetExitCode() const
+    {
+        return exitCode_;
+    }
+
+}; // namespace Plugin

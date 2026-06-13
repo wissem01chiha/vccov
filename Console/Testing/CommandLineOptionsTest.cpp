@@ -16,161 +16,166 @@
 
 #include "stdafx.h"
 
-#include <filesystem>
-#include <boost/algorithm/string/predicate.hpp >
-#include "TestHelper/TemporaryPath.hpp"
 #include "CppCoverage/OptionsParser.hpp"
 #include "CppCoverage/ProgramOptions.hpp"
 #include "OpenCppCoverage/OpenCppCoverage.hpp"
 #include "TestCoverageConsole/TestCoverageConsole.hpp"
 #include "TestCoverageSharedLib/TestCoverageSharedLib.hpp"
+#include "TestHelper/TemporaryPath.hpp"
+#include <boost/algorithm/string/predicate.hpp >
+#include <filesystem>
 
 #include "OpenCppCoverageTestTools.hpp"
 
-namespace fs = std::filesystem;
+namespace fs  = std::filesystem;
 namespace cov = CppCoverage;
 
 namespace OpenCppCoverageTest
 {
-	namespace
-	{
-		auto testCoverageConsole = TestCoverageConsole::GetOutputBinaryPath();
-		auto testCoverageSharedLib = TestCoverageSharedLib::GetOutputBinaryPath();
-		
-		auto testCoverageSharedLibMain = TestCoverageSharedLib::GetMainCppPath();
+    namespace
+    {
+        auto testCoverageConsole   = TestCoverageConsole::GetOutputBinaryPath();
+        auto testCoverageSharedLib = TestCoverageSharedLib::GetOutputBinaryPath();
 
-		//---------------------------------------------------------------------
-		bool FindFilename(const std::wstring& filename, const fs::path& outputDirectory)
-		{
-			for (fs::recursive_directory_iterator it(outputDirectory);
-				it != fs::recursive_directory_iterator(); ++it)
-			{
-				const auto& path = it->path();
+        auto testCoverageSharedLibMain = TestCoverageSharedLib::GetMainCppPath();
 
-				if (boost::iequals(path.filename().stem().wstring(), filename))
-					return true;
-			}
+        //---------------------------------------------------------------------
+        bool FindFilename(const std::wstring& filename, const fs::path& outputDirectory)
+        {
+            for (fs::recursive_directory_iterator it(outputDirectory);
+                 it != fs::recursive_directory_iterator(); ++it)
+            {
+                const auto& path = it->path();
 
-			return false;
-		}
-		
-		//---------------------------------------------------------------------
-		class CommandLineOptionsTest : public ::testing::Test
-		{
-		public:
-			//-----------------------------------------------------------------
-			int RunCoverageOnProgramWithExitCode(
-				std::vector<std::pair<std::string, std::string>> coverageArguments,
-				bool useSourceInSolutionDir = true)
-			{
-				if (useSourceInSolutionDir)
-					coverageArguments.push_back({ cov::ProgramOptions::SelectedSourcesOption, GetSolutionFolderName()});
-				auto thirdParties = { "Build", "packages" };
-				for (const auto& thirdParty: thirdParties)
-					coverageArguments.push_back({ cov::ProgramOptions::ExcludedSourcesOption, thirdParty });
+                if (boost::iequals(path.filename().stem().wstring(), filename))
+                    return true;
+            }
 
-				AddDefaultHtmlExport(coverageArguments, GetTempPath());
-				coverageArguments.emplace_back(cov::ProgramOptions::QuietOption, "");
-				std::string ignoreOutput;
-				return RunCoverageFor(coverageArguments, testCoverageConsole, {}, &ignoreOutput);
-			}
+            return false;
+        }
 
-			//-----------------------------------------------------------------
-			void RunCoverageOnProgram(
-				std::vector<std::pair<std::string, std::string>> coverageArguments,
-				bool useSourceInSolutionDir = true)
-			{
-				int exitCode = RunCoverageOnProgramWithExitCode(coverageArguments,
-					useSourceInSolutionDir);
+        //---------------------------------------------------------------------
+        class CommandLineOptionsTest : public ::testing::Test
+        {
+          public:
+            //-----------------------------------------------------------------
+            int RunCoverageOnProgramWithExitCode(
+                std::vector<std::pair<std::string, std::string>> coverageArguments,
+                bool                                             useSourceInSolutionDir = true)
+            {
+                if (useSourceInSolutionDir)
+                    coverageArguments.push_back(
+                        { cov::ProgramOptions::SelectedSourcesOption, GetSolutionFolderName() });
+                auto thirdParties = { "Build", "packages" };
+                for (const auto& thirdParty : thirdParties)
+                    coverageArguments.push_back(
+                        { cov::ProgramOptions::ExcludedSourcesOption, thirdParty });
 
-				ASSERT_EQ(0, exitCode);
-			}
+                AddDefaultHtmlExport(coverageArguments, GetTempPath());
+                coverageArguments.emplace_back(cov::ProgramOptions::QuietOption, "");
+                std::string ignoreOutput;
+                return RunCoverageFor(coverageArguments, testCoverageConsole, {}, &ignoreOutput);
+            }
 
-			//-----------------------------------------------------------------
-			void CheckFilenameExistsInOutput(const fs::path& path, bool expectedValue)
-			{
-				auto filename = path.filename().replace_extension("");
-				CheckFilenameWithExtensionExistsInOutput(filename, expectedValue);
-			}
+            //-----------------------------------------------------------------
+            void
+            RunCoverageOnProgram(std::vector<std::pair<std::string, std::string>> coverageArguments,
+                                 bool useSourceInSolutionDir = true)
+            {
+                int exitCode =
+                    RunCoverageOnProgramWithExitCode(coverageArguments, useSourceInSolutionDir);
 
-			//-----------------------------------------------------------------
-			void CheckFilenameWithExtensionExistsInOutput(const fs::path& path, bool expectedValue)
-			{
-				auto filename = path.filename();
-				ASSERT_EQ(expectedValue, FindFilename(filename.wstring(), GetTempPath()));
-			}
+                ASSERT_EQ(0, exitCode);
+            }
 
-			//-----------------------------------------------------------------
-			const fs::path& GetTempPath() const
-			{
-				return tempFolder_.GetPath();
-			}
+            //-----------------------------------------------------------------
+            void CheckFilenameExistsInOutput(const fs::path& path, bool expectedValue)
+            {
+                auto filename = path.filename().replace_extension("");
+                CheckFilenameWithExtensionExistsInOutput(filename, expectedValue);
+            }
 
-		private:
-			TestHelper::TemporaryPath tempFolder_;
-		};
-	}
-	
-	//-------------------------------------------------------------------------
-	TEST_F(CommandLineOptionsTest, SelectedModulesOption)
-	{		
-		RunCoverageOnProgram({ { cov::ProgramOptions::SelectedModulesOption, testCoverageConsole.string() } });
-		CheckFilenameExistsInOutput(testCoverageConsole, true);
-		CheckFilenameExistsInOutput(testCoverageSharedLib, false);
-	}
+            //-----------------------------------------------------------------
+            void CheckFilenameWithExtensionExistsInOutput(const fs::path& path, bool expectedValue)
+            {
+                auto filename = path.filename();
+                ASSERT_EQ(expectedValue, FindFilename(filename.wstring(), GetTempPath()));
+            }
 
-	//-------------------------------------------------------------------------
-	TEST_F(CommandLineOptionsTest, ExcludedModulesOption)
-	{
-		RunCoverageOnProgram({ { cov::ProgramOptions::ExcludedModulesOption, testCoverageConsole.string() } });
-		CheckFilenameExistsInOutput(testCoverageConsole, false);
-		CheckFilenameExistsInOutput(testCoverageSharedLib, true);
-	}
+            //-----------------------------------------------------------------
+            const fs::path& GetTempPath() const
+            {
+                return tempFolder_.GetPath();
+            }
 
-	//-------------------------------------------------------------------------
-	TEST_F(CommandLineOptionsTest, SelectedSourcesOption)
-	{
-		auto testCoverageConsoleMain = TestCoverageConsole::GetMainCppFilename().string();
+          private:
+            TestHelper::TemporaryPath tempFolder_;
+        };
+    } // namespace
 
-		RunCoverageOnProgram({ { cov::ProgramOptions::SelectedSourcesOption, testCoverageConsoleMain } }, false);
-		CheckFilenameWithExtensionExistsInOutput(testCoverageConsoleMain, true);
-		CheckFilenameWithExtensionExistsInOutput(testCoverageSharedLibMain, false);
-	}
+    //-------------------------------------------------------------------------
+    TEST_F(CommandLineOptionsTest, SelectedModulesOption)
+    {
+        RunCoverageOnProgram(
+            { { cov::ProgramOptions::SelectedModulesOption, testCoverageConsole.string() } });
+        CheckFilenameExistsInOutput(testCoverageConsole, true);
+        CheckFilenameExistsInOutput(testCoverageSharedLib, false);
+    }
 
-	//-------------------------------------------------------------------------
-	TEST_F(CommandLineOptionsTest, ExcludedSourcesOption)
-	{
-		auto testCoverageConsoleMain = TestCoverageConsole::GetMainCppFilename().string();
+    //-------------------------------------------------------------------------
+    TEST_F(CommandLineOptionsTest, ExcludedModulesOption)
+    {
+        RunCoverageOnProgram(
+            { { cov::ProgramOptions::ExcludedModulesOption, testCoverageConsole.string() } });
+        CheckFilenameExistsInOutput(testCoverageConsole, false);
+        CheckFilenameExistsInOutput(testCoverageSharedLib, true);
+    }
 
-		RunCoverageOnProgram({ { cov::ProgramOptions::ExcludedSourcesOption, testCoverageConsoleMain } });
-		CheckFilenameWithExtensionExistsInOutput(testCoverageConsoleMain, false);
-		CheckFilenameWithExtensionExistsInOutput(testCoverageSharedLibMain, true);
-	}
+    //-------------------------------------------------------------------------
+    TEST_F(CommandLineOptionsTest, SelectedSourcesOption)
+    {
+        auto testCoverageConsoleMain = TestCoverageConsole::GetMainCppFilename().string();
 
-	//-------------------------------------------------------------------------
-	TEST_F(CommandLineOptionsTest, OutputDirectoryOption)
-	{
-		RunCoverageOnProgram({});
-		CheckFilenameExistsInOutput(testCoverageConsole, true);
-		CheckFilenameExistsInOutput(testCoverageSharedLib, true);
-	}
+        RunCoverageOnProgram(
+            { { cov::ProgramOptions::SelectedSourcesOption, testCoverageConsoleMain } }, false);
+        CheckFilenameWithExtensionExistsInOutput(testCoverageConsoleMain, true);
+        CheckFilenameWithExtensionExistsInOutput(testCoverageSharedLibMain, false);
+    }
 
-	//-------------------------------------------------------------------------
-	TEST_F(CommandLineOptionsTest, FailureExitCode)
-	{
-		std::vector<std::pair<std::string, std::string>> coverageArguments;
+    //-------------------------------------------------------------------------
+    TEST_F(CommandLineOptionsTest, ExcludedSourcesOption)
+    {
+        auto testCoverageConsoleMain = TestCoverageConsole::GetMainCppFilename().string();
 
-		ASSERT_EQ(0, RunCoverageOnProgramWithExitCode(coverageArguments));
+        RunCoverageOnProgram(
+            { { cov::ProgramOptions::ExcludedSourcesOption, testCoverageConsoleMain } });
+        CheckFilenameWithExtensionExistsInOutput(testCoverageConsoleMain, false);
+        CheckFilenameWithExtensionExistsInOutput(testCoverageSharedLibMain, true);
+    }
 
-		coverageArguments.emplace_back("Invalid option", "Invalid value");
-		ASSERT_EQ(OpenCppCoverage::FailureExitCode,
-		          RunCoverageOnProgramWithExitCode(coverageArguments));
+    //-------------------------------------------------------------------------
+    TEST_F(CommandLineOptionsTest, OutputDirectoryOption)
+    {
+        RunCoverageOnProgram({});
+        CheckFilenameExistsInOutput(testCoverageConsole, true);
+        CheckFilenameExistsInOutput(testCoverageSharedLib, true);
+    }
 
-		// This should failed at runtime
-		coverageArguments.clear();
-		coverageArguments.emplace_back(cov::ProgramOptions::InputCoverageValue,
-		                               __FILE__);
-		ASSERT_EQ(OpenCppCoverage::FailureExitCode,
-		          RunCoverageOnProgramWithExitCode(coverageArguments));
-	}
-}
+    //-------------------------------------------------------------------------
+    TEST_F(CommandLineOptionsTest, FailureExitCode)
+    {
+        std::vector<std::pair<std::string, std::string>> coverageArguments;
+
+        ASSERT_EQ(0, RunCoverageOnProgramWithExitCode(coverageArguments));
+
+        coverageArguments.emplace_back("Invalid option", "Invalid value");
+        ASSERT_EQ(OpenCppCoverage::FailureExitCode,
+                  RunCoverageOnProgramWithExitCode(coverageArguments));
+
+        // This should failed at runtime
+        coverageArguments.clear();
+        coverageArguments.emplace_back(cov::ProgramOptions::InputCoverageValue, __FILE__);
+        ASSERT_EQ(OpenCppCoverage::FailureExitCode,
+                  RunCoverageOnProgramWithExitCode(coverageArguments));
+    }
+} // namespace OpenCppCoverageTest

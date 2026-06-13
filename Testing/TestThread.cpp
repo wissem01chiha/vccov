@@ -22,13 +22,10 @@
 
 namespace TestCoverageConsole
 {
-	//-----------------------------------------------------------------------------
-	void RunThread()
-	{
-		std::thread t([]()
-		{
-			int answer = 42;
-		});
-		t.join();
-	}
-}
+    //-----------------------------------------------------------------------------
+    void RunThread()
+    {
+        std::thread t([]() { int answer = 42; });
+        t.join();
+    }
+} // namespace TestCoverageConsole

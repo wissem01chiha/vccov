@@ -27,26 +27,23 @@ namespace fs = std::filesystem;
 
 namespace CppCoverageTest
 {
-	//---------------------------------------------------------------------
-	TEST(CppCliTest, ManagedUnManagedModule)
-	{
-		auto vsPath = TestHelper::GetVisualStudioPath();
-		fs::path vsConsoleTestPath = vsPath / "Common7" / "IDE" /
-		                             "CommonExtensions" / "Microsoft" /
-		                             "TestWindow" / "vstest.console.exe";
-		auto testCppCliPath = (fs::path{OUT_DIR} / "DefaultTest.dll").wstring();
-		auto sharedLibModulePath = TestCoverageSharedLib::GetOutputBinaryPath();
+    //---------------------------------------------------------------------
+    TEST(CppCliTest, ManagedUnManagedModule)
+    {
+        auto     vsPath            = TestHelper::GetVisualStudioPath();
+        fs::path vsConsoleTestPath = vsPath / "Common7" / "IDE" / "CommonExtensions" / "Microsoft" /
+                                     "TestWindow" / "vstest.console.exe";
+        auto testCppCliPath      = (fs::path{ OUT_DIR } / "DefaultTest.dll").wstring();
+        auto sharedLibModulePath = TestCoverageSharedLib::GetOutputBinaryPath();
 
-		TestTools::CoverageArgs coverageArgs(
-		    {testCppCliPath}, testCppCliPath, L"None");
-		coverageArgs.modulePatternCollection_.push_back(
-		    sharedLibModulePath.wstring());
-		coverageArgs.programToRun_ = vsConsoleTestPath;
+        TestTools::CoverageArgs coverageArgs({ testCppCliPath }, testCppCliPath, L"None");
+        coverageArgs.modulePatternCollection_.push_back(sharedLibModulePath.wstring());
+        coverageArgs.programToRun_ = vsConsoleTestPath;
 
-		auto coverage = TestTools::ComputeCoverageDataPatterns(coverageArgs);
-		ASSERT_EQ(0, coverage.GetExitCode());
-		const auto& modules = coverage.GetModules();
-		ASSERT_EQ(1, modules.size());
-		ASSERT_EQ(sharedLibModulePath, modules.at(0)->GetPath());
-	}
-}
+        auto coverage = TestTools::ComputeCoverageDataPatterns(coverageArgs);
+        ASSERT_EQ(0, coverage.GetExitCode());
+        const auto& modules = coverage.GetModules();
+        ASSERT_EQ(1, modules.size());
+        ASSERT_EQ(sharedLibModulePath, modules.at(0)->GetPath());
+    }
+} // namespace CppCoverageTest

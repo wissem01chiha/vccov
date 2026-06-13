@@ -16,17 +16,18 @@
 
 #pragma once
 
-#include <windows.h>
-#include <unordered_set>
 #include "FilterExport.h"
+#include <unordered_set>
+#include <windows.h>
 
 namespace FileFilter
 {
-	class VCOV_FILTEREXPORT_DLL IRelocationsExtractor
-	{
-	public:
-		~IRelocationsExtractor() {}
-		virtual std::unordered_set<DWORD64>
-		Extract(HANDLE hProcess, DWORD64 baseOfImage) const = 0;
-	};
-}
+    class VCOV_FILTEREXPORT_DLL IRelocationsExtractor
+    {
+      public:
+        ~IRelocationsExtractor()
+        {
+        }
+        virtual std::unordered_set<DWORD64> Extract(HANDLE hProcess, DWORD64 baseOfImage) const = 0;
+    };
+} // namespace FileFilter

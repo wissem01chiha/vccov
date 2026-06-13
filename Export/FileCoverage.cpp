@@ -16,67 +16,66 @@
 
 #include "FileCoverage.hpp"
 #include "LineCoverage.hpp"
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace Plugin
 {
-	//-------------------------------------------------------------------------
-	FileCoverage::FileCoverage(const std::filesystem::path& path)
-		: path_(path)
-	{
-	}
+    //-------------------------------------------------------------------------
+    FileCoverage::FileCoverage(const std::filesystem::path& path) : path_(path)
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	void FileCoverage::AddLine(unsigned int lineNumber, bool hasBeenExecuted)
-	{
-		LineCoverage line{ lineNumber, hasBeenExecuted };
+    //-------------------------------------------------------------------------
+    void FileCoverage::AddLine(unsigned int lineNumber, bool hasBeenExecuted)
+    {
+        LineCoverage line{ lineNumber, hasBeenExecuted };
 
-		if (!lines_.emplace(lineNumber, line).second)
-		{
-			throw std::runtime_error("Line " + std::to_string(lineNumber) +
-				" already exists for " + path_.string());
-		}
-	}
+        if (!lines_.emplace(lineNumber, line).second)
+        {
+            throw std::runtime_error("Line " + std::to_string(lineNumber) + " already exists for " +
+                                     path_.string());
+        }
+    }
 
-	//-------------------------------------------------------------------------
-	void FileCoverage::UpdateLine(unsigned int lineNumber, bool hasBeenExecuted)
-	{
-		if (!lines_.erase(lineNumber))
-		{
-			throw std::runtime_error(
-			    "Line " + std::to_string(lineNumber) +
-			    " does not exists and cannot be updated for " + path_.string());
-		}
+    //-------------------------------------------------------------------------
+    void FileCoverage::UpdateLine(unsigned int lineNumber, bool hasBeenExecuted)
+    {
+        if (!lines_.erase(lineNumber))
+        {
+            throw std::runtime_error("Line " + std::to_string(lineNumber) +
+                                     " does not exists and cannot be updated for " +
+                                     path_.string());
+        }
 
-		AddLine(lineNumber, hasBeenExecuted);
-	}
+        AddLine(lineNumber, hasBeenExecuted);
+    }
 
-	//-------------------------------------------------------------------------
-	const std::filesystem::path& FileCoverage::GetPath() const
-	{
-		return path_;
-	}
+    //-------------------------------------------------------------------------
+    const std::filesystem::path& FileCoverage::GetPath() const
+    {
+        return path_;
+    }
 
-	//-------------------------------------------------------------------------
-	const LineCoverage* FileCoverage::operator[](unsigned int line) const
-	{
-		auto it = lines_.find(line);
+    //-------------------------------------------------------------------------
+    const LineCoverage* FileCoverage::operator[](unsigned int line) const
+    {
+        auto it = lines_.find(line);
 
-		if (it == lines_.end())
-			return 0;
+        if (it == lines_.end())
+            return 0;
 
-		return &it->second;
-	}
-		
-	//-------------------------------------------------------------------------
-	std::vector<LineCoverage> FileCoverage::GetLines() const
-	{
-		std::vector<LineCoverage> lines;
-		
-		for (const auto& pair : lines_)
-			lines.push_back(pair.second);
-		
-		return lines;
-	}	
-}
+        return &it->second;
+    }
+
+    //-------------------------------------------------------------------------
+    std::vector<LineCoverage> FileCoverage::GetLines() const
+    {
+        std::vector<LineCoverage> lines;
+
+        for (const auto& pair : lines_)
+            lines.push_back(pair.second);
+
+        return lines;
+    }
+} // namespace Plugin

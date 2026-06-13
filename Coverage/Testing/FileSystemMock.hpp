@@ -20,11 +20,10 @@
 
 namespace CppCoverageTest
 {
-	class FileSystemMock : public CppCoverage::IFileSystem
-	{
-	  public:
-		MOCK_CONST_METHOD1(
-		    GetLastWriteTime,
-		    boost::optional<std::filesystem::file_time_type>(const std::filesystem::path&));
-	};
-}
+    class FileSystemMock : public CppCoverage::IFileSystem
+    {
+      public:
+        MOCK_CONST_METHOD1(GetLastWriteTime, boost::optional<std::filesystem::file_time_type>(
+                                                 const std::filesystem::path&));
+    };
+} // namespace CppCoverageTest

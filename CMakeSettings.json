@@ -1,17 +1,21 @@
-﻿{
-  "configurations": [
-    {
-      "buildRoot": "${projectDir}\\build\\${name}",
-      "cmakeCommandArgs": "",
-      "cmakeGeneratorPlatform": "x64",
-      "cmakeToolchain": "C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake",
-      "configurationType": "Debug",
-      "ctestCommandArgs": "",
-      "inheritEnvironments": [ "msvc_x64" ],
-      "generator": "Visual Studio 17 2022",
-      "installRoot": "${projectDir}\\build\\install\\${name}",
-      "name": "x64-Debug",
-      "buildCommandArgs": ""
-    }
-  ]
+﻿
+{
+    "configurations": [
+        {
+            "buildRoot": "${projectDir}\\build\\${name}",
+            "cmakeCommandArgs": "",
+            "cmakeGeneratorPlatform": "x64",
+            "cmakeToolchain":
+                "C:/Program Files/Microsoft Visual Studio/18/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake",
+            "configurationType": "Debug",
+            "ctestCommandArgs": "",
+            "inheritEnvironments": [
+                "msvc_x64"
+            ],
+            "generator": "Visual Studio 17 2022",
+            "installRoot": "${projectDir}\\build\\install\\${name}",
+            "name": "x64-Debug",
+            "buildCommandArgs": ""
+        }
+    ]
 }

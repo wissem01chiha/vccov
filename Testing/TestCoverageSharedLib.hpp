@@ -20,29 +20,29 @@
 
 namespace TestCoverageSharedLib
 {
-	__declspec(dllexport) std::filesystem::path GetMainCppPath();
-	__declspec(dllexport) std::filesystem::path GetOutputBinaryPath();
-	__declspec(dllexport) bool IsOdd(int n);
+    __declspec(dllexport) std::filesystem::path GetMainCppPath();
+    __declspec(dllexport) std::filesystem::path GetOutputBinaryPath();
+    __declspec(dllexport) bool IsOdd(int n);
 
-	__declspec(dllexport) void CallSharedFunctionFromSharedLib();
+    __declspec(dllexport) void CallSharedFunctionFromSharedLib();
 
-	//-------------------------------------------------------------------------
-	inline std::filesystem::path GetSharedFunctionFilename()
-	{
-		return std::filesystem::path(__FILE__).filename();
-	}
+    //-------------------------------------------------------------------------
+    inline std::filesystem::path GetSharedFunctionFilename()
+    {
+        return std::filesystem::path(__FILE__).filename();
+    }
 
-	//-------------------------------------------------------------------------
-	inline int GetSharedFunctionLine()
-	{
-		return __LINE__ + 4;
-	}
+    //-------------------------------------------------------------------------
+    inline int GetSharedFunctionLine()
+    {
+        return __LINE__ + 4;
+    }
 
-	//-------------------------------------------------------------------------
-	inline bool SharedFunction(bool calledFromSharedLib)
-	{
-		if (calledFromSharedLib)
-			return true;
-		return false;
-	}
-}
+    //-------------------------------------------------------------------------
+    inline bool SharedFunction(bool calledFromSharedLib)
+    {
+        if (calledFromSharedLib)
+            return true;
+        return false;
+    }
+} // namespace TestCoverageSharedLib

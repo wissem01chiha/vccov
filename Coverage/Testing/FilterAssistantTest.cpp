@@ -17,83 +17,79 @@
 #include "stdafx.h"
 
 #include "CppCoverage/FilterAssistant.hpp"
+#include "FileSystemMock.hpp"
 #include <boost/optional/optional.hpp>
 #include <filesystem>
-#include "FileSystemMock.hpp"
 
 namespace cov = CppCoverage;
 using namespace testing;
 
 namespace
 {
-	//-------------------------------------------------------------------------
-	struct Params
-	{
-		void (cov::FilterAssistant::*onNewFile)(const std::filesystem::path&,
-		                                        bool);
-		boost::optional<std::filesystem::path> (
-		    cov::FilterAssistant::*computeSuggestedFilter)() const;
-	};
-}
+    //-------------------------------------------------------------------------
+    struct Params
+    {
+        void (cov::FilterAssistant::*onNewFile)(const std::filesystem::path&, bool);
+        boost::optional<std::filesystem::path> (
+            cov::FilterAssistant::*computeSuggestedFilter)() const;
+    };
+} // namespace
 
 namespace CppCoverageTest
 {
-	//-------------------------------------------------------------------------
-	struct FilterAssistantTest : public TestWithParam<Params>
-	{
-		//---------------------------------------------------------------------
-		FilterAssistantTest() : fileSystem_{std::make_shared<FileSystemMock>()}
-		{
-			filterAssistant_ = std::make_unique<cov::FilterAssistant>(
-			    std::shared_ptr<cov::IFileSystem>{fileSystem_});
-		}
+    //-------------------------------------------------------------------------
+    struct FilterAssistantTest : public TestWithParam<Params>
+    {
+        //---------------------------------------------------------------------
+        FilterAssistantTest() : fileSystem_{ std::make_shared<FileSystemMock>() }
+        {
+            filterAssistant_ = std::make_unique<cov::FilterAssistant>(
+                std::shared_ptr<cov::IFileSystem>{ fileSystem_ });
+        }
 
-		//---------------------------------------------------------------------
-		void AddFile(const std::filesystem::path& path,
-					 int time,
-		             bool isSelected)
-		{
-			EXPECT_CALL(*fileSystem_, GetLastWriteTime(path))
-			    .WillRepeatedly(Return(std::filesystem::file_time_type(std::chrono::seconds(time))));
-			(*filterAssistant_.*GetParam().onNewFile)(path, isSelected);
-		}
+        //---------------------------------------------------------------------
+        void AddFile(const std::filesystem::path& path, int time, bool isSelected)
+        {
+            EXPECT_CALL(*fileSystem_, GetLastWriteTime(path))
+                .WillRepeatedly(
+                    Return(std::filesystem::file_time_type(std::chrono::seconds(time))));
+            (*filterAssistant_.*GetParam().onNewFile)(path, isSelected);
+        }
 
-		//---------------------------------------------------------------------
-		boost::optional<std::filesystem::path> ComputeSuggestedFilter() const
-		{
-			return (*filterAssistant_.*GetParam().computeSuggestedFilter)();
-		}
+        //---------------------------------------------------------------------
+        boost::optional<std::filesystem::path> ComputeSuggestedFilter() const
+        {
+            return (*filterAssistant_.*GetParam().computeSuggestedFilter)();
+        }
 
-	  private:
-		std::shared_ptr<FileSystemMock> fileSystem_;
-		std::unique_ptr<cov::FilterAssistant> filterAssistant_;
-	};
+      private:
+        std::shared_ptr<FileSystemMock>       fileSystem_;
+        std::unique_ptr<cov::FilterAssistant> filterAssistant_;
+    };
 
-	//-------------------------------------------------------------------------
-	TEST_P(FilterAssistantTest, ComputeSuggestSourceFile)
-	{
-		ASSERT_EQ(boost::none, ComputeSuggestedFilter());
+    //-------------------------------------------------------------------------
+    TEST_P(FilterAssistantTest, ComputeSuggestSourceFile)
+    {
+        ASSERT_EQ(boost::none, ComputeSuggestedFilter());
 
-		AddFile("folder1/file1", 1, false);
-		AddFile("folder3/file3", 3, false);
-		AddFile("folder2/file2", 2, false);
+        AddFile("folder1/file1", 1, false);
+        AddFile("folder3/file3", 3, false);
+        AddFile("folder2/file2", 2, false);
 
-		auto suggestedFile = ComputeSuggestedFilter();
-		ASSERT_TRUE(suggestedFile);
-		ASSERT_EQ(L"folder3", suggestedFile->wstring());
+        auto suggestedFile = ComputeSuggestedFilter();
+        ASSERT_TRUE(suggestedFile);
+        ASSERT_EQ(L"folder3", suggestedFile->wstring());
 
-		AddFile("file4", 2, true);
-		AddFile("file5", 2, false);
-		ASSERT_EQ(boost::none, ComputeSuggestedFilter());
-	}
+        AddFile("file4", 2, true);
+        AddFile("file5", 2, false);
+        ASSERT_EQ(boost::none, ComputeSuggestedFilter());
+    }
 
-	//-------------------------------------------------------------------------
-	INSTANTIATE_TEST_SUITE_P(
-	    FilterAssistantTest,
-	    FilterAssistantTest,
-	    ::testing::Values(
-	        Params{&cov::FilterAssistant::OnNewModule,
-	               &cov::FilterAssistant::ComputeSuggestedModuleFilter},
-	        Params{&cov::FilterAssistant::OnNewSourceFile,
-	               &cov::FilterAssistant::ComputeSuggestedSourceFileFilter}));
-}
+    //-------------------------------------------------------------------------
+    INSTANTIATE_TEST_SUITE_P(
+        FilterAssistantTest, FilterAssistantTest,
+        ::testing::Values(Params{ &cov::FilterAssistant::OnNewModule,
+                                  &cov::FilterAssistant::ComputeSuggestedModuleFilter },
+                          Params{ &cov::FilterAssistant::OnNewSourceFile,
+                                  &cov::FilterAssistant::ComputeSuggestedSourceFileFilter }));
+} // namespace CppCoverageTest

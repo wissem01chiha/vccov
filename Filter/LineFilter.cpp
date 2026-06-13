@@ -14,89 +14,82 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "FileInfo.hpp"
 #include "LineFilter.hpp"
+#include "FileInfo.hpp"
 #include "LineInfo.hpp"
 #include "Log.hpp"
 #include "MappedFile.hpp"
-#include "stdafx.h"
 #include "Tool.hpp"
+#include "stdafx.h"
 
 namespace FileFilter
 {
-	//-------------------------------------------------------------------------
-	LineFilter::LineFilter(
-		const std::vector<std::wstring>& excludedLineRegexes,
-		bool enableLog)
-		: fileReadCount_{0}
-		, enableLog_{ enableLog }
-	{
-		for (const auto& regex : excludedLineRegexes)
-			excludedLineRegexes_.emplace_back(Tools::ToLocalString(regex));
-	}
+    //-------------------------------------------------------------------------
+    LineFilter::LineFilter(const std::vector<std::wstring>& excludedLineRegexes, bool enableLog)
+        : fileReadCount_{ 0 }, enableLog_{ enableLog }
+    {
+        for (const auto& regex : excludedLineRegexes)
+            excludedLineRegexes_.emplace_back(Tools::ToLocalString(regex));
+    }
 
-	//-------------------------------------------------------------------------
-	bool LineFilter::IsLineSelected(
-		const FileInfo& fileInfo,
-		const LineInfo& lineInfo)
-	{
-		return IsLineSelected(fileInfo.filePath_, lineInfo.lineNumber_);
-	}
+    //-------------------------------------------------------------------------
+    bool LineFilter::IsLineSelected(const FileInfo& fileInfo, const LineInfo& lineInfo)
+    {
+        return IsLineSelected(fileInfo.filePath_, lineInfo.lineNumber_);
+    }
 
-	//-------------------------------------------------------------------------
-	LineFilter::~LineFilter() = default;
+    //-------------------------------------------------------------------------
+    LineFilter::~LineFilter() = default;
 
-	//-------------------------------------------------------------------------
-	bool LineFilter::IsLineSelected(
-		const std::filesystem::path& filePath, 
-		int lineNumber)
-	{
-		const auto* lines = GetLines(filePath);
+    //-------------------------------------------------------------------------
+    bool LineFilter::IsLineSelected(const std::filesystem::path& filePath, int lineNumber)
+    {
+        const auto* lines = GetLines(filePath);
 
-		if (!lines)
-			return true;
-	
-		if (lineNumber <= 0 || lineNumber > static_cast<int>(lines->size()))
-		{
-			if (enableLog_)
-				LOG_DEBUG << filePath.wstring() << L" line " << lineNumber << L" does not exist, skipped";
-			return false;
-		}
+        if (!lines)
+            return true;
 
-		const auto& line = (*lines)[lineNumber - 1];
-		return IsLineSelected(line);
-	}
+        if (lineNumber <= 0 || lineNumber > static_cast<int>(lines->size()))
+        {
+            if (enableLog_)
+                LOG_DEBUG << filePath.wstring() << L" line " << lineNumber
+                          << L" does not exist, skipped";
+            return false;
+        }
 
-	//-------------------------------------------------------------------------
-	bool LineFilter::IsLineSelected(const std::string& line) const
-	{
-		for (const auto& excludedRegex : excludedLineRegexes_)
-		{
-			if (std::regex_match(line, excludedRegex))
-				return false;
-		}
+        const auto& line = (*lines)[lineNumber - 1];
+        return IsLineSelected(line);
+    }
 
-		return true;
-	}
+    //-------------------------------------------------------------------------
+    bool LineFilter::IsLineSelected(const std::string& line) const
+    {
+        for (const auto& excludedRegex : excludedLineRegexes_)
+        {
+            if (std::regex_match(line, excludedRegex))
+                return false;
+        }
 
-	//-------------------------------------------------------------------------
-	const std::vector<std::string>* LineFilter::GetLines(
-		const std::filesystem::path& path)
-	{
-		if (path != filePath_)
-		{
-			mappedFileForFilePath_ = Tools::MappedFile::TryCreate(path);
-			if (mappedFileForFilePath_)
-				++fileReadCount_;
-			filePath_ = path;
-		}
+        return true;
+    }
 
-		return mappedFileForFilePath_ ? &mappedFileForFilePath_->GetLines() : nullptr;
-	}
+    //-------------------------------------------------------------------------
+    const std::vector<std::string>* LineFilter::GetLines(const std::filesystem::path& path)
+    {
+        if (path != filePath_)
+        {
+            mappedFileForFilePath_ = Tools::MappedFile::TryCreate(path);
+            if (mappedFileForFilePath_)
+                ++fileReadCount_;
+            filePath_ = path;
+        }
 
-	//-------------------------------------------------------------------------
-	int LineFilter::GetFileReadCount() const
-	{
-		return fileReadCount_;
-	}
-}
+        return mappedFileForFilePath_ ? &mappedFileForFilePath_->GetLines() : nullptr;
+    }
+
+    //-------------------------------------------------------------------------
+    int LineFilter::GetFileReadCount() const
+    {
+        return fileReadCount_;
+    }
+} // namespace FileFilter

@@ -14,319 +14,308 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "CppCoverageException.hpp"
 #include "DebugInformationEnumerator.hpp"
+#include "CppCoverageException.hpp"
 #include "Log.hpp"
 #include "stdafx.h"
+#include <Windows.h>
 #include <atlbase.h>
 #include <boost/algorithm/string.hpp>
 #include <dia2.h>
 #include <diacreate.h>
 #include <filesystem>
-#include <Windows.h>
 
 namespace CppCoverage
 {
 
-		//----------------------------------------------------------------------
-		class VCOV_COREEXPORT_DLL DiaString
-		{
-		  public:
-			DiaString() = default;
-			DiaString(const DiaString&) = delete;
-			DiaString(DiaString&&) = delete;
+    //----------------------------------------------------------------------
+    class VCOV_COREEXPORT_DLL DiaString
+    {
+      public:
+        DiaString()                 = default;
+        DiaString(const DiaString&) = delete;
+        DiaString(DiaString&&)      = delete;
 
-			DiaString& operator=(const DiaString&) = delete;
-			DiaString& operator=(DiaString&&) = delete;
+        DiaString& operator=(const DiaString&) = delete;
+        DiaString& operator=(DiaString&&)      = delete;
 
-			~DiaString()
-			{
-				ReleaseMemory();
-			}
+        ~DiaString()
+        {
+            ReleaseMemory();
+        }
 
-			BSTR* operator&()
-			{
-				ReleaseMemory();
-				return &str_;
-			}
+        BSTR* operator&()
+        {
+            ReleaseMemory();
+            return &str_;
+        }
 
-			operator std::wstring() const
-			{
-				if (!str_)
-					return L"";
-				return str_;
-			}
+        operator std::wstring() const
+        {
+            if (!str_)
+                return L"";
+            return str_;
+        }
 
-		  private:
-			void ReleaseMemory()
-			{
-				if (str_ != nullptr)
-				{
-					// Cannot call SysFreeString as dia generated invalid BSTR
-					// for x64.
-					LocalFree(str_ - 2);
-					str_ = nullptr;
-				}
-			}
+      private:
+        void ReleaseMemory()
+        {
+            if (str_ != nullptr)
+            {
+                // Cannot call SysFreeString as dia generated invalid BSTR
+                // for x64.
+                LocalFree(str_ - 2);
+                str_ = nullptr;
+            }
+        }
 
-			BSTR str_ = nullptr;
-		};
+        BSTR str_ = nullptr;
+    };
 
-		//----------------------------------------------------------------------
-		template <typename Value, typename Collection, typename Fct>
-		VCOV_COREEXPORT_DLL void EnumerateCollection(Collection& collection, Fct fct)
-		{
-			CComPtr<Value> value;
-			ULONG celtFetched;
-			while (collection.Next(1, &value, &celtFetched) == S_OK &&
-			       celtFetched == 1 && value != nullptr)
-			{
-				fct(*value);
-				value = nullptr;
-			}
-		}
+    //----------------------------------------------------------------------
+    template <typename Value, typename Collection, typename Fct>
+    VCOV_COREEXPORT_DLL void EnumerateCollection(Collection& collection, Fct fct)
+    {
+        CComPtr<Value> value;
+        ULONG          celtFetched;
+        while (collection.Next(1, &value, &celtFetched) == S_OK && celtFetched == 1 &&
+               value != nullptr)
+        {
+            fct(*value);
+            value = nullptr;
+        }
+    }
 
-		//----------------------------------------------------------------------
-		VCOV_COREEXPORT_DLL CComPtr<IDiaEnumSourceFiles> GetEnumSourceFiles(IDiaSession& session)
-		{
-			CComPtr<IDiaEnumTables> tables;
-			if (session.getEnumTables(&tables) != S_OK || !tables)
-				THROW("DIA: Cannot get tables");
+    //----------------------------------------------------------------------
+    VCOV_COREEXPORT_DLL CComPtr<IDiaEnumSourceFiles> GetEnumSourceFiles(IDiaSession& session)
+    {
+        CComPtr<IDiaEnumTables> tables;
+        if (session.getEnumTables(&tables) != S_OK || !tables)
+            THROW("DIA: Cannot get tables");
 
-			CComPtr<IDiaEnumSourceFiles> sourceFiles;
+        CComPtr<IDiaEnumSourceFiles> sourceFiles;
 
-			EnumerateCollection<IDiaTable>(*tables, [&](IDiaTable& table) {
-				if (!sourceFiles)
-				{
-					CComPtr<IDiaEnumSourceFiles> currentSourceFiles;
-					if (table.QueryInterface(_uuidof(IDiaEnumSourceFiles),
-					                         (void**)&currentSourceFiles) ==
-					    S_OK)
-					{
-						sourceFiles = currentSourceFiles;
-					}
-				}
-			});
+        EnumerateCollection<IDiaTable>(
+            *tables,
+            [&](IDiaTable& table)
+            {
+                if (!sourceFiles)
+                {
+                    CComPtr<IDiaEnumSourceFiles> currentSourceFiles;
+                    if (table.QueryInterface(_uuidof(IDiaEnumSourceFiles),
+                                             (void**)&currentSourceFiles) == S_OK)
+                    {
+                        sourceFiles = currentSourceFiles;
+                    }
+                }
+            });
 
-			return sourceFiles;
-		}
+        return sourceFiles;
+    }
 
-		//----------------------------------------------------------------------
-		struct VCOV_COREEXPORT_DLL DiaLoadCallback : public IDiaLoadCallback
-		{
-			//------------------------------------------------------------------
-			HRESULT STDMETHODCALLTYPE QueryInterface(
-			    REFIID riid,
-			    _COM_Outptr_ void __RPC_FAR* __RPC_FAR* ppvObject) override
-			{
-				if (!ppvObject)
-					return E_POINTER;
+    //----------------------------------------------------------------------
+    struct VCOV_COREEXPORT_DLL DiaLoadCallback : public IDiaLoadCallback
+    {
+        //------------------------------------------------------------------
+        HRESULT STDMETHODCALLTYPE
+        QueryInterface(REFIID riid, _COM_Outptr_ void __RPC_FAR* __RPC_FAR* ppvObject) override
+        {
+            if (!ppvObject)
+                return E_POINTER;
 
-				if (riid == IID_IDiaLoadCallback)
-				{
-					*ppvObject = this;
-					return S_OK;
-				}
+            if (riid == IID_IDiaLoadCallback)
+            {
+                *ppvObject = this;
+                return S_OK;
+            }
 
-				return E_NOINTERFACE;
-			}
+            return E_NOINTERFACE;
+        }
 
-			//------------------------------------------------------------------
-			ULONG STDMETHODCALLTYPE AddRef() override
-			{
-				return 1; // On stack
-			}
+        //------------------------------------------------------------------
+        ULONG STDMETHODCALLTYPE AddRef() override
+        {
+            return 1; // On stack
+        }
 
-			//------------------------------------------------------------------
-			ULONG STDMETHODCALLTYPE Release() override
-			{
-				return 1; // On stack
-			}
+        //------------------------------------------------------------------
+        ULONG STDMETHODCALLTYPE Release() override
+        {
+            return 1; // On stack
+        }
 
-			//------------------------------------------------------------------
-			HRESULT STDMETHODCALLTYPE NotifyDebugDir(BOOL fExecutable,
-			                                         DWORD cbData,
-			                                         BYTE* pbData) override
-			{
-				return S_OK;
-			}
+        //------------------------------------------------------------------
+        HRESULT STDMETHODCALLTYPE NotifyDebugDir(BOOL fExecutable, DWORD cbData,
+                                                 BYTE* pbData) override
+        {
+            return S_OK;
+        }
 
-			//------------------------------------------------------------------
-			HRESULT STDMETHODCALLTYPE NotifyOpenDBG(LPCOLESTR dbgPath,
-			                                        HRESULT resultCode) override
-			{
-				return S_OK;
-			}
+        //------------------------------------------------------------------
+        HRESULT STDMETHODCALLTYPE NotifyOpenDBG(LPCOLESTR dbgPath, HRESULT resultCode) override
+        {
+            return S_OK;
+        }
 
-			//------------------------------------------------------------------
-			HRESULT STDMETHODCALLTYPE NotifyOpenPDB(LPCOLESTR pdbPath,
-			                                        HRESULT resultCode) override
-			{
-				LOG_DEBUG << "Try to load pdb from " << pdbPath << ": "
-				          << (resultCode == S_OK ? "Success" : "Failed");
-				return S_OK;
-			}
+        //------------------------------------------------------------------
+        HRESULT STDMETHODCALLTYPE NotifyOpenPDB(LPCOLESTR pdbPath, HRESULT resultCode) override
+        {
+            LOG_DEBUG << "Try to load pdb from " << pdbPath << ": "
+                      << (resultCode == S_OK ? "Success" : "Failed");
+            return S_OK;
+        }
 
-			//------------------------------------------------------------------
-			HRESULT STDMETHODCALLTYPE RestrictRegistryAccess() override
-			{
-				return S_OK;
-			}
+        //------------------------------------------------------------------
+        HRESULT STDMETHODCALLTYPE RestrictRegistryAccess() override
+        {
+            return S_OK;
+        }
 
-			//------------------------------------------------------------------
-			HRESULT STDMETHODCALLTYPE RestrictSymbolServerAccess() override
-			{
-				return S_OK;
-			}
-		};
+        //------------------------------------------------------------------
+        HRESULT STDMETHODCALLTYPE RestrictSymbolServerAccess() override
+        {
+            return S_OK;
+        }
+    };
 
-		//----------------------------------------------------------------------
-		CComPtr<IDiaDataSource>
-		LoadDataForExe(const std::filesystem::path& path)
-		{
-			CComPtr<IDiaDataSource> sourcePtr;
+    //----------------------------------------------------------------------
+    CComPtr<IDiaDataSource> LoadDataForExe(const std::filesystem::path& path)
+    {
+        CComPtr<IDiaDataSource> sourcePtr;
 
-			auto msDia = L"msdia140.dll";
-			if (NoRegCoCreate(msDia,
-			                  _uuidof(DiaSourceAlt),
-			                  _uuidof(IDiaDataSource),
-			                  (void**)&sourcePtr) != S_OK)
-			{
-				THROW(std::wstring(L"DIA: Cannot register dia. Make sure ") +
-				      msDia + L" is in the current directory.");
-			}
+        auto msDia = L"msdia140.dll";
+        if (NoRegCoCreate(msDia, _uuidof(DiaSourceAlt), _uuidof(IDiaDataSource),
+                          (void**)&sourcePtr) != S_OK)
+        {
+            THROW(std::wstring(L"DIA: Cannot register dia. Make sure ") + msDia +
+                  L" is in the current directory.");
+        }
 
-			DiaLoadCallback diaLoadCallback;
-			if (!sourcePtr ||
-			    sourcePtr->loadDataForExe(
-			        path.wstring().c_str(), nullptr, &diaLoadCallback) != S_OK)
-			{
-				return nullptr;
-			}
-			return sourcePtr;
-		}
+        DiaLoadCallback diaLoadCallback;
+        if (!sourcePtr ||
+            sourcePtr->loadDataForExe(path.wstring().c_str(), nullptr, &diaLoadCallback) != S_OK)
+        {
+            return nullptr;
+        }
+        return sourcePtr;
+    }
 
-	//--------------------------------------------------------------------------
-	DebugInformationEnumerator::DebugInformationEnumerator(
-	    const std::vector<SubstitutePdbSourcePath>& substitutePdbSourcePaths)
-		: substitutePdbSourcePaths_{ substitutePdbSourcePaths }
-	{
-	}
+    //--------------------------------------------------------------------------
+    DebugInformationEnumerator::DebugInformationEnumerator(
+        const std::vector<SubstitutePdbSourcePath>& substitutePdbSourcePaths)
+        : substitutePdbSourcePaths_{ substitutePdbSourcePaths }
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	bool
-	DebugInformationEnumerator::Enumerate(const std::filesystem::path& path,
-	                                      IDebugInformationHandler& handler)
-	{
-		auto sourcePtr = LoadDataForExe(path);
+    //-------------------------------------------------------------------------
+    bool DebugInformationEnumerator::Enumerate(const std::filesystem::path& path,
+                                               IDebugInformationHandler&    handler)
+    {
+        auto sourcePtr = LoadDataForExe(path);
 
-		if (!sourcePtr)
-			return false;
+        if (!sourcePtr)
+            return false;
 
-		CComPtr<IDiaSession> sessionPtr;
-		if (sourcePtr->openSession(&sessionPtr) != S_OK || !sessionPtr)
-			THROW("DIA: Cannot open session.");
+        CComPtr<IDiaSession> sessionPtr;
+        if (sourcePtr->openSession(&sessionPtr) != S_OK || !sessionPtr)
+            THROW("DIA: Cannot open session.");
 
-		auto sourceFiles = GetEnumSourceFiles(*sessionPtr);
-		if (!sourceFiles)
-			THROW("DIA: cannot get SourceFiles");
+        auto sourceFiles = GetEnumSourceFiles(*sessionPtr);
+        if (!sourceFiles)
+            THROW("DIA: cannot get SourceFiles");
 
-		EnumerateCollection<IDiaSourceFile>(
-		    *sourceFiles, [&](IDiaSourceFile& sourceFile) {
-			    auto filename = GetSourceFileName(sourceFile);
-			    if (handler.IsSourceFileSelected(filename))
-			    {
-				    lines_.clear();
-				    EnumLines(*sessionPtr, sourceFile, handler);
-				    handler.OnSourceFile(filename, lines_);
-			    }
-		    });
-		return true;
-	}
+        EnumerateCollection<IDiaSourceFile>(*sourceFiles,
+                                            [&](IDiaSourceFile& sourceFile)
+                                            {
+                                                auto filename = GetSourceFileName(sourceFile);
+                                                if (handler.IsSourceFileSelected(filename))
+                                                {
+                                                    lines_.clear();
+                                                    EnumLines(*sessionPtr, sourceFile, handler);
+                                                    handler.OnSourceFile(filename, lines_);
+                                                }
+                                            });
+        return true;
+    }
 
-	//----------------------------------------------------------------------
-	void
-	DebugInformationEnumerator::EnumLines(IDiaSession& session,
-	                                      IDiaSourceFile& sourceFile,
-	                                      IDebugInformationHandler& handler)
-	{
-		CComPtr<IDiaEnumSymbols> symbols;
-		if (sourceFile.get_compilands(&symbols) != S_OK || !symbols)
-			THROW("DIA: Cannot get compilands");
+    //----------------------------------------------------------------------
+    void DebugInformationEnumerator::EnumLines(IDiaSession& session, IDiaSourceFile& sourceFile,
+                                               IDebugInformationHandler& handler)
+    {
+        CComPtr<IDiaEnumSymbols> symbols;
+        if (sourceFile.get_compilands(&symbols) != S_OK || !symbols)
+            THROW("DIA: Cannot get compilands");
 
-		EnumerateCollection<IDiaSymbol>(*symbols, [&](IDiaSymbol& symbol) {
-			CComPtr<IDiaEnumLineNumbers> lines;
+        EnumerateCollection<IDiaSymbol>(
+            *symbols,
+            [&](IDiaSymbol& symbol)
+            {
+                CComPtr<IDiaEnumLineNumbers> lines;
 
-			if (session.findLines(&symbol, &sourceFile, &lines) != S_OK ||
-			    !lines)
-			{
-				THROW("DIA: Cannot find lines");
-			}
+                if (session.findLines(&symbol, &sourceFile, &lines) != S_OK || !lines)
+                {
+                    THROW("DIA: Cannot find lines");
+                }
 
-			EnumerateCollection<IDiaLineNumber>(
-			    *lines, [&](IDiaLineNumber& lineNumber) {
-				    OnNewLine(session, lineNumber, handler);
-			    });
-		});
-	}
+                EnumerateCollection<IDiaLineNumber>(*lines, [&](IDiaLineNumber& lineNumber)
+                                                    { OnNewLine(session, lineNumber, handler); });
+            });
+    }
 
-	//----------------------------------------------------------------------
-	void
-	DebugInformationEnumerator::OnNewLine(IDiaSession& session,
-	                                      IDiaLineNumber& lineNumber,
-	                                      IDebugInformationHandler& handler)
-	{
-		DWORD linenum = 0;
-		if (lineNumber.get_lineNumber(&linenum) != S_OK)
-			THROW("DIA: Cannot get line number");
+    //----------------------------------------------------------------------
+    void DebugInformationEnumerator::OnNewLine(IDiaSession& session, IDiaLineNumber& lineNumber,
+                                               IDebugInformationHandler& handler)
+    {
+        DWORD linenum = 0;
+        if (lineNumber.get_lineNumber(&linenum) != S_OK)
+            THROW("DIA: Cannot get line number");
 
-		// Skip invalid lines
-		if (linenum != 0x00f00f00 && linenum != 0x00feefee)
-		{
-			ULONGLONG virtualAddress = 0;
-			if (lineNumber.get_virtualAddress(&virtualAddress) != S_OK)
-				THROW("DIA: Cannot get virtual address");
+        // Skip invalid lines
+        if (linenum != 0x00f00f00 && linenum != 0x00feefee)
+        {
+            ULONGLONG virtualAddress = 0;
+            if (lineNumber.get_virtualAddress(&virtualAddress) != S_OK)
+                THROW("DIA: Cannot get virtual address");
 
-			CComPtr<IDiaSymbol> symbol;
-			if (session.findSymbolByVA(
-			        virtualAddress, SymTagEnum::SymTagNull, &symbol) != S_OK ||
-			    !symbol)
-			{
-				THROW("DIA: Cannot find symbol");
-			}
+            CComPtr<IDiaSymbol> symbol;
+            if (session.findSymbolByVA(virtualAddress, SymTagEnum::SymTagNull, &symbol) != S_OK ||
+                !symbol)
+            {
+                THROW("DIA: Cannot find symbol");
+            }
 
-			unsigned long symIndex = 0;
-			if (symbol->get_symIndexId(&symIndex) != S_OK)
-				THROW("DIA: Cannot get symIndex");
+            unsigned long symIndex = 0;
+            if (symbol->get_symIndexId(&symIndex) != S_OK)
+                THROW("DIA: Cannot get symIndex");
 
-			lines_.emplace_back(linenum, virtualAddress, symIndex);
-		}
-	}
+            lines_.emplace_back(linenum, virtualAddress, symIndex);
+        }
+    }
 
-	//----------------------------------------------------------------------
-	std::filesystem::path DebugInformationEnumerator::GetSourceFileName(
-	    IDiaSourceFile& sourceFile) const
-	{
-		DiaString fileName;
-		if (sourceFile.get_fileName(&fileName) != S_OK)
-			THROW("DIA: Cannot get filename");
-		std::wstring filenameStr = fileName;
+    //----------------------------------------------------------------------
+    std::filesystem::path
+    DebugInformationEnumerator::GetSourceFileName(IDiaSourceFile& sourceFile) const
+    {
+        DiaString fileName;
+        if (sourceFile.get_fileName(&fileName) != S_OK)
+            THROW("DIA: Cannot get filename");
+        std::wstring filenameStr = fileName;
 
-		for (const auto& paths : substitutePdbSourcePaths_)
-		{
-			auto pdbStartPath = paths.GetPdbStartPath().wstring();
+        for (const auto& paths : substitutePdbSourcePaths_)
+        {
+            auto pdbStartPath = paths.GetPdbStartPath().wstring();
 
-			if (boost::istarts_with(filenameStr, pdbStartPath))
-			{
-				auto startIndex = pdbStartPath.size();
-				if (startIndex < filenameStr.size() && filenameStr[startIndex] == '\\')
-					++startIndex;
-				auto remainingPath = filenameStr.substr(startIndex);
-				filenameStr = (paths.GetLocalPath() / remainingPath).wstring();
-				break;
-			}
-		}
+            if (boost::istarts_with(filenameStr, pdbStartPath))
+            {
+                auto startIndex = pdbStartPath.size();
+                if (startIndex < filenameStr.size() && filenameStr[startIndex] == '\\')
+                    ++startIndex;
+                auto remainingPath = filenameStr.substr(startIndex);
+                filenameStr        = (paths.GetLocalPath() / remainingPath).wstring();
+                break;
+            }
+        }
 
-		return filenameStr;
-	}
-}
+        return filenameStr;
+    }
+} // namespace CppCoverage

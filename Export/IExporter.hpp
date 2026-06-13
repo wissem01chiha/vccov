@@ -16,29 +16,28 @@
 
 #pragma once
 
-#include <string>
-#include <vector>
 #include "ExportExport.h"
 #include <filesystem>
+#include <string>
+#include <vector>
 
 namespace Plugin
 {
-	class CoverageData;
+    class CoverageData;
 }
 
 namespace Exporter
 {
-	class  IExporter
-	{
-	public:
-		IExporter() = default;
+    class IExporter
+    {
+      public:
+        IExporter() = default;
 
-		virtual std::filesystem::path GetDefaultPath(const std::wstring& prefix) const = 0;
-		virtual void Export(const Plugin::CoverageData&, const std::filesystem::path& output) = 0;
+        virtual std::filesystem::path GetDefaultPath(const std::wstring& prefix) const        = 0;
+        virtual void Export(const Plugin::CoverageData&, const std::filesystem::path& output) = 0;
 
-	private:
-		IExporter(const IExporter&) = delete;
-		IExporter& operator=(const IExporter&) = delete;
-	};
-}
-
+      private:
+        IExporter(const IExporter&)            = delete;
+        IExporter& operator=(const IExporter&) = delete;
+    };
+} // namespace Exporter

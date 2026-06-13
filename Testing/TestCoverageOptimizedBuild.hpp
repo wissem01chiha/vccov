@@ -18,7 +18,7 @@
 
 namespace TestCoverageOptimizedBuild
 {
-	__declspec(dllexport) std::filesystem::path GetMainCppPath();
-	__declspec(dllexport) std::filesystem::path GetOutputBinaryPath();
-	__declspec(dllexport) void TestOptimizedBuild();
-}
+    __declspec(dllexport) std::filesystem::path GetMainCppPath();
+    __declspec(dllexport) std::filesystem::path GetOutputBinaryPath();
+    __declspec(dllexport) void TestOptimizedBuild();
+} // namespace TestCoverageOptimizedBuild

@@ -14,26 +14,29 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "UnifiedDiffParserException.hpp"
-#include "UnifiedDiffParser.hpp"
 #include "Tool.hpp"
+#include "UnifiedDiffParser.hpp"
+#include "stdafx.h"
 
 namespace FileFilter
 {
-	//-------------------------------------------------------------------------
-	const std::wstring UnifiedDiffParserException::ErrorContextHunks
-		= L"Context line count is not consistent with hunks differences.";
-	const std::wstring UnifiedDiffParserException::ErrorNoFilenameBeforeHunks
-		= L"No filename previously found.";
-	const std::wstring UnifiedDiffParserException::ErrorCannotReadLine
-		= L"Cannot read a new line. Expect a line starting with " + UnifiedDiffParser::ToFilePrefix + L'.';
-	const std::wstring UnifiedDiffParserException::ErrorExpectFromFilePrefix
-		= L"Invalid line. Expect a line starting with " + UnifiedDiffParser::ToFilePrefix + L'.';
-	const std::wstring UnifiedDiffParserException::ErrorInvalidHunks = L"Invalid hunks differences.";
+    //-------------------------------------------------------------------------
+    const std::wstring UnifiedDiffParserException::ErrorContextHunks =
+        L"Context line count is not consistent with hunks differences.";
+    const std::wstring UnifiedDiffParserException::ErrorNoFilenameBeforeHunks =
+        L"No filename previously found.";
+    const std::wstring UnifiedDiffParserException::ErrorCannotReadLine =
+        L"Cannot read a new line. Expect a line starting with " + UnifiedDiffParser::ToFilePrefix +
+        L'.';
+    const std::wstring UnifiedDiffParserException::ErrorExpectFromFilePrefix =
+        L"Invalid line. Expect a line starting with " + UnifiedDiffParser::ToFilePrefix + L'.';
+    const std::wstring UnifiedDiffParserException::ErrorInvalidHunks =
+        L"Invalid hunks differences.";
 
-	//-------------------------------------------------------------------------
-	UnifiedDiffParserException::UnifiedDiffParserException(const std::wstring& message)
-		: std::runtime_error(Tools::ToLocalString(message))
-	{}
-}
+    //-------------------------------------------------------------------------
+    UnifiedDiffParserException::UnifiedDiffParserException(const std::wstring& message)
+        : std::runtime_error(Tools::ToLocalString(message))
+    {
+    }
+} // namespace FileFilter

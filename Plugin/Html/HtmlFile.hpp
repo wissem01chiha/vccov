@@ -16,27 +16,24 @@
 
 #pragma once
 
-#include <filesystem>
 #include "HtmlExport.h"
+#include <filesystem>
 
 namespace Exporter
 {
-	class VCOV_HTMLEXPORT_DLL HtmlFile
-	{
-	public:
-		HtmlFile(
-			std::filesystem::path absolutePath,
-			std::filesystem::path relativeLinkPath);
-		HtmlFile(const HtmlFile&) = default;
+    class VCOV_HTMLEXPORT_DLL HtmlFile
+    {
+      public:
+        HtmlFile(std::filesystem::path absolutePath, std::filesystem::path relativeLinkPath);
+        HtmlFile(const HtmlFile&) = default;
 
-		const std::filesystem::path& GetAbsolutePath() const;
-		const std::filesystem::path& GetRelativeLinkPath() const;
+        const std::filesystem::path& GetAbsolutePath() const;
+        const std::filesystem::path& GetRelativeLinkPath() const;
 
-	private:		
-		HtmlFile& operator=(const HtmlFile&) = delete;
+      private:
+        HtmlFile& operator=(const HtmlFile&) = delete;
 
-		std::filesystem::path absolutePath_;
-		std::filesystem::path relativeLinkPath_;
-	};
-}
-
+        std::filesystem::path absolutePath_;
+        std::filesystem::path relativeLinkPath_;
+    };
+} // namespace Exporter

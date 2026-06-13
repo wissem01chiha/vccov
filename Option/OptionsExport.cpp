@@ -14,49 +14,47 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "OptionsExport.hpp"
-#include <map>
+#include "stdafx.h"
 #include <iostream>
+#include <map>
 
 namespace CppCoverage
 {
-	//-------------------------------------------------------------------------
-	OptionsExport::OptionsExport(OptionsExportType type,
-	                             std::wstring&& name,
-	                             std::optional<std::wstring>&& parameter)
-	    : type_{type}, name_{std::move(name)}, parameter_{std::move(parameter)}
-	{
-	}
+    //-------------------------------------------------------------------------
+    OptionsExport::OptionsExport(OptionsExportType type, std::wstring&& name,
+                                 std::optional<std::wstring>&& parameter)
+        : type_{ type }, name_{ std::move(name) }, parameter_{ std::move(parameter) }
+    {
+    }
 
-	//-------------------------------------------------------------------------
-	OptionsExportType OptionsExport::GetType() const
-	{
-		return type_;
-	}
+    //-------------------------------------------------------------------------
+    OptionsExportType OptionsExport::GetType() const
+    {
+        return type_;
+    }
 
-	//-------------------------------------------------------------------------
-	const std::wstring& OptionsExport::GetName() const
-	{
-		return name_;
-	}
+    //-------------------------------------------------------------------------
+    const std::wstring& OptionsExport::GetName() const
+    {
+        return name_;
+    }
 
-	//-------------------------------------------------------------------------
-	const std::optional<std::wstring>& OptionsExport::GetParameter() const
-	{
-		return parameter_;
-	}
+    //-------------------------------------------------------------------------
+    const std::optional<std::wstring>& OptionsExport::GetParameter() const
+    {
+        return parameter_;
+    }
 
-	//-------------------------------------------------------------------------
-	std::wostream& operator<<(std::wostream& ostr,
-	                          const OptionsExport& optionsExport)
-	{
-		ostr << optionsExport.GetName();
+    //-------------------------------------------------------------------------
+    std::wostream& operator<<(std::wostream& ostr, const OptionsExport& optionsExport)
+    {
+        ostr << optionsExport.GetName();
 
-		auto parameter = optionsExport.GetParameter();
+        auto parameter = optionsExport.GetParameter();
 
-		if (parameter)
-			ostr << " " << *parameter;
-		return ostr;
-	}
-}
+        if (parameter)
+            ostr << " " << *parameter;
+        return ostr;
+    }
+} // namespace CppCoverage

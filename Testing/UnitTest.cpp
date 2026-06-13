@@ -20,14 +20,10 @@ using namespace Microsoft::VisualStudio::TestTools::UnitTesting;
 
 namespace TestCppCli
 {
-	[TestClass]
-	public ref class UnitTest
-	{
-	public: 
-		[TestMethod]
-		void TestReturn42()
-		{
-			Assert::AreEqual(42, TestCoverageSharedLib::Return42());
-		};
-	};
-}
+    [TestClass] public ref class UnitTest
+    {
+      public:
+        [TestMethod] void TestReturn42()
+        { Assert::AreEqual(42, TestCoverageSharedLib::Return42()); };
+    };
+} // namespace TestCppCli

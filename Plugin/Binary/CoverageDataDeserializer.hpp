@@ -16,26 +16,27 @@
 
 #pragma once
 
-#include <filesystem>
 #include "BinaryExport.h"
+#include <filesystem>
 
-namespace Plugin{
+namespace Plugin
+{
 
-	class CoverageData;
-	
+    class CoverageData;
+
 }
 
 namespace Exporter
-{	
-	class VCOV_BINARYEXPORT_DLL  CoverageDataDeserializer
-	{
-	public:		
-		CoverageDataDeserializer() = default;
-		Plugin::CoverageData Deserialize(const std::filesystem::path&, const std::string& errorIfNotCorrectFormat) const;
-		
-	private:
-		CoverageDataDeserializer(const CoverageDataDeserializer&) = delete;
-		CoverageDataDeserializer& operator=(const CoverageDataDeserializer&) = delete;
-	};
-}
+{
+    class VCOV_BINARYEXPORT_DLL CoverageDataDeserializer
+    {
+      public:
+        CoverageDataDeserializer() = default;
+        Plugin::CoverageData Deserialize(const std::filesystem::path&,
+                                         const std::string& errorIfNotCorrectFormat) const;
 
+      private:
+        CoverageDataDeserializer(const CoverageDataDeserializer&)            = delete;
+        CoverageDataDeserializer& operator=(const CoverageDataDeserializer&) = delete;
+    };
+} // namespace Exporter

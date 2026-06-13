@@ -16,10 +16,10 @@
 
 #include "stdafx.h"
 
-#include "CppCoverage/ExceptionHandler.hpp"
 #include "CppCoverage/Debugger.hpp"
-#include "CppCoverage/StartInfo.hpp"
+#include "CppCoverage/ExceptionHandler.hpp"
 #include "CppCoverage/IDebugEventsHandler.hpp"
+#include "CppCoverage/StartInfo.hpp"
 
 #include "TestCoverageConsole/TestCoverageConsole.hpp"
 
@@ -28,124 +28,133 @@ namespace cov = CppCoverage;
 namespace CppCoverageTest
 {
 
-	namespace
-	{
-		//---------------------------------------------------------------------
-		class ExceptionHandlerTest : public ::testing::Test, private CppCoverage::IDebugEventsHandler
-		{
-		public:
-			//---------------------------------------------------------------------
-			void Run(const std::wstring& commandLineArgument)
-			{
-				cov::StartInfo startInfo{ TestCoverageConsole::GetOutputBinaryPath() };
-				cov::Debugger debugger{ false, false, false };
+    namespace
+    {
+        //---------------------------------------------------------------------
+        class ExceptionHandlerTest : public ::testing::Test,
+                                     private CppCoverage::IDebugEventsHandler
+        {
+          public:
+            //---------------------------------------------------------------------
+            void Run(const std::wstring& commandLineArgument)
+            {
+                cov::StartInfo startInfo{ TestCoverageConsole::GetOutputBinaryPath() };
+                cov::Debugger  debugger{ false, false, false };
 
-				startInfo.AddArgument(commandLineArgument);
-				debugger.Debug(startInfo, *this);
-			}
+                startInfo.AddArgument(commandLineArgument);
+                debugger.Debug(startInfo, *this);
+            }
 
-			//---------------------------------------------------------------------
-			virtual ExceptionType OnException(HANDLE hProcess, HANDLE hThread, const EXCEPTION_DEBUG_INFO& exceptionDebugInfo) override
-			{							
-				std::wostringstream ostr;
+            //---------------------------------------------------------------------
+            virtual ExceptionType
+            OnException(HANDLE hProcess, HANDLE hThread,
+                        const EXCEPTION_DEBUG_INFO& exceptionDebugInfo) override
+            {
+                std::wostringstream ostr;
 
-				exceptionHandlerStatus_ = handler_.HandleException(hProcess, exceptionDebugInfo, ostr);
-				message_ = ostr.str();
+                exceptionHandlerStatus_ =
+                    handler_.HandleException(hProcess, exceptionDebugInfo, ostr);
+                message_ = ostr.str();
 
-				return IDebugEventsHandler::ExceptionType::NotHandled;;
-			}
-			
-			//-----------------------------------------------------------------
-			std::wstring HandleExceptionTwice(int errorCode, bool firstChange)
-			{
-				auto exceptionDebugInfo = CreateExceptionDebugInfo(errorCode, firstChange);
+                return IDebugEventsHandler::ExceptionType::NotHandled;
+                ;
+            }
 
-				handler_.HandleException(nullptr, exceptionDebugInfo, ostr_); // skip first exception
-				handler_.HandleException(nullptr, exceptionDebugInfo, ostr_);
+            //-----------------------------------------------------------------
+            std::wstring HandleExceptionTwice(int errorCode, bool firstChange)
+            {
+                auto exceptionDebugInfo = CreateExceptionDebugInfo(errorCode, firstChange);
 
-				return ostr_.str();
-			};
+                handler_.HandleException(nullptr, exceptionDebugInfo,
+                                         ostr_); // skip first exception
+                handler_.HandleException(nullptr, exceptionDebugInfo, ostr_);
 
-			//-----------------------------------------------------------------------------
-			EXCEPTION_DEBUG_INFO CreateExceptionDebugInfo(
-				int errorCode = cov::ExceptionHandler::ExceptionEmulationX86ErrorCode,
-				bool firstChange = true)
-			{
-				EXCEPTION_DEBUG_INFO exceptionDebugInfo{};
+                return ostr_.str();
+            };
 
-				exceptionDebugInfo.dwFirstChance = firstChange ? 1 : 0;
-				exceptionDebugInfo.ExceptionRecord.ExceptionCode = errorCode;
+            //-----------------------------------------------------------------------------
+            EXCEPTION_DEBUG_INFO CreateExceptionDebugInfo(
+                int  errorCode   = cov::ExceptionHandler::ExceptionEmulationX86ErrorCode,
+                bool firstChange = true)
+            {
+                EXCEPTION_DEBUG_INFO exceptionDebugInfo{};
 
-				return exceptionDebugInfo;
-			}
+                exceptionDebugInfo.dwFirstChance                 = firstChange ? 1 : 0;
+                exceptionDebugInfo.ExceptionRecord.ExceptionCode = errorCode;
 
-			CppCoverage::ExceptionHandlerStatus exceptionHandlerStatus_;
-			std::wstring message_;
-			cov::ExceptionHandler handler_;
-			std::wostringstream ostr_;
-		};
-	}
+                return exceptionDebugInfo;
+            }
 
-	//-----------------------------------------------------------------------------
-	TEST_F(ExceptionHandlerTest, TestUnHandleCppException)
-	{
-		Run(TestCoverageConsole::TestThrowUnHandledCppException);
-		ASSERT_EQ(cov::ExceptionHandlerStatus::CppError, exceptionHandlerStatus_);
-		ASSERT_NE(std::string::npos, message_.find(cov::ExceptionHandler::ExceptionCpp));
-	}
+            CppCoverage::ExceptionHandlerStatus exceptionHandlerStatus_;
+            std::wstring                        message_;
+            cov::ExceptionHandler               handler_;
+            std::wostringstream                 ostr_;
+        };
+    } // namespace
 
-	//-----------------------------------------------------------------------------
-	TEST_F(ExceptionHandlerTest, TestUnHandleSEHException)
-	{
-		Run(TestCoverageConsole::TestThrowUnHandledSEHException);	
-		ASSERT_EQ(CppCoverage::ExceptionHandlerStatus::Error, exceptionHandlerStatus_);
-		ASSERT_NE(std::string::npos, message_.find(cov::ExceptionHandler::ExceptionAccesViolation));
-	}
-	
-	//-----------------------------------------------------------------------------
-	TEST_F(ExceptionHandlerTest, TestFormatMessage)
-	{
-		auto message = HandleExceptionTwice(cov::ExceptionHandler::ExceptionEmulationX86ErrorCode, false);
-		ASSERT_NE(std::string::npos, message.find(L"Exception status code used by Win32 x86 emulation subsystem"));
-	}
+    //-----------------------------------------------------------------------------
+    TEST_F(ExceptionHandlerTest, TestUnHandleCppException)
+    {
+        Run(TestCoverageConsole::TestThrowUnHandledCppException);
+        ASSERT_EQ(cov::ExceptionHandlerStatus::CppError, exceptionHandlerStatus_);
+        ASSERT_NE(std::string::npos, message_.find(cov::ExceptionHandler::ExceptionCpp));
+    }
 
-	//-----------------------------------------------------------------------------
-	TEST_F(ExceptionHandlerTest, TestUnknown)
-	{
-		auto message = HandleExceptionTwice(42, false);
-		ASSERT_NE(std::string::npos, message.find(cov::ExceptionHandler::ExceptionUnknown));
-	}
+    //-----------------------------------------------------------------------------
+    TEST_F(ExceptionHandlerTest, TestUnHandleSEHException)
+    {
+        Run(TestCoverageConsole::TestThrowUnHandledSEHException);
+        ASSERT_EQ(CppCoverage::ExceptionHandlerStatus::Error, exceptionHandlerStatus_);
+        ASSERT_NE(std::string::npos, message_.find(cov::ExceptionHandler::ExceptionAccesViolation));
+    }
 
-	//-----------------------------------------------------------------------------
-	TEST_F(ExceptionHandlerTest, ChildProcess)
-	{
-		auto exceptionDebugInfo = CreateExceptionDebugInfo();
+    //-----------------------------------------------------------------------------
+    TEST_F(ExceptionHandlerTest, TestFormatMessage)
+    {
+        auto message =
+            HandleExceptionTwice(cov::ExceptionHandler::ExceptionEmulationX86ErrorCode, false);
+        ASSERT_NE(std::string::npos,
+                  message.find(L"Exception status code used by Win32 x86 emulation subsystem"));
+    }
 
-		ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
-			handler_.HandleException(nullptr, exceptionDebugInfo, ostr_));
-		ASSERT_EQ(cov::ExceptionHandlerStatus::BreakPoint,
-			handler_.HandleException(nullptr, exceptionDebugInfo, ostr_));
-		ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
-			handler_.HandleException(reinterpret_cast<HANDLE>(42), exceptionDebugInfo, ostr_));
-	}
+    //-----------------------------------------------------------------------------
+    TEST_F(ExceptionHandlerTest, TestUnknown)
+    {
+        auto message = HandleExceptionTwice(42, false);
+        ASSERT_NE(std::string::npos, message.find(cov::ExceptionHandler::ExceptionUnknown));
+    }
 
-	//-----------------------------------------------------------------------------
-	TEST_F(ExceptionHandlerTest, ExitProcess)
-	{
-		auto exceptionDebugInfo = CreateExceptionDebugInfo();
-		const HANDLE handle = nullptr;
-		const auto handle2 = reinterpret_cast<HANDLE>(42);
-		ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
-			handler_.HandleException(handle, exceptionDebugInfo, ostr_));
-		ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
-			handler_.HandleException(handle2, exceptionDebugInfo, ostr_));
+    //-----------------------------------------------------------------------------
+    TEST_F(ExceptionHandlerTest, ChildProcess)
+    {
+        auto exceptionDebugInfo = CreateExceptionDebugInfo();
 
-		handler_.OnExitProcess(handle2);
-		ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
-			handler_.HandleException(handle2, exceptionDebugInfo, ostr_));
+        ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
+                  handler_.HandleException(nullptr, exceptionDebugInfo, ostr_));
+        ASSERT_EQ(cov::ExceptionHandlerStatus::BreakPoint,
+                  handler_.HandleException(nullptr, exceptionDebugInfo, ostr_));
+        ASSERT_EQ(
+            cov::ExceptionHandlerStatus::FirstChanceException,
+            handler_.HandleException(reinterpret_cast<HANDLE>(42), exceptionDebugInfo, ostr_));
+    }
 
-		handler_.OnExitProcess(handle);
-		ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
-			handler_.HandleException(handle, exceptionDebugInfo, ostr_));
-	}
-}
+    //-----------------------------------------------------------------------------
+    TEST_F(ExceptionHandlerTest, ExitProcess)
+    {
+        auto         exceptionDebugInfo = CreateExceptionDebugInfo();
+        const HANDLE handle             = nullptr;
+        const auto   handle2            = reinterpret_cast<HANDLE>(42);
+        ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
+                  handler_.HandleException(handle, exceptionDebugInfo, ostr_));
+        ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
+                  handler_.HandleException(handle2, exceptionDebugInfo, ostr_));
+
+        handler_.OnExitProcess(handle2);
+        ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
+                  handler_.HandleException(handle2, exceptionDebugInfo, ostr_));
+
+        handler_.OnExitProcess(handle);
+        ASSERT_EQ(cov::ExceptionHandlerStatus::FirstChanceException,
+                  handler_.HandleException(handle, exceptionDebugInfo, ostr_));
+    }
+} // namespace CppCoverageTest

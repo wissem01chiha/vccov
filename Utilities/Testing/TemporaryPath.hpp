@@ -16,27 +16,27 @@
 
 #pragma once
 
-#include <filesystem>
-#include "TestingExport.hpp"
 #include "TemporaryPathOption.hpp"
+#include "TestingExport.hpp"
+#include <filesystem>
 
 namespace Testing
 {
-	class VCOV_TESTINGEXPORT_DLL TemporaryPath
-	{
-	public:
-		explicit TemporaryPath(TemporaryPathOption = TemporaryPathOption::DoNotCreate);
-		~TemporaryPath();
+    class VCOV_TESTINGEXPORT_DLL TemporaryPath
+    {
+      public:
+        explicit TemporaryPath(TemporaryPathOption = TemporaryPathOption::DoNotCreate);
+        ~TemporaryPath();
 
-		operator const std::filesystem::path& () const;
-		const std::filesystem::path& GetPath() const;
-		const std::filesystem::path* operator->() const;
+        operator const std::filesystem::path&() const;
+        const std::filesystem::path& GetPath() const;
+        const std::filesystem::path* operator->() const;
 
-	private:
-		TemporaryPath(const TemporaryPath&) = delete;
-		TemporaryPath& operator=(const TemporaryPath&) = delete;
+      private:
+        TemporaryPath(const TemporaryPath&)            = delete;
+        TemporaryPath& operator=(const TemporaryPath&) = delete;
 
-	private:
-		std::filesystem::path path_;
-	};
-}
+      private:
+        std::filesystem::path path_;
+    };
+} // namespace Testing

@@ -16,47 +16,42 @@
 
 #pragma once
 
-#include <filesystem>
 #include "FilterExport.h"
+#include <filesystem>
 
 namespace FileFilter
 {
-	class File;
+    class File;
 
-	class VCOV_FILTEREXPORT_DLL UnifiedDiffParser
-	{
-	public:
-		const static std::wstring FromFilePrefix;
-		const static std::wstring ToFilePrefix;
+    class VCOV_FILTEREXPORT_DLL UnifiedDiffParser
+    {
+      public:
+        const static std::wstring FromFilePrefix;
+        const static std::wstring ToFilePrefix;
 
-		UnifiedDiffParser() = default;
-				
-		std::vector<File> Parse(std::wistream&) const;		
+        UnifiedDiffParser() = default;
 
-	private:
-		UnifiedDiffParser(const UnifiedDiffParser&) = delete;
-		UnifiedDiffParser& operator=(const UnifiedDiffParser&) = delete;
-		UnifiedDiffParser(UnifiedDiffParser&&) = delete;
-		UnifiedDiffParser& operator=(UnifiedDiffParser&&) = delete;
+        std::vector<File> Parse(std::wistream&) const;
 
-		struct HunksDifferences;
-		struct Stream;
+      private:
+        UnifiedDiffParser(const UnifiedDiffParser&)            = delete;
+        UnifiedDiffParser& operator=(const UnifiedDiffParser&) = delete;
+        UnifiedDiffParser(UnifiedDiffParser&&)                 = delete;
+        UnifiedDiffParser& operator=(UnifiedDiffParser&&)      = delete;
 
-		std::filesystem::path ExtractTargetFile(Stream&) const;
-		HunksDifferences ExtractHunksDifferences(
-							const Stream&, 
-							const std::wstring& hunksDifferencesLine) const;
+        struct HunksDifferences;
+        struct Stream;
 
-		std::vector<int> ExtractUpdatedLines(
-							Stream&, 
-							const std::wstring& hunksDifferencesLine) const;
+        std::filesystem::path ExtractTargetFile(Stream&) const;
+        HunksDifferences      ExtractHunksDifferences(const Stream&,
+                                                      const std::wstring& hunksDifferencesLine) const;
 
-		void ThrowError(const Stream&, const std::wstring&) const;
+        std::vector<int> ExtractUpdatedLines(Stream&,
+                                             const std::wstring& hunksDifferencesLine) const;
 
-		void FillUpdatedLines(
-			const std::wstring& line,
-			std::vector<File>& files,
-			Stream& stream) const;
-	};
-}
+        void ThrowError(const Stream&, const std::wstring&) const;
 
+        void FillUpdatedLines(const std::wstring& line, std::vector<File>& files,
+                              Stream& stream) const;
+    };
+} // namespace FileFilter

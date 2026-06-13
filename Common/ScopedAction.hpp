@@ -16,22 +16,22 @@
 
 #pragma once
 
-#include <functional>
 #include "CommonExport.h"
+#include <functional>
 
 namespace Tools
 {
-	class VCOV_COMMONEXPORT_DLL ScopedAction
-	{
-	public:
-		explicit ScopedAction(std::function<void ()>);
-		~ScopedAction();
+    class VCOV_COMMONEXPORT_DLL ScopedAction
+    {
+      public:
+        explicit ScopedAction(std::function<void()>);
+        ~ScopedAction();
 
-	private:
-		ScopedAction(const ScopedAction&) = delete;
-		ScopedAction& operator=(const ScopedAction&) = delete;
+      private:
+        ScopedAction(const ScopedAction&)            = delete;
+        ScopedAction& operator=(const ScopedAction&) = delete;
 
-	private:
-		std::function<void()> action_;
-	};
-}
+      private:
+        std::function<void()> action_;
+    };
+} // namespace Tools

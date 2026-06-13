@@ -14,32 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "Tool.hpp"
+#include "stdafx.h"
 
 namespace ToolsTests
 {
-	//---------------------------------------------------------------------
-	TEST(Tool, ToLocalString)
-	{
-		ASSERT_EQ("", Tools::ToLocalString(L""));
-		ASSERT_EQ("123456789", Tools::ToLocalString(L"123456789"));
-		ASSERT_EQ(1, Tools::ToLocalString(L"1").size());
-		ASSERT_EQ(std::string("יאט"), Tools::ToLocalString(L"יאט"));
-	}
+    //---------------------------------------------------------------------
+    TEST(Tool, ToLocalString)
+    {
+        ASSERT_EQ("", Tools::ToLocalString(L""));
+        ASSERT_EQ("123456789", Tools::ToLocalString(L"123456789"));
+        ASSERT_EQ(1, Tools::ToLocalString(L"1").size());
+        ASSERT_EQ(std::string("יאט"), Tools::ToLocalString(L"יאט"));
+    }
 
-	//---------------------------------------------------------------------
-	TEST(Tool, LocalToWString)
-	{
-		ASSERT_EQ(L"", Tools::LocalToWString(""));
-		ASSERT_EQ(L"123456789", Tools::LocalToWString("123456789"));
-		ASSERT_EQ(1, Tools::LocalToWString("1").size());
-		ASSERT_EQ(std::wstring(L"יאט"), Tools::LocalToWString("יאט"));
-	}
+    //---------------------------------------------------------------------
+    TEST(Tool, LocalToWString)
+    {
+        ASSERT_EQ(L"", Tools::LocalToWString(""));
+        ASSERT_EQ(L"123456789", Tools::LocalToWString("123456789"));
+        ASSERT_EQ(1, Tools::LocalToWString("1").size());
+        ASSERT_EQ(std::wstring(L"יאט"), Tools::LocalToWString("יאט"));
+    }
 
-	//---------------------------------------------------------------------
-	TEST(Tool, Uft8)
-	{
-		ASSERT_EQ(L"יאט", Tools::Utf8ToWString(Tools::ToUtf8String(L"יאט")));
-	}
-}
+    //---------------------------------------------------------------------
+    TEST(Tool, Uft8)
+    {
+        ASSERT_EQ(L"יאט", Tools::Utf8ToWString(Tools::ToUtf8String(L"יאט")));
+    }
+} // namespace ToolsTests

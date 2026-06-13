@@ -16,138 +16,134 @@
 
 #include "HandleInformation.hpp"
 #include "stdafx.h"
-//#include "CppCoverageException.hpp"
+// #include "CppCoverageException.hpp"
 #include "Handle.hpp"
-#include <boost/algorithm/string.hpp>
 #include <Psapi.h>
+#include <boost/algorithm/string.hpp>
 #include <vector>
 
 namespace CppCoverage
 {
-		//-------------------------------------------------------------------------
-		std::vector<std::wstring> GetLogicalDrives()
-		{
-			std::vector<wchar_t> logicalDriveStrings(PathBufferSize);
-			std::vector<std::wstring> logicalDrives;
+    //-------------------------------------------------------------------------
+    std::vector<std::wstring> GetLogicalDrives()
+    {
+        std::vector<wchar_t>      logicalDriveStrings(PathBufferSize);
+        std::vector<std::wstring> logicalDrives;
 
-			auto size = GetLogicalDriveStringsW(
-                static_cast<DWORD>(logicalDriveStrings.size()), 
-				logicalDriveStrings.data());
+        auto size = GetLogicalDriveStringsW(static_cast<DWORD>(logicalDriveStrings.size()),
+                                            logicalDriveStrings.data());
 
-			if (!size)
-				THROW(L"Cannot GetLogicalDriveStrings");
+        if (!size)
+            THROW(L"Cannot GetLogicalDriveStrings");
 
-			size_t startIndex = 0;
+        size_t startIndex = 0;
 
-			for (size_t i = 0; i < size; ++i)
-			{
-				if (!logicalDriveStrings[i])
-				{
-					std::wstring localDrive(&logicalDriveStrings[startIndex], &logicalDriveStrings[i]);
-					logicalDrives.push_back(localDrive);
-					startIndex = i + 1;
-				}
-			}
+        for (size_t i = 0; i < size; ++i)
+        {
+            if (!logicalDriveStrings[i])
+            {
+                std::wstring localDrive(&logicalDriveStrings[startIndex], &logicalDriveStrings[i]);
+                logicalDrives.push_back(localDrive);
+                startIndex = i + 1;
+            }
+        }
 
-			return logicalDrives;
-		}
+        return logicalDrives;
+    }
 
-		//-------------------------------------------------------------------------
-		std::vector<std::pair<std::wstring, std::wstring>> GetQueryDosDevicesMapping()
-		{
-			std::vector<wchar_t> dosDevice(PathBufferSize);
-			std::vector<std::pair<std::wstring, std::wstring>> queryDosDevicesMapping;
+    //-------------------------------------------------------------------------
+    std::vector<std::pair<std::wstring, std::wstring>> GetQueryDosDevicesMapping()
+    {
+        std::vector<wchar_t>                               dosDevice(PathBufferSize);
+        std::vector<std::pair<std::wstring, std::wstring>> queryDosDevicesMapping;
 
-			for (const auto& logicalDrive : GetLogicalDrives())
-			{
-				auto pos = logicalDrive.find('\\');
-				std::wstring drive = (pos != std::string::npos) ? logicalDrive.substr(0, pos) : logicalDrive;
+        for (const auto& logicalDrive : GetLogicalDrives())
+        {
+            auto         pos = logicalDrive.find('\\');
+            std::wstring drive =
+                (pos != std::string::npos) ? logicalDrive.substr(0, pos) : logicalDrive;
 
-				if (QueryDosDeviceW(
-                                        drive.c_str(), dosDevice.data(),
-                                        static_cast<DWORD>(dosDevice.size())))
-				{
-					std::wstring dosDeviceName{ &dosDevice[0] };
-					queryDosDevicesMapping.emplace_back(dosDeviceName, drive);
-				}
-			}
+            if (QueryDosDeviceW(drive.c_str(), dosDevice.data(),
+                                static_cast<DWORD>(dosDevice.size())))
+            {
+                std::wstring dosDeviceName{ &dosDevice[0] };
+                queryDosDevicesMapping.emplace_back(dosDeviceName, drive);
+            }
+        }
 
-			// Handle network drive. We just remove prefix.
-			queryDosDevicesMapping.emplace_back(L"\\Device\\Mup", L"\\");
-			return queryDosDevicesMapping;
-		}
+        // Handle network drive. We just remove prefix.
+        queryDosDevicesMapping.emplace_back(L"\\Device\\Mup", L"\\");
+        return queryDosDevicesMapping;
+    }
 
-		//-------------------------------------------------------------------------
-		std::wstring GetMappedFileNameStr(HANDLE hfile)
-		{
-			DWORD dwFileSizeHi = 0;
-			DWORD dwFileSizeLo = GetFileSize(hfile, &dwFileSizeHi);
+    //-------------------------------------------------------------------------
+    std::wstring GetMappedFileNameStr(HANDLE hfile)
+    {
+        DWORD dwFileSizeHi = 0;
+        DWORD dwFileSizeLo = GetFileSize(hfile, &dwFileSizeHi);
 
-			if (dwFileSizeLo == 0 && dwFileSizeHi == 0)
-				THROW(L"Cannot map a file with a length of zero.");
+        if (dwFileSizeLo == 0 && dwFileSizeHi == 0)
+            THROW(L"Cannot map a file with a length of zero.");
 
-			auto fileMappingHandle = CreateHandle(
-				CreateFileMapping(hfile, NULL, PAGE_READONLY, 0, 1, NULL),
-				CloseHandle);
+        auto fileMappingHandle =
+            CreateHandle(CreateFileMapping(hfile, NULL, PAGE_READONLY, 0, 1, NULL), CloseHandle);
 
-			auto mapViewOfFile = CreateHandle(
-				MapViewOfFile(fileMappingHandle.GetValue(), FILE_MAP_READ, 0, 0, 1),
-				UnmapViewOfFile);
+        auto mapViewOfFile = CreateHandle(
+            MapViewOfFile(fileMappingHandle.GetValue(), FILE_MAP_READ, 0, 0, 1), UnmapViewOfFile);
 
-			WCHAR pszFilename[MAX_PATH + 1];
+        WCHAR pszFilename[MAX_PATH + 1];
 
-			if (!GetMappedFileNameW(GetCurrentProcess(),
-				mapViewOfFile.GetValue(),
-				pszFilename,
-				MAX_PATH))
-			{
-				THROW(L"Cannot GetMappedFileName");
-			}
+        if (!GetMappedFileNameW(GetCurrentProcess(), mapViewOfFile.GetValue(), pszFilename,
+                                MAX_PATH))
+        {
+            THROW(L"Cannot GetMappedFileName");
+        }
 
-			return std::wstring(pszFilename);
-		}
+        return std::wstring(pszFilename);
+    }
 
-		//-------------------------------------------------------------------------
-		std::wstring GetFinalPathName(HANDLE hfile)
-		{
-			std::vector<wchar_t> buffer(PathBufferSize);
+    //-------------------------------------------------------------------------
+    std::wstring GetFinalPathName(HANDLE hfile)
+    {
+        std::vector<wchar_t> buffer(PathBufferSize);
 
-			if (GetFinalPathNameByHandleW(hfile, &buffer[0], static_cast<int>(buffer.size()) - 1, VOLUME_NAME_NT))
-				return &buffer[0];
+        if (GetFinalPathNameByHandleW(hfile, &buffer[0], static_cast<int>(buffer.size()) - 1,
+                                      VOLUME_NAME_NT))
+            return &buffer[0];
 
-			return GetMappedFileNameStr(hfile);
-		}
+        return GetMappedFileNameStr(hfile);
+    }
 
-	//-------------------------------------------------------------------------
-	HandleInformation::HandleInformation() = default;
+    //-------------------------------------------------------------------------
+    HandleInformation::HandleInformation() = default;
 
-	//-------------------------------------------------------------------------
-	std::wstring HandleInformation::ComputeFilename(HANDLE hfile) const
-	{
-		if (hfile == nullptr)
-		{
-			THROW(L"OpenCppCoverage cannot find the name of the module.\n"
-			      L"See "
-			      L"https://github.com/OpenCppCoverage/OpenCppCoverage/wiki/"
-			      L"FAQ#error-opencppcoverage-cannot-find-the-name-of-the-"
-			      L"module for more information.");
-		}
+    //-------------------------------------------------------------------------
+    std::wstring HandleInformation::ComputeFilename(HANDLE hfile) const
+    {
+        if (hfile == nullptr)
+        {
+            THROW(L"OpenCppCoverage cannot find the name of the module.\n"
+                  L"See "
+                  L"https://github.com/OpenCppCoverage/OpenCppCoverage/wiki/"
+                  L"FAQ#error-opencppcoverage-cannot-find-the-name-of-the-"
+                  L"module for more information.");
+        }
 
-		auto mappedFileName = GetFinalPathName(hfile);
-		auto queryDosDevicesMapping = GetQueryDosDevicesMapping();
+        auto mappedFileName         = GetFinalPathName(hfile);
+        auto queryDosDevicesMapping = GetQueryDosDevicesMapping();
 
-		for (const auto& queryDosDeviceMapping : queryDosDevicesMapping)
-		{
-			const auto& deviceName = queryDosDeviceMapping.first;
-			const auto& logicalDrive = queryDosDeviceMapping.second;
+        for (const auto& queryDosDeviceMapping : queryDosDevicesMapping)
+        {
+            const auto& deviceName   = queryDosDeviceMapping.first;
+            const auto& logicalDrive = queryDosDeviceMapping.second;
 
-			if (boost::algorithm::istarts_with(mappedFileName, deviceName))
-			{
-				boost::algorithm::ireplace_first(mappedFileName, deviceName, logicalDrive);
-				return mappedFileName;
-			}
-		}
+            if (boost::algorithm::istarts_with(mappedFileName, deviceName))
+            {
+                boost::algorithm::ireplace_first(mappedFileName, deviceName, logicalDrive);
+                return mappedFileName;
+            }
+        }
 
-		THROW(L"Cannot find path for the handle: " << mappedFileName);
-	}
-}
+        THROW(L"Cannot find path for the handle: " << mappedFileName);
+    }
+} // namespace CppCoverage

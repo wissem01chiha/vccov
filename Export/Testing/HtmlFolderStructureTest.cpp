@@ -29,92 +29,93 @@ namespace fs = std::filesystem;
 
 namespace ExporterTest
 {
-	namespace
-	{
-		//-------------------------------------------------------------------------
-		struct HtmlFolderStructureTest : public ::testing::Test
-		{
-			HtmlFolderStructureTest()
-			{
-				std::error_code error;
-				auto folder = templateFolder_.GetPath() / Exporter::HtmlFolderStructure::ThirdParty;
-				fs::create_directories(folder);				
-				htmlFolderStructure_.reset(new Exporter::HtmlFolderStructure(templateFolder_));				
-			}
+    namespace
+    {
+        //-------------------------------------------------------------------------
+        struct HtmlFolderStructureTest : public ::testing::Test
+        {
+            HtmlFolderStructureTest()
+            {
+                std::error_code error;
+                auto folder = templateFolder_.GetPath() / Exporter::HtmlFolderStructure::ThirdParty;
+                fs::create_directories(folder);
+                htmlFolderStructure_.reset(new Exporter::HtmlFolderStructure(templateFolder_));
+            }
 
-			std::unique_ptr<Exporter::HtmlFolderStructure> htmlFolderStructure_;
+            std::unique_ptr<Exporter::HtmlFolderStructure> htmlFolderStructure_;
 
-			TestHelper::TemporaryPath templateFolder_;
-			TestHelper::TemporaryPath outputFolder_;
-		};
-		
-		//-------------------------------------------------------------------------
-		const std::string Module = "Module";
-		const std::string File = "file";
-	}
+            TestHelper::TemporaryPath templateFolder_;
+            TestHelper::TemporaryPath outputFolder_;
+        };
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlFolderStructureTest, CreateCurrentRoot)
-	{						
-		TestHelper::CreateEmptyFile(templateFolder_.GetPath() / Exporter::HtmlFolderStructure::ThirdParty / "EmptyFile");
-		htmlFolderStructure_->CreateCurrentRoot(outputFolder_);
-		auto createdPath = outputFolder_.GetPath() / Exporter::HtmlFolderStructure::ThirdParty;
-		ASSERT_TRUE(Tools::FileExists(createdPath));	
-	}
-	
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlFolderStructureTest, CreateCurrentModule)
-	{		
-		htmlFolderStructure_->CreateCurrentRoot(outputFolder_);
-		auto htmlPath = htmlFolderStructure_->CreateCurrentModule(Module + ".exe");
-		auto modulesFolder = outputFolder_.GetPath() / Exporter::HtmlFolderStructure::FolderModules;
-		auto expectedOutputFolder = modulesFolder / Module;
-		ASSERT_TRUE(Tools::FileExists(expectedOutputFolder));
-		auto expectedPath = modulesFolder / (Module + ".html");
-		ASSERT_EQ(expectedPath, htmlPath.GetAbsolutePath());
-	}
+        //-------------------------------------------------------------------------
+        const std::string Module = "Module";
+        const std::string File   = "file";
+    } // namespace
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlFolderStructureTest, GetHtmlFilePath)
-	{		
-		htmlFolderStructure_->CreateCurrentRoot(outputFolder_);
-		htmlFolderStructure_->CreateCurrentModule(Module);
-		auto htmlFilePath = htmlFolderStructure_->GetHtmlFilePath(File);
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlFolderStructureTest, CreateCurrentRoot)
+    {
+        TestHelper::CreateEmptyFile(templateFolder_.GetPath() /
+                                    Exporter::HtmlFolderStructure::ThirdParty / "EmptyFile");
+        htmlFolderStructure_->CreateCurrentRoot(outputFolder_);
+        auto createdPath = outputFolder_.GetPath() / Exporter::HtmlFolderStructure::ThirdParty;
+        ASSERT_TRUE(Tools::FileExists(createdPath));
+    }
 
-		auto expectedPath = outputFolder_.GetPath();
-		
-		expectedPath /= Exporter::HtmlFolderStructure::FolderModules;		
-		expectedPath /= Module;
-		expectedPath /= File + ".html";
-		ASSERT_EQ(expectedPath, htmlFilePath.GetAbsolutePath());
-	}
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlFolderStructureTest, CreateCurrentModule)
+    {
+        htmlFolderStructure_->CreateCurrentRoot(outputFolder_);
+        auto htmlPath      = htmlFolderStructure_->CreateCurrentModule(Module + ".exe");
+        auto modulesFolder = outputFolder_.GetPath() / Exporter::HtmlFolderStructure::FolderModules;
+        auto expectedOutputFolder = modulesFolder / Module;
+        ASSERT_TRUE(Tools::FileExists(expectedOutputFolder));
+        auto expectedPath = modulesFolder / (Module + ".html");
+        ASSERT_EQ(expectedPath, htmlPath.GetAbsolutePath());
+    }
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlFolderStructureTest, TestConflictModules)
-	{
-		htmlFolderStructure_->CreateCurrentRoot(outputFolder_);		
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlFolderStructureTest, GetHtmlFilePath)
+    {
+        htmlFolderStructure_->CreateCurrentRoot(outputFolder_);
+        htmlFolderStructure_->CreateCurrentModule(Module);
+        auto htmlFilePath = htmlFolderStructure_->GetHtmlFilePath(File);
 
-		auto module = htmlFolderStructure_->CreateCurrentModule(Module);
-		auto modulePath = module.GetAbsolutePath();
+        auto expectedPath = outputFolder_.GetPath();
 
-		TestHelper::CreateEmptyFile(modulePath);
-		auto otherModule = htmlFolderStructure_->CreateCurrentModule(Module);
+        expectedPath /= Exporter::HtmlFolderStructure::FolderModules;
+        expectedPath /= Module;
+        expectedPath /= File + ".html";
+        ASSERT_EQ(expectedPath, htmlFilePath.GetAbsolutePath());
+    }
 
-		ASSERT_NE(modulePath, otherModule.GetAbsolutePath());
-	} 
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlFolderStructureTest, TestConflictModules)
+    {
+        htmlFolderStructure_->CreateCurrentRoot(outputFolder_);
 
-	//-------------------------------------------------------------------------
-	TEST_F(HtmlFolderStructureTest, TestConflictFile)
-	{
-		htmlFolderStructure_->CreateCurrentRoot(outputFolder_);
-		htmlFolderStructure_->CreateCurrentModule(Module);
+        auto module     = htmlFolderStructure_->CreateCurrentModule(Module);
+        auto modulePath = module.GetAbsolutePath();
 
-		auto file = htmlFolderStructure_->GetHtmlFilePath(File);
-		auto filePath = file.GetAbsolutePath();
+        TestHelper::CreateEmptyFile(modulePath);
+        auto otherModule = htmlFolderStructure_->CreateCurrentModule(Module);
 
-		TestHelper::CreateEmptyFile(filePath);
-		auto otherFile = htmlFolderStructure_->GetHtmlFilePath(File);
+        ASSERT_NE(modulePath, otherModule.GetAbsolutePath());
+    }
 
-		ASSERT_NE(filePath, otherFile.GetAbsolutePath());
-	}
-}
+    //-------------------------------------------------------------------------
+    TEST_F(HtmlFolderStructureTest, TestConflictFile)
+    {
+        htmlFolderStructure_->CreateCurrentRoot(outputFolder_);
+        htmlFolderStructure_->CreateCurrentModule(Module);
+
+        auto file     = htmlFolderStructure_->GetHtmlFilePath(File);
+        auto filePath = file.GetAbsolutePath();
+
+        TestHelper::CreateEmptyFile(filePath);
+        auto otherFile = htmlFolderStructure_->GetHtmlFilePath(File);
+
+        ASSERT_NE(filePath, otherFile.GetAbsolutePath());
+    }
+} // namespace ExporterTest

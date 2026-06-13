@@ -16,18 +16,18 @@
 
 #pragma once
 
-#include <stdexcept>
 #include "OptionExport.h"
+#include <stdexcept>
 
 namespace Plugin
 {
-	//---------------------------------------------------------------------
-	class VCOV_OPTIONEXPORT_DLL OptionsParserException : public std::runtime_error
-	{
-	  public:
-		explicit OptionsParserException(const std::string& message)
-		    : std::runtime_error(message.c_str())
-		{
-		}
-	};
-}
+    //---------------------------------------------------------------------
+    class VCOV_OPTIONEXPORT_DLL OptionsParserException : public std::runtime_error
+    {
+      public:
+        explicit OptionsParserException(const std::string& message)
+            : std::runtime_error(message.c_str())
+        {
+        }
+    };
+} // namespace Plugin

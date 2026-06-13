@@ -18,57 +18,53 @@
 
 #include "CoverageData.hpp"
 #include "CoverageExport.h"
+#include <Windows.h>
 #include <boost/optional.hpp>
 #include <map>
 #include <set>
 #include <string>
-#include <Windows.h>
 
 namespace CppCoverage
 {
-	class FileCoverage;
-	class Address;
+    class FileCoverage;
+    class Address;
 
-	class VCOV_COVERAGEEXPORT_DLL ExecutedAddressManager
-	{
-	public:
-		ExecutedAddressManager();
-		~ExecutedAddressManager();
+    class VCOV_COVERAGEEXPORT_DLL ExecutedAddressManager
+    {
+      public:
+        ExecutedAddressManager();
+        ~ExecutedAddressManager();
 
-		void AddModule(const std::wstring& moduleName, void* dllBaseOfImage);
-		void OnUnloadModule(HANDLE hProcess, void* dllBaseOfImage);
+        void AddModule(const std::wstring& moduleName, void* dllBaseOfImage);
+        void OnUnloadModule(HANDLE hProcess, void* dllBaseOfImage);
 
-		bool RegisterAddress(
-			const Address&,
-			const std::wstring& filename,
-			unsigned int line,
-			unsigned char instruction);
+        bool RegisterAddress(const Address&, const std::wstring& filename, unsigned int line,
+                             unsigned char instruction);
 
-		boost::optional<unsigned char> MarkAddressAsExecuted(const Address&);
+        boost::optional<unsigned char> MarkAddressAsExecuted(const Address&);
 
-		Plugin::CoverageData CreateCoverageData(const std::wstring& name, int exitCode) const;
-		void OnExitProcess(HANDLE hProcess);
+        Plugin::CoverageData CreateCoverageData(const std::wstring& name, int exitCode) const;
+        void                 OnExitProcess(HANDLE hProcess);
 
-	private:
-		struct Module;
-		struct File;
-		struct File;
-		struct Line;
-		struct LastModule
-		{
-			Module* module_;
-			void* baseOfImage_;
-		};
+      private:
+        struct Module;
+        struct File;
+        struct File;
+        struct Line;
+        struct LastModule
+        {
+            Module* module_;
+            void*   baseOfImage_;
+        };
 
-		ExecutedAddressManager(const ExecutedAddressManager&) = delete;
-		ExecutedAddressManager& operator=(const ExecutedAddressManager&) = delete;
+        ExecutedAddressManager(const ExecutedAddressManager&)            = delete;
+        ExecutedAddressManager& operator=(const ExecutedAddressManager&) = delete;
 
-		Module& GetLastAddedModule();
-		template <typename F>
-		void RemoveAddressLineIf(F fct);
+        Module&                    GetLastAddedModule();
+        template <typename F> void RemoveAddressLineIf(F fct);
 
-		std::map<std::wstring, Module> modules_;
-		std::map<Address, Line> addressLineMap_;
-		LastModule lastModule_;
-	};
-}
+        std::map<std::wstring, Module> modules_;
+        std::map<Address, Line>        addressLineMap_;
+        LastModule                     lastModule_;
+    };
+} // namespace CppCoverage

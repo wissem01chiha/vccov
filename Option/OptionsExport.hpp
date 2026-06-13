@@ -16,43 +16,41 @@
 
 #pragma once
 
+#include "OptionExport.h"
 #include <optional>
 #include <string>
-#include "OptionExport.h"
 
 namespace CppCoverage
 {
-	enum class OptionsExportType
-	{
-		Html,
-		Cobertura,
-		Binary,
-		Plugin
-	};
+    enum class OptionsExportType
+    {
+        Html,
+        Cobertura,
+        Binary,
+        Plugin
+    };
 
-	class VCOV_OPTIONEXPORT_DLL OptionsExport
-	{
-	  public:
-		explicit OptionsExport(OptionsExportType type,
-		                       std::wstring&& name,
-		                       std::optional<std::wstring>&& argument);
+    class VCOV_OPTIONEXPORT_DLL OptionsExport
+    {
+      public:
+        explicit OptionsExport(OptionsExportType type, std::wstring&& name,
+                               std::optional<std::wstring>&& argument);
 
-		OptionsExport(OptionsExport&&) = default;
-		OptionsExport& operator=(OptionsExport&&) = default;
+        OptionsExport(OptionsExport&&)            = default;
+        OptionsExport& operator=(OptionsExport&&) = default;
 
-		OptionsExport(const OptionsExport&) = delete;
-		OptionsExport& operator=(const OptionsExport&) = delete;
-		
-		OptionsExportType GetType() const;
-		const std::wstring& GetName() const;
-		const std::optional<std::wstring>& GetParameter() const;
+        OptionsExport(const OptionsExport&)            = delete;
+        OptionsExport& operator=(const OptionsExport&) = delete;
 
-		friend std::wostream& operator<<(std::wostream& ostr,
-		                                 const OptionsExport&);
+        OptionsExportType                  GetType() const;
+        const std::wstring&                GetName() const;
+        const std::optional<std::wstring>& GetParameter() const;
 
-	  private:
-		OptionsExportType type_;
-		std::wstring name_;
-		std::optional<std::wstring> parameter_;
-	};
-}
+        friend std::wostream& operator<<(std::wostream& ostr, const OptionsExport&);
+
+      private:
+        OptionsExportType           type_;
+        std::wstring                name_;
+        std::optional<std::wstring> parameter_;
+    };
+} // namespace CppCoverage

@@ -17,27 +17,27 @@
 #pragma once
 
 #include "CommonExport.h"
-#include <set>
 #include <filesystem>
+#include <set>
 
 namespace Tools
 {
-	class VCOV_COMMONEXPORT_DLL UniquePath
-	{
-	public:
-		UniquePath() = default;
+    class VCOV_COMMONEXPORT_DLL UniquePath
+    {
+      public:
+        UniquePath() = default;
 
-		UniquePath(const UniquePath&) = delete;
-		UniquePath& operator=(const UniquePath&) = delete;
-		UniquePath(UniquePath&&) = delete;
-		UniquePath& operator=(UniquePath&&) = delete;
+        UniquePath(const UniquePath&)            = delete;
+        UniquePath& operator=(const UniquePath&) = delete;
+        UniquePath(UniquePath&&)                 = delete;
+        UniquePath& operator=(UniquePath&&)      = delete;
 
-		// GetUniquePath returns "path" if there was no previous 
-		// call to GetUniquePath with this value else it returns an unique
-		// path starting with "path".
-		std::filesystem::path GetUniquePath(const std::filesystem::path& path);
+        // GetUniquePath returns "path" if there was no previous
+        // call to GetUniquePath with this value else it returns an unique
+        // path starting with "path".
+        std::filesystem::path GetUniquePath(const std::filesystem::path& path);
 
-	private:
-		std::set<std::filesystem::path> existingPathSet_;
-	};
-}
+      private:
+        std::set<std::filesystem::path> existingPathSet_;
+    };
+} // namespace Tools

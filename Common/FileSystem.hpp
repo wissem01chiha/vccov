@@ -16,15 +16,15 @@
 
 #pragma once
 
-#include "IFileSystem.hpp"
 #include "CommonExport.h"
+#include "IFileSystem.hpp"
 
 namespace CppCoverage
 {
-	class VCOV_COMMONEXPORT_DLL FileSystem : public IFileSystem
-	{
-	  public:
-		boost::optional<std::filesystem::file_time_type>
-		GetLastWriteTime(const std::filesystem::path&) const override;
-	};
-}
+    class VCOV_COMMONEXPORT_DLL FileSystem : public IFileSystem
+    {
+      public:
+        boost::optional<std::filesystem::file_time_type>
+        GetLastWriteTime(const std::filesystem::path&) const override;
+    };
+} // namespace CppCoverage

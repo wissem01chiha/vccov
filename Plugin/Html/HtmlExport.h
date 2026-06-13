@@ -24,4 +24,4 @@
 #define VCOV_HTMLEXPORT_DLL __declspec(dllimport)
 #endif
 
-#pragma warning (disable: 4251)
+#pragma warning(disable : 4251)

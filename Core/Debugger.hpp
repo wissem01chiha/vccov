@@ -16,72 +16,59 @@
 
 #pragma once
 
+#include "CoreExport.h"
+#include <Windows.h>
 #include <boost/optional/optional.hpp>
 #include <unordered_map>
-#include <Windows.h>
-#include "CoreExport.h"
 
 namespace CppCoverage
 {
-	class StartInfo;
-	class IDebugEventsHandler;
+    class StartInfo;
+    class IDebugEventsHandler;
 
-	class VCOV_COREEXPORT_DLL Debugger
-	{
-	public:
-		Debugger(
-			bool coverChildren,
-			bool continueAfterCppException,
-            bool stopOnAssert);
+    class VCOV_COREEXPORT_DLL Debugger
+    {
+      public:
+        Debugger(bool coverChildren, bool continueAfterCppException, bool stopOnAssert);
 
-		int Debug(const StartInfo&, IDebugEventsHandler&);
-		size_t GetRunningProcesses() const;
-		size_t GetRunningThreads() const;
+        int    Debug(const StartInfo&, IDebugEventsHandler&);
+        size_t GetRunningProcesses() const;
+        size_t GetRunningThreads() const;
 
-	private:
-		Debugger(const Debugger&) = delete;
-		Debugger& operator=(const Debugger&) = delete;
-	
-		void OnCreateProcess(
-			const DEBUG_EVENT& debugEvent,
-			IDebugEventsHandler& debugEventsHandler);
+      private:
+        Debugger(const Debugger&)            = delete;
+        Debugger& operator=(const Debugger&) = delete;
 
-		int OnExitProcess(
-			const DEBUG_EVENT& debugEvent,
-			HANDLE hProcess,
-			HANDLE hThread,
-			IDebugEventsHandler& debugEventsHandler);
+        void OnCreateProcess(const DEBUG_EVENT&   debugEvent,
+                             IDebugEventsHandler& debugEventsHandler);
 
-		void OnCreateThread(
-			HANDLE hThread,
-			DWORD dwThreadId);
+        int OnExitProcess(const DEBUG_EVENT& debugEvent, HANDLE hProcess, HANDLE hThread,
+                          IDebugEventsHandler& debugEventsHandler);
 
-		void OnExitThread(DWORD dwProcessId);
+        void OnCreateThread(HANDLE hThread, DWORD dwThreadId);
 
-		HANDLE GetProcessHandle(DWORD dwProcessId) const;
-		HANDLE GetThreadHandle(DWORD dwThreadId) const;
+        void OnExitThread(DWORD dwProcessId);
 
-		struct ProcessStatus;
+        HANDLE GetProcessHandle(DWORD dwProcessId) const;
+        HANDLE GetThreadHandle(DWORD dwThreadId) const;
 
-		ProcessStatus HandleDebugEvent(const DEBUG_EVENT&, IDebugEventsHandler&);
+        struct ProcessStatus;
 
-		ProcessStatus HandleNotCreationalEvent(
-			const DEBUG_EVENT& debugEvent,
-			IDebugEventsHandler& debugEventsHandler,
-			HANDLE hProcess,
-			HANDLE hThread,
-			DWORD dwThreadId);
+        ProcessStatus HandleDebugEvent(const DEBUG_EVENT&, IDebugEventsHandler&);
 
-		ProcessStatus OnException(const DEBUG_EVENT&, IDebugEventsHandler&, HANDLE hProcess, HANDLE hThread) const;
+        ProcessStatus HandleNotCreationalEvent(const DEBUG_EVENT&   debugEvent,
+                                               IDebugEventsHandler& debugEventsHandler,
+                                               HANDLE hProcess, HANDLE hThread, DWORD dwThreadId);
 
-	private:
-		std::unordered_map<DWORD, HANDLE> processHandles_;
-		std::unordered_map<DWORD, HANDLE> threadHandles_;
-		boost::optional<DWORD> rootProcessId_;
-		bool coverChildren_;
-		bool continueAfterCppException_;
-        bool stopOnAssert_;
+        ProcessStatus OnException(const DEBUG_EVENT&, IDebugEventsHandler&, HANDLE hProcess,
+                                  HANDLE hThread) const;
+
+      private:
+        std::unordered_map<DWORD, HANDLE> processHandles_;
+        std::unordered_map<DWORD, HANDLE> threadHandles_;
+        boost::optional<DWORD>            rootProcessId_;
+        bool                              coverChildren_;
+        bool                              continueAfterCppException_;
+        bool                              stopOnAssert_;
     };
-}
-
-
+} // namespace CppCoverage

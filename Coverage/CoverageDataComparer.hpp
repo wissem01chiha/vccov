@@ -22,32 +22,31 @@
 
 namespace Plugin
 {
-	class CoverageData;
-	class ModuleCoverage;
-}
+    class CoverageData;
+    class ModuleCoverage;
+} // namespace Plugin
 
 namespace Testing
 {
-	class VCOV_TESTINGEXPORT_DLL CoverageDataComparer
-	{
-	public:
-		CoverageDataComparer() = default;
+    class VCOV_TESTINGEXPORT_DLL CoverageDataComparer
+    {
+      public:
+        CoverageDataComparer() = default;
 
-		void AssertEquals(const Plugin::CoverageData&, const Plugin::CoverageData&) const;
-		void AssertEquals(const Plugin::ModuleCoverage*, const Plugin::ModuleCoverage*) const;
+        void AssertEquals(const Plugin::CoverageData&, const Plugin::CoverageData&) const;
+        void AssertEquals(const Plugin::ModuleCoverage*, const Plugin::ModuleCoverage*) const;
 
-		using ModuleCoveragePtr = std::unique_ptr<Plugin::ModuleCoverage>;
-		using ModuleCoverageCollection = std::vector<ModuleCoveragePtr>;
+        using ModuleCoveragePtr        = std::unique_ptr<Plugin::ModuleCoverage>;
+        using ModuleCoverageCollection = std::vector<ModuleCoveragePtr>;
 
-		bool IsFirstModuleContainsSecond(
-			const ModuleCoveragePtr& module1,
-			const ModuleCoveragePtr& module2) const;
+        bool IsFirstModuleContainsSecond(const ModuleCoveragePtr& module1,
+                                         const ModuleCoveragePtr& module2) const;
 
-		bool IsFirstCollectionContainsSecond(
-			const ModuleCoverageCollection& container1,
-			const ModuleCoverageCollection& container2) const;
-	private:
-		CoverageDataComparer(const CoverageDataComparer&) = delete;
-		CoverageDataComparer& operator=(const CoverageDataComparer&) = delete;
-	};
-}
+        bool IsFirstCollectionContainsSecond(const ModuleCoverageCollection& container1,
+                                             const ModuleCoverageCollection& container2) const;
+
+      private:
+        CoverageDataComparer(const CoverageDataComparer&)            = delete;
+        CoverageDataComparer& operator=(const CoverageDataComparer&) = delete;
+    };
+} // namespace Testing

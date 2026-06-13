@@ -16,29 +16,25 @@
 
 #pragma once
 
-#include <vector>
-#include <string>
 #include <filesystem>
+#include <string>
+#include <vector>
 
 namespace OpenCppCoverageTest
-{	
-	void AddDefaultFilters(
-		std::vector<std::pair<std::string, std::string>>& coverageArguments,
-		const std::filesystem::path& programToRun);
+{
+    void AddDefaultFilters(std::vector<std::pair<std::string, std::string>>& coverageArguments,
+                           const std::filesystem::path&                      programToRun);
 
-	void AddDefaultHtmlExport(
-		std::vector<std::pair<std::string, std::string>>& coverageArguments,
-		const std::filesystem::path& outputFolder);
-	
-	std::pair<std::string, std::string> BuildExportTypeString(
-		const std::string& exportType,
-		const std::filesystem::path& output);
-	
-	int RunCoverageFor(
-		const std::vector<std::pair<std::string, std::string>>& coverageArguments,
-		const std::filesystem::path& programToRun,
-		const std::vector<std::wstring>& arguments,
-		std::string* optionalOutput = nullptr);
+    void AddDefaultHtmlExport(std::vector<std::pair<std::string, std::string>>& coverageArguments,
+                              const std::filesystem::path&                      outputFolder);
 
-	std::string GetSolutionFolderName();
-}
+    std::pair<std::string, std::string> BuildExportTypeString(const std::string& exportType,
+                                                              const std::filesystem::path& output);
+
+    int RunCoverageFor(const std::vector<std::pair<std::string, std::string>>& coverageArguments,
+                       const std::filesystem::path&                            programToRun,
+                       const std::vector<std::wstring>&                        arguments,
+                       std::string* optionalOutput = nullptr);
+
+    std::string GetSolutionFolderName();
+} // namespace OpenCppCoverageTest

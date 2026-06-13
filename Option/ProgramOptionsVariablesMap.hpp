@@ -16,64 +16,60 @@
 
 #pragma once
 
-#include <boost/program_options/variables_map.hpp>
-#include "Tool.hpp"
 #include "CppCoverageException.hpp"
 #include "OptionExport.h"
+#include "Tool.hpp"
+#include <boost/program_options/variables_map.hpp>
 
 namespace CppCoverage
 {
-	class VCOV_OPTIONEXPORT_DLL ProgramOptionsVariablesMap
-	{
-	  public:
-		//---------------------------------------------------------------------
-		ProgramOptionsVariablesMap() = default;
+    class VCOV_OPTIONEXPORT_DLL ProgramOptionsVariablesMap
+    {
+      public:
+        //---------------------------------------------------------------------
+        ProgramOptionsVariablesMap() = default;
 
-		//---------------------------------------------------------------------
-		template <typename T>
-		const T* GetOptionalValue(const std::string& optionName) const
-		{
-			auto it = variables_map_.find(optionName);
+        //---------------------------------------------------------------------
+        template <typename T> const T* GetOptionalValue(const std::string& optionName) const
+        {
+            auto it = variables_map_.find(optionName);
 
-			if (it == variables_map_.end())
-				return nullptr;
-			const auto& variable = it->second;
+            if (it == variables_map_.end())
+                return nullptr;
+            const auto& variable = it->second;
 
-			return &variable.as<T>();
-		}
+            return &variable.as<T>();
+        }
 
-		//---------------------------------------------------------------------
-		template <typename T>
-		const T& GetValue(const std::string& optionName) const
-		{
-			auto* optionalValue = GetOptionalValue<T>(optionName);
+        //---------------------------------------------------------------------
+        template <typename T> const T& GetValue(const std::string& optionName) const
+        {
+            auto* optionalValue = GetOptionalValue<T>(optionName);
 
-			if (!optionalValue)
-				THROW(L"Cannot find option:" +
-				      Tools::LocalToWString(optionName));
+            if (!optionalValue)
+                THROW(L"Cannot find option:" + Tools::LocalToWString(optionName));
 
-			return *optionalValue;
-		}
+            return *optionalValue;
+        }
 
-		//---------------------------------------------------------------------
-		bool IsOptionSelected(const std::string& optionName) const
-		{
-			return variables_map_.find(optionName) != variables_map_.end();
-		}
+        //---------------------------------------------------------------------
+        bool IsOptionSelected(const std::string& optionName) const
+        {
+            return variables_map_.find(optionName) != variables_map_.end();
+        }
 
-		//---------------------------------------------------------------------
-		using VariableMap = boost::program_options::variables_map;
+        //---------------------------------------------------------------------
+        using VariableMap = boost::program_options::variables_map;
 
-		VariableMap& GetVariablesMap()
-		{
-			return variables_map_;
-		}
+        VariableMap& GetVariablesMap()
+        {
+            return variables_map_;
+        }
 
-	  private:
-		ProgramOptionsVariablesMap(const ProgramOptionsVariablesMap&) = delete;
-		ProgramOptionsVariablesMap&
-		operator=(const ProgramOptionsVariablesMap&) = delete;
+      private:
+        ProgramOptionsVariablesMap(const ProgramOptionsVariablesMap&)            = delete;
+        ProgramOptionsVariablesMap& operator=(const ProgramOptionsVariablesMap&) = delete;
 
-		VariableMap variables_map_;
-	};
-}
+        VariableMap variables_map_;
+    };
+} // namespace CppCoverage

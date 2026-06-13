@@ -14,82 +14,75 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
 #include "MiniDump.hpp"
+#include "stdafx.h"
 #include <iostream>
 #pragma warning(push)
-#pragma warning(disable: 4091) // 'typedef ': ignored on left of '' when no variable is declared
+#pragma warning(disable : 4091) // 'typedef ': ignored on left of '' when no
+                                // variable is declared
 #pragma warning(pop)
 
 namespace Tools
 {
 
-		//-----------------------------------------------------------------------------
-		MINIDUMP_TYPE GetMiniDumpDefaultType()
-		{
-			return static_cast<MINIDUMP_TYPE>(MiniDumpWithDataSegs |
-				MiniDumpWithPrivateReadWriteMemory |
-				MiniDumpWithFullMemoryInfo |
-				MiniDumpWithThreadInfo);
-		}
+    //-----------------------------------------------------------------------------
+    MINIDUMP_TYPE GetMiniDumpDefaultType()
+    {
+        return static_cast<MINIDUMP_TYPE>(MiniDumpWithDataSegs |
+                                          MiniDumpWithPrivateReadWriteMemory |
+                                          MiniDumpWithFullMemoryInfo | MiniDumpWithThreadInfo);
+    }
 
-		//-----------------------------------------------------------------------------
-		void CreateMiniDump(
-			MINIDUMP_EXCEPTION_INFORMATION& minidumpInfo, 
-			HANDLE hFile, 			
-			const wchar_t* dmpFilename)
-		{
-			auto miniDumpType = GetMiniDumpDefaultType();
+    //-----------------------------------------------------------------------------
+    void CreateMiniDump(MINIDUMP_EXCEPTION_INFORMATION& minidumpInfo, HANDLE hFile,
+                        const wchar_t* dmpFilename)
+    {
+        auto miniDumpType = GetMiniDumpDefaultType();
 
-			std::wcerr << L"\tTrying to create memory dump..." << std::endl;
-			if (MiniDumpWriteDump(
-				GetCurrentProcess(),
-				GetCurrentProcessId(),
-				hFile,
-				miniDumpType,
-				&minidumpInfo,
-				nullptr,
-				nullptr))
-			{
-				std::wcerr << "\tMemory dump created successfully: " << dmpFilename << std::endl;
-				std::wcerr << "\tPlease create a new issue on ";
-				std::wcerr << "https://github.com/OpenCppCoverage/OpenCppCoverage/issues and attached the memory dump ";
-				std::wcerr << dmpFilename << std::endl;
-			}
-			else
-				std::cerr << "\tFailed to create memory dump." << std::endl;
-		}
-		
-		//-----------------------------------------------------------------------------
-		LONG WINAPI CreateMiniDumpOnUnHandledException(PEXCEPTION_POINTERS exceptionInfo)
-		{
-			MINIDUMP_EXCEPTION_INFORMATION minidumpInfo;
+        std::wcerr << L"\tTrying to create memory dump..." << std::endl;
+        if (MiniDumpWriteDump(GetCurrentProcess(), GetCurrentProcessId(), hFile, miniDumpType,
+                              &minidumpInfo, nullptr, nullptr))
+        {
+            std::wcerr << "\tMemory dump created successfully: " << dmpFilename << std::endl;
+            std::wcerr << "\tPlease create a new issue on ";
+            std::wcerr << "https://github.com/OpenCppCoverage/OpenCppCoverage/issues "
+                          "and attached the memory dump ";
+            std::wcerr << dmpFilename << std::endl;
+        }
+        else
+            std::cerr << "\tFailed to create memory dump." << std::endl;
+    }
 
-			std::wcerr << L"Unexpected error occurs." << std::endl;			
+    //-----------------------------------------------------------------------------
+    LONG WINAPI CreateMiniDumpOnUnHandledException(PEXCEPTION_POINTERS exceptionInfo)
+    {
+        MINIDUMP_EXCEPTION_INFORMATION minidumpInfo;
 
-			minidumpInfo.ThreadId = GetCurrentThreadId();
-			minidumpInfo.ExceptionPointers = exceptionInfo;
-			minidumpInfo.ClientPointers = FALSE;
+        std::wcerr << L"Unexpected error occurs." << std::endl;
 
-			const auto dmpFilename = L"OpenCppCoverage.dmp";
-			HANDLE hFile = CreateFileW(dmpFilename, GENERIC_WRITE, 0, nullptr,
-				CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
-			
-			if (hFile != INVALID_HANDLE_VALUE)
-			{				
-				CreateMiniDump(minidumpInfo, hFile, dmpFilename);
-				CloseHandle(hFile);
-			}
-			abort();
-			return 0;
-		}	
+        minidumpInfo.ThreadId          = GetCurrentThreadId();
+        minidumpInfo.ExceptionPointers = exceptionInfo;
+        minidumpInfo.ClientPointers    = FALSE;
 
-	//-------------------------------------------------------------------------
-	void CreateMiniDumpOnUnHandledException()
-	{
-		DWORD dwMode = GetErrorMode();
-		SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
+        const auto dmpFilename = L"OpenCppCoverage.dmp";
+        HANDLE     hFile       = CreateFileW(dmpFilename, GENERIC_WRITE, 0, nullptr, CREATE_ALWAYS,
+                                             FILE_ATTRIBUTE_NORMAL, nullptr);
 
-		SetUnhandledExceptionFilter(CreateMiniDumpOnUnHandledException);
-	}	
-}
+        if (hFile != INVALID_HANDLE_VALUE)
+        {
+            CreateMiniDump(minidumpInfo, hFile, dmpFilename);
+            CloseHandle(hFile);
+        }
+        abort();
+        return 0;
+    }
+
+    //-------------------------------------------------------------------------
+    void CreateMiniDumpOnUnHandledException()
+    {
+        DWORD dwMode = GetErrorMode();
+        SetErrorMode(dwMode | SEM_NOGPFAULTERRORBOX);
+
+        SetUnhandledExceptionFilter(CreateMiniDumpOnUnHandledException);
+    }
+} // namespace Tools

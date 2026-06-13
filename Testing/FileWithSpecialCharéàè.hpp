@@ -20,9 +20,9 @@
 
 namespace TestCoverageConsole
 {
-	//-------------------------------------------------------------------------
-	inline std::filesystem::path GetFileWithSpecialChars()
-	{
-		return std::filesystem::path(__FILE__).filename();
-	}
-}
+    //-------------------------------------------------------------------------
+    inline std::filesystem::path GetFileWithSpecialChars()
+    {
+        return std::filesystem::path(__FILE__).filename();
+    }
+} // namespace TestCoverageConsole

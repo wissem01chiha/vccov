@@ -20,26 +20,25 @@
 
 namespace CppCoverage
 {
-	class VCOV_COVERAGEEXPORT_DLL CoverageRate
-	{
-	public:
-		CoverageRate();
-		CoverageRate(int executedLinesCount, int unexecutedLinesCount);
-		
-		CoverageRate& operator=(const CoverageRate&) = delete;
-		CoverageRate(const CoverageRate&) = default;
+    class VCOV_COVERAGEEXPORT_DLL CoverageRate
+    {
+      public:
+        CoverageRate();
+        CoverageRate(int executedLinesCount, int unexecutedLinesCount);
 
-		int GetExecutedLinesCount() const;
-		int GetUnExecutedLinesCount() const;
-		int GetTotalLinesCount() const;
-		int GetPercentRate() const;
-		double GetRate() const;
+        CoverageRate& operator=(const CoverageRate&) = delete;
+        CoverageRate(const CoverageRate&)            = default;
 
-		CoverageRate& operator+=(const CoverageRate&);
-		
-	private:
-		int executedLinesCount_;
-		int unexecutedLinesCount_;
-	}; 	
-}
+        int    GetExecutedLinesCount() const;
+        int    GetUnExecutedLinesCount() const;
+        int    GetTotalLinesCount() const;
+        int    GetPercentRate() const;
+        double GetRate() const;
 
+        CoverageRate& operator+=(const CoverageRate&);
+
+      private:
+        int executedLinesCount_;
+        int unexecutedLinesCount_;
+    };
+} // namespace CppCoverage

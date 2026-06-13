@@ -21,27 +21,23 @@
 
 namespace FileFilter
 {
-	class ModuleInfo;
-	class FileInfo;
-	class LineInfo;
-}
+    class ModuleInfo;
+    class FileInfo;
+    class LineInfo;
+} // namespace FileFilter
 
 namespace CppCoverage
 {
-	class CoverageFilterSettings;
+    class CoverageFilterSettings;
 
-	class VCOV_FILTEREXPORT_DLL ICoverageFilterManager
-	{
-	public:
-		virtual ~ICoverageFilterManager() = default;
+    class VCOV_FILTEREXPORT_DLL ICoverageFilterManager
+    {
+      public:
+        virtual ~ICoverageFilterManager() = default;
 
-		virtual bool IsModuleSelected(const std::wstring& filename) const = 0;
-		virtual bool IsSourceFileSelected(const std::wstring& filename) = 0;
-		virtual bool IsLineSelected(
-			const FileFilter::ModuleInfo&,
-			const FileFilter::FileInfo&,
-			const FileFilter::LineInfo&) = 0;
-	};
-}
-
-
+        virtual bool IsModuleSelected(const std::wstring& filename) const = 0;
+        virtual bool IsSourceFileSelected(const std::wstring& filename)   = 0;
+        virtual bool IsLineSelected(const FileFilter::ModuleInfo&, const FileFilter::FileInfo&,
+                                    const FileFilter::LineInfo&)          = 0;
+    };
+} // namespace CppCoverage

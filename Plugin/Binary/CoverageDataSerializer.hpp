@@ -16,27 +16,28 @@
 
 #pragma once
 
-#include <filesystem>
 #include "BinaryExport.h"
+#include <filesystem>
 
-namespace Plugin {
+namespace Plugin
+{
 
- class CoverageData;
+    class CoverageData;
 
 }
 
 namespace Exporter
 {
-	class VCOV_BINARYEXPORT_DLL CoverageDataSerializer
-	{
-	public:
-		const static unsigned int FileTypeId;
-		CoverageDataSerializer() = default;
-        void Serialize(const Plugin::CoverageData &coverageData, const std::filesystem::path& output) const;
+    class VCOV_BINARYEXPORT_DLL CoverageDataSerializer
+    {
+      public:
+        const static unsigned int FileTypeId;
+        CoverageDataSerializer() = default;
+        void Serialize(const Plugin::CoverageData&  coverageData,
+                       const std::filesystem::path& output) const;
 
-	private:
-		CoverageDataSerializer(const CoverageDataSerializer&) = delete;
-		CoverageDataSerializer& operator=(const CoverageDataSerializer&) = delete;
-	};
-}
-
+      private:
+        CoverageDataSerializer(const CoverageDataSerializer&)            = delete;
+        CoverageDataSerializer& operator=(const CoverageDataSerializer&) = delete;
+    };
+} // namespace Exporter

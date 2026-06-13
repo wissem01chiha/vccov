@@ -16,53 +16,48 @@
 
 #pragma once
 
-#include "PluginExport.h"
-#include <memory>
-#include <vector>
-#include <string>
-#include <filesystem>
-#include <unordered_map>
-#include <optional>
 #include "ExportPluginDescription.hpp"
+#include "PluginExport.h"
+#include <filesystem>
+#include <memory>
+#include <optional>
+#include <string>
+#include <unordered_map>
+#include <vector>
 
 namespace Plugin
 {
-	class CoverageData;
-	class IExportPlugin;
-}
+    class CoverageData;
+    class IExportPlugin;
+} // namespace Plugin
 
 namespace Exporter
 {
-	template <typename T>
-	class IPluginLoader;
+    template <typename T> class IPluginLoader;
 
-	template <typename T>
-	class LoadedPlugin;
+    template <typename T> class LoadedPlugin;
 
-	class VCOV_PLUGINEXPORT_DLL ExporterPluginManager
-	{
-	  public:
-		explicit ExporterPluginManager(const IPluginLoader<Plugin::IExportPlugin>&,
-		                               std::filesystem::path&& pluginFolder);
-		~ExporterPluginManager();
+    class VCOV_PLUGINEXPORT_DLL ExporterPluginManager
+    {
+      public:
+        explicit ExporterPluginManager(const IPluginLoader<Plugin::IExportPlugin>&,
+                                       std::filesystem::path&& pluginFolder);
+        ~ExporterPluginManager();
 
-		ExporterPluginManager(const ExporterPluginManager&) = delete;
-		ExporterPluginManager(ExporterPluginManager&&) = delete;
+        ExporterPluginManager(const ExporterPluginManager&) = delete;
+        ExporterPluginManager(ExporterPluginManager&&)      = delete;
 
-		ExporterPluginManager& operator=(const ExporterPluginManager&) = delete;
-		ExporterPluginManager& operator=(ExporterPluginManager&&) = delete;
+        ExporterPluginManager& operator=(const ExporterPluginManager&) = delete;
+        ExporterPluginManager& operator=(ExporterPluginManager&&)      = delete;
 
-		std::vector<CppCoverage::ExportPluginDescription>
-		CreateExportPluginDescriptions() const;
+        std::vector<CppCoverage::ExportPluginDescription> CreateExportPluginDescriptions() const;
 
-		void Export(const std::wstring& pluginName,
-		            const Plugin::CoverageData&,
-		            const std::optional<std::wstring>& argument) const;
+        void Export(const std::wstring&                pluginName, const Plugin::CoverageData&,
+                    const std::optional<std::wstring>& argument) const;
 
-	  private:
-		std::unordered_map<std::wstring,
-		                   std::shared_ptr<LoadedPlugin<Plugin::IExportPlugin>>>
-		    plugins_;
-		std::filesystem::path pluginFolder_;
-	};
-}
+      private:
+        std::unordered_map<std::wstring, std::shared_ptr<LoadedPlugin<Plugin::IExportPlugin>>>
+                              plugins_;
+        std::filesystem::path pluginFolder_;
+    };
+} // namespace Exporter

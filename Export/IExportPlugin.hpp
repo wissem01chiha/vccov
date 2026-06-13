@@ -16,57 +16,56 @@
 
 #pragma once
 
-#include <string>
-#include <optional>
-#include <filesystem>
 #include "ExportExport.h"
+#include <filesystem>
+#include <optional>
+#include <string>
 
 namespace Plugin
 {
-	class CoverageData;
+    class CoverageData;
 
-	//-------------------------------------------------------------------------
-	// This is the interface to implement a new export type.
-	//-------------------------------------------------------------------------
-	class VCOV_EXPORTEXPORT_DLL IExportPlugin
-	{
-	  public:
-		virtual ~IExportPlugin() = default;
+    //-------------------------------------------------------------------------
+    // This is the interface to implement a new export type.
+    //-------------------------------------------------------------------------
+    class VCOV_EXPORTEXPORT_DLL IExportPlugin
+    {
+      public:
+        virtual ~IExportPlugin() = default;
 
-		//---------------------------------------------------------------------
-		// Perform the export.
-		//    coverageData: stores the result of the code coverage.
-		//    argument: The command line argument provided by the user or
-		//    std::nullopt.
-		// Returns the path where the report was generated or std::nullopt.
-		//---------------------------------------------------------------------
-		virtual std::optional<std::filesystem::path>
-		Export(const Plugin::CoverageData& coverageData,
-		       const std::optional<std::wstring>& argument) = 0;
+        //---------------------------------------------------------------------
+        // Perform the export.
+        //    coverageData: stores the result of the code coverage.
+        //    argument: The command line argument provided by the user or
+        //    std::nullopt.
+        // Returns the path where the report was generated or std::nullopt.
+        //---------------------------------------------------------------------
+        virtual std::optional<std::filesystem::path>
+        Export(const Plugin::CoverageData&        coverageData,
+               const std::optional<std::wstring>& argument) = 0;
 
-		//---------------------------------------------------------------------
-		// Check the command line argument.
-		//    argument: The command line argument provided by the user or
-		//    std::nullopt.
-		// If the argument is not valid, this function must throw an instance of
-		// OptionsParserException.
-		//---------------------------------------------------------------------
-		virtual void
-		CheckArgument(const std::optional<std::wstring>& argument) = 0;
+        //---------------------------------------------------------------------
+        // Check the command line argument.
+        //    argument: The command line argument provided by the user or
+        //    std::nullopt.
+        // If the argument is not valid, this function must throw an instance of
+        // OptionsParserException.
+        //---------------------------------------------------------------------
+        virtual void CheckArgument(const std::optional<std::wstring>& argument) = 0;
 
-		//---------------------------------------------------------------------
-		// Get the text to describe the command line argument.
-		// For example, it can be "output file (optional)".
-		//---------------------------------------------------------------------
-		virtual std::wstring GetArgumentHelpDescription() = 0;
+        //---------------------------------------------------------------------
+        // Get the text to describe the command line argument.
+        // For example, it can be "output file (optional)".
+        //---------------------------------------------------------------------
+        virtual std::wstring GetArgumentHelpDescription() = 0;
 
-		//---------------------------------------------------------------------
-		// Get the IExportPlugin interface version.
-		// Must be implemented as return Plugin::CurrentExportPluginVersion.
-		//---------------------------------------------------------------------
-		virtual int GetExportPluginVersion() const = 0;
-	};
+        //---------------------------------------------------------------------
+        // Get the IExportPlugin interface version.
+        // Must be implemented as return Plugin::CurrentExportPluginVersion.
+        //---------------------------------------------------------------------
+        virtual int GetExportPluginVersion() const = 0;
+    };
 
-	// The current version of IExportPlugin.
-	const int CurrentExportPluginVersion = 1;
-}
+    // The current version of IExportPlugin.
+    const int CurrentExportPluginVersion = 1;
+} // namespace Plugin

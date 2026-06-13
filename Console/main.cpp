@@ -17,31 +17,31 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-#include <iostream>
+#include "Log.hpp"
 #include "MiniDump.hpp"
 #include "OpenCppCoverage.hpp"
-#include "Log.hpp"
+#include "stdafx.h"
+#include <iostream>
 
 //-----------------------------------------------------------------------------
 int main(int argc, const char* argv[])
 {
-	Tools::CreateMiniDumpOnUnHandledException();
-	
-	try
-	{
-		OpenCppCoverage::OpenCppCoverage openCppCoverage;
+    Tools::CreateMiniDumpOnUnHandledException();
 
-		return openCppCoverage.Run(argc, argv, &std::wcerr);
-	}
-	catch (const std::exception& e)
-	{
-		std::cerr << "Error: " << e.what() << std::endl;
-	}
-	catch (...)
-	{
-		std::cerr << "Unknown error" << std::endl;
-	}
+    try
+    {
+        OpenCppCoverage::OpenCppCoverage openCppCoverage;
 
-	return OpenCppCoverage::FailureExitCode;
+        return openCppCoverage.Run(argc, argv, &std::wcerr);
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unknown error" << std::endl;
+    }
+
+    return OpenCppCoverage::FailureExitCode;
 }

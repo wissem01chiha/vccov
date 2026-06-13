@@ -17,6 +17,6 @@
 #pragma once
 
 #pragma warning(push)
-#pragma warning(disable: 4267) // 'initializing' : conversion from 'size_t' to 'int'
+#pragma warning(disable : 4267) // 'initializing' : conversion from 'size_t' to 'int'
 #include <ctemplate/template.h>
 #pragma warning(pop)
