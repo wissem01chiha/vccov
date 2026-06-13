@@ -13,6 +13,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgArguments: install
+          vcpkgDirectory: '${{ github.workspace }}/vcpkg'
+          vcpkgTriplet: '${{ matrix.platform }}-windows'
+
       - name: Configure CMake
         shell: pwsh
         run: |
@@ -21,7 +28,7 @@ jobs:
           } else {
             $generator = "Visual Studio 16 2019"
           }
-          cmake -G "$generator" -A "${{ matrix.platform }}" -DCMAKE_TOOLCHAIN_FILE=C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -S . -B build/${{ matrix.os }}-${{ matrix.platform }}-${{ matrix.configuration }}
+          cmake -G "$generator" -A "${{ matrix.platform }}" -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake -S . -B build/${{ matrix.os }}-${{ matrix.platform }}-${{ matrix.configuration }}
 
       - name: Build
         shell: powershell
