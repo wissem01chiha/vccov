@@ -16,11 +16,13 @@
 
 #pragma once
 
-namespace TestHelper
+#include "TestingExport.hpp"
+
+namespace Testing
 {
 	//-------------------------------------------------------------------------
 	template <typename Value, typename CloseAction>
-	class AutoClose
+	class VCOV_TESTINGEXPORT_DLL AutoClose
 	{
 	public:
 		//---------------------------------------------------------------------

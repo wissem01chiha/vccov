@@ -32,4 +32,4 @@ vcov_module_add_dependencies(Coverage
         Export
         Option
 )
-vcov_add_test(Coverage)
+vcov_module_add_test(Coverage)

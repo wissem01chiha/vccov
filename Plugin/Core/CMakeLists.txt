@@ -21,4 +21,4 @@ vcov_module_add_dependencies(Plugin
         Common
         Option
 )
-vcov_add_test(Plugin)
+vcov_module_add_test(Plugin)

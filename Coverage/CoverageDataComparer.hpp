@@ -16,8 +16,9 @@
 
 #pragma once
 
-#include "TestHelperExport.hpp"
+#include "TestingExport.hpp"
 #include <memory>
+#include <vector>
 
 namespace Plugin
 {
@@ -25,9 +26,9 @@ namespace Plugin
 	class ModuleCoverage;
 }
 
-namespace TestHelper
+namespace Testing
 {
-	class TEST_HELPER_DLL CoverageDataComparer
+	class VCOV_TESTINGEXPORT_DLL CoverageDataComparer
 	{
 	public:
 		CoverageDataComparer() = default;

@@ -25,4 +25,4 @@ vcov_module_add_dependencies(Option
         Core
         Export
 )
-vcov_add_test(Option)
+vcov_module_add_test(Option)

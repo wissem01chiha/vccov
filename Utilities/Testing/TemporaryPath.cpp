@@ -14,18 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+#include "TemporaryPath.hpp"
 #include "stdafx.h"
 #include <system_error>
 #include <random>
 
-#include "TemporaryPath.hpp"
-#include "Tools/Log.hpp"
-#include "Tools.hpp"
-#include "Tools/Tool.hpp"
-
 namespace fs = std::filesystem;
 
-namespace TestHelper
+namespace Testing
 {
 	//-------------------------------------------------------------------------	
 	TemporaryPath::TemporaryPath(TemporaryPathOption temporaryPathOption)

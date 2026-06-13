@@ -33,4 +33,4 @@ vcov_module_add_dependencies(Core
     DEPENDENCIES    
         Common
 )
-vcov_add_test(Core)
+vcov_module_add_test(Core)

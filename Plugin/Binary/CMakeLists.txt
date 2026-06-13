@@ -26,4 +26,4 @@ target_link_libraries(Binary PUBLIC
     protobuf::libprotobuf 
     protobuf::libprotobuf-lite
 )
-vcov_add_test(Binary)
+vcov_module_add_test(Binary)

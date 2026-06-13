@@ -78,7 +78,6 @@ function (vcov_module_add_dependencies module)
             target_include_directories(${module} PUBLIC ${dep_includes})
         endif()
     endforeach()
-
     if(_vcov_private_deps)
         target_link_libraries(${module} PRIVATE ${_vcov_private_deps})
     endif()
@@ -88,28 +87,28 @@ function (vcov_module_add_dependencies module)
 endfunction()
 
 #[==[.rst:
-.. cmake:command:: vcov_add_test
+.. cmake:command:: vcov_module_add_test
 
   .. code-block:: cmake
 
-    vcov_add_test(<name>)
+    vcov_module_add_test(<name>)
 #]==]
-function (vcov_add_test module)
+function (vcov_module_add_test module)
     enable_testing()
     add_subdirectory(Testing)
 endfunction()
 
 #[==[.rst:
-.. cmake:command:: vcov_add_test_sources
+.. cmake:command:: vcov_module_add_test_sources
 
   .. code-block:: cmake
 
-    vcov_add_test_sources(<name>
+    vcov_module_add_test_sources(<name>
         SOURCES [<source>...] 
         DEPENDENCIES [<name>...] 
     )
 #]==]
-function (vcov_add_test_sources module)
+function (vcov_module_add_test_sources module)
     cmake_parse_arguments(PARSE_ARGV 1 _vcov "" "" "SOURCES;DEPENDENCIES")
     if(NOT _vcov_SOURCES)
         message(FATAL_ERROR "No test sources provided for module ${module}")

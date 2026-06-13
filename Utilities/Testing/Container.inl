@@ -16,7 +16,9 @@
 
 #pragma once
 
-namespace TestHelper
+#include <functional>
+
+namespace Testing
 {
 	//---------------------------------------------------------------------
 	template<typename Container, typename CompareFct>

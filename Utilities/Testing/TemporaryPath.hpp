@@ -17,22 +17,14 @@
 #pragma once
 
 #include <filesystem>
+#include "TestingExport.hpp"
+#include "TemporaryPathOption.hpp"
 
-#include "TestHelperExport.hpp"
-
-namespace TestHelper
+namespace Testing
 {
-	enum class TemporaryPathOption
-	{
-		DoNotCreate,
-		CreateAsFile,
-		CreateAsFolder
-	};
-
-	class TEST_HELPER_DLL TemporaryPath
+	class VCOV_TESTINGEXPORT_DLL TemporaryPath
 	{
 	public:
-		 
 		explicit TemporaryPath(TemporaryPathOption = TemporaryPathOption::DoNotCreate);
 		~TemporaryPath();
 

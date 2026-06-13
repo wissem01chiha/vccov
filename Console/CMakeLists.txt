@@ -22,7 +22,7 @@ vcov_module_add_dependencies(Console
         Binary
         Html
 )
-vcov_add_test(Console)
+vcov_module_add_test(Console)
 
 add_executable(vcov  main.cpp)
 target_link_libraries(vcov PRIVATE Console 

@@ -48,4 +48,4 @@ vcov_module_add_dependencies(Filter
         Core 
         Option
 )
-vcov_add_test(Filter)
+vcov_module_add_test(Filter)

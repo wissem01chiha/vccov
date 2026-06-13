@@ -13,4 +13,4 @@ vcov_module_add_dependencies(Platform
         Common
         Core
 )
-vcov_add_test(Platform)
+vcov_module_add_test(Platform)

@@ -15,13 +15,11 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "stdafx.h"
-
 #include "CoverageDataComparer.hpp"
 #include "Plugins/Exporter/CoverageData.hpp"
 #include "Plugin/Exporter/ModuleCoverage.hpp"
 #include "Plugin/Exporter/FileCoverage.hpp"
 #include "Plugin/Exporter/LineCoverage.hpp"
-
 #include "Container.hpp"
 
 namespace TestHelper

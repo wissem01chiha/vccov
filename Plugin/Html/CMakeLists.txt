@@ -26,4 +26,4 @@ vcov_module_add_dependencies(Html
 )
 target_include_directories(Html PUBLIC ${CTemplate_INCLUDE_DIRS})
 target_link_libraries(Html PUBLIC ${CTemplate_LIBRARIES})
-vcov_add_test(Html)
+vcov_module_add_test(Html)

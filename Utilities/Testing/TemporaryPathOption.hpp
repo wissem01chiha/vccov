@@ -16,10 +16,14 @@
 
 #pragma once
 
-#ifdef TEST_HELPER_EXPORTS
-#define TEST_HELPER_DLL __declspec(dllexport)
-#else
-#define TEST_HELPER_DLL __declspec(dllimport)
-#endif
+#include "TestingExport.hpp"
 
-#pragma warning (disable: 4251)
+namespace Testing
+{
+	enum class VCOV_TESTINGEXPORT_DLL TemporaryPathOption
+	{
+		DoNotCreate,
+		CreateAsFile,
+		CreateAsFolder
+	};
+};

@@ -17,25 +17,26 @@
 #pragma once
 
 #include <filesystem>
-#include "TestHelperExport.hpp"
+#include "TestingExport.hpp"
+#include <functional>
 
 extern "C"
 {
-	void TEST_HELPER_DLL TestUnloadDll();
+	void VCOV_TESTINGEXPORT_DLL TestUnloadDll();
 }
 
-namespace TestHelper
+namespace Testing
 {
-	std::filesystem::path TEST_HELPER_DLL  GetTestUnloadDllFilename();
-	std::filesystem::path TEST_HELPER_DLL  GetOutputBinaryPath();
+	std::filesystem::path VCOV_TESTINGEXPORT_DLL  GetTestUnloadDllFilename();
+	std::filesystem::path VCOV_TESTINGEXPORT_DLL  GetOutputBinaryPath();
 
-	void TEST_HELPER_DLL CreateEmptyFile(const std::filesystem::path&);
+	void VCOV_TESTINGEXPORT_DLL CreateEmptyFile(const std::filesystem::path&);
 
-	std::string TEST_HELPER_DLL RunProcess(
+	std::string VCOV_TESTINGEXPORT_DLL RunProcess(
 		const std::filesystem::path& program,
 		const std::vector<std::string>& args);
 
-	std::filesystem::path TEST_HELPER_DLL GetVisualStudioPath();
+	std::filesystem::path VCOV_TESTINGEXPORT_DLL GetVisualStudioPath();
 
 	//-------------------------------------------------------------------------
 	template <typename ExceptionType, typename Fct>

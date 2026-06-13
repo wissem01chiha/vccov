@@ -18,12 +18,9 @@
 
 #include "stdafx.h"
 #include "Tools.hpp"
-#include "Tools/Tool.hpp"
-
 #include <fstream>
 #include <filesystem>
 #include <boost/algorithm/string.hpp>
-
 #include <Poco/Process.h>
 #include <Poco/Pipe.h>
 #include <Poco/PipeStream.h>
@@ -35,7 +32,7 @@ void TestUnloadDll()
 {
 }
 
-namespace TestHelper
+namespace Testing
 {
 	//-------------------------------------------------------------------------
 	fs::path GetTestUnloadDllFilename()

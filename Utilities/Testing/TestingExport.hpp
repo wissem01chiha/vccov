@@ -16,29 +16,12 @@
 
 #pragma once
 
-#include "TestingExport.hpp"
-#include <functional>
+#include "VcovExport.h"
 
-namespace Testing
-{
-	template<typename Container, typename CompareFct>
-	void AssertContainerEqual(
-		const Container& container1,
-		const Container& container2,
-		const CompareFct& compareFct);
-	
-	template<typename Container, typename CompareFct>
-	void AssertContainerUniquePtrEqual(
-		const Container& container1,
-		const Container& container2,
-		const CompareFct& compareFct);
+#ifdef VCOV_TESTINGEXPORT
+#define VCOV_TESTINGEXPORT_DLL __declspec(dllexport)
+#else
+#define VCOV_TESTINGEXPORT_DLL __declspec(dllimport)
+#endif
 
-	template<typename Key, typename Container, typename CompareFct>
-	bool IsFirstContainsSecond(
-		const Container& container1,
-		const Container& container2,
-		const std::function<Key(const typename Container::value_type&)>& getKeyFct,
-		const CompareFct& compareFct);
-}
-
-#include "Container.inl"
+#pragma warning (disable: 4251)

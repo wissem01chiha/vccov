@@ -32,4 +32,4 @@ set(headers
     CommonExport.h
 )
 vcov_module_add_module(Common CLASSES ${classes} HEADERS ${headers})
-vcov_add_test(Common)
+vcov_module_add_test(Common)
