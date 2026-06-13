@@ -9,18 +9,20 @@ jobs:
         platform: [x64, Win32]
         configuration: [Debug, Release]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 120
+    timeout-minutes: 200
     steps:
       - uses: actions/checkout@v4
+
       - name: Configure CMake
-        shell: powershell
+        shell: pwsh
         run: |
-          if (${{ matrix.os }} -eq 'windows-2022') {
-            $generator = 'Visual Studio 17 2022'
+          if ("${{ matrix.os }}" -eq "windows-2022") {
+            $generator = "Visual Studio 17 2022"
           } else {
-            $generator = 'Visual Studio 16 2019'
+            $generator = "Visual Studio 16 2019"
           }
           cmake -G "$generator" -A "${{ matrix.platform }}" -DCMAKE_TOOLCHAIN_FILE=C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake -S . -B build/${{ matrix.os }}-${{ matrix.platform }}-${{ matrix.configuration }}
+
       - name: Build
         shell: powershell
         run: |
