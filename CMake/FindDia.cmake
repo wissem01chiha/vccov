@@ -12,10 +12,15 @@
 #  Dia_FOUND              - True if the DIA library was found.
 #==========================================================================]
 
-find_path(Dia_INCLUDE_DIR dia2.h)
+# by default DIA directories are not addded to system envirment variables 
+# this need to be run from a developper command prompet
+find_path(Dia_INCLUDE_DIR
+    NAMES dia2.h
+    PATHS "$ENV{VSINSTALLDIR}/DIA SDK/include"
+    NO_DEFAULT_PATH
+)
 
 string(TOLOWER "${CMAKE_GENERATOR_PLATFORM}" _dia_platform)
-message(STATUS "Detected platform: ${_dia_platform}")
 
 if(_dia_platform STREQUAL "x64" OR _dia_platform STREQUAL "amd64")
     set(_DIA_LIB_PATHS ${Dia_INCLUDE_DIR}/../lib/amd64)
@@ -31,8 +36,6 @@ find_library(Dia_LIBRARY diaguids.lib
     PATHS ${_DIA_LIB_PATHS}
     NO_DEFAULT_PATH
 )
-
-message(STATUS "DIA architecture directories: ${_DIA_ARCH_DIRS}")
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Dia DEFAULT_MSG Dia_INCLUDE_DIR Dia_LIBRARY)

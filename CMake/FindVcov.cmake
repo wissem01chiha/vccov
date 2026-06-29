@@ -1,9 +1,9 @@
 #[=======================================================================[.rst:
-# Findvcov
+# FindVcov
 # -----------
 # Find the Vcov library
 #
-#  find_package(vcov [<version>] REQUIRED)
+#  find_package(Vcov [<version>] REQUIRED)
 #
 #    - Vcov_FOUND        - True if the library was found.
 #    - Vcov_VERSION      - The version of the library.

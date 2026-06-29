@@ -16,7 +16,7 @@
 
 #pragma once
 
-#include <minwindef.h>
+#include <windows.h>
 #include <vector>
 
 namespace FileFilter

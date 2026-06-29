@@ -17,7 +17,7 @@
 #pragma once
 
 #include "CoreExport.h"
-#include <Windows.h>
+#include <windows.h>
 #include <boost/optional/optional.hpp>
 #include <unordered_map>
 

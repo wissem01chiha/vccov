@@ -19,7 +19,7 @@
 #include "FilterExport.h"
 #include <filesystem>
 #include <memory>
-#include <minwindef.h>
+#include <windows.h>
 #include <unordered_map>
 #include <unordered_set>
 
