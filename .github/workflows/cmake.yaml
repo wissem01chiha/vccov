@@ -20,6 +20,12 @@ jobs:
           vcpkgDirectory: '${{ github.workspace }}/vcpkg'
           vcpkgTriplet: '${{ matrix.platform }}-windows'
 
+      - name: Setup Visual Studio Environment Variables
+        shell: pwsh
+        run: |
+          $vsPath = & "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath
+          echo "VSINSTALLDIR=$vsPath" | Out-File -FilePath $env:GITHUB_ENV -Append
+
       - name: Configure CMake
         shell: pwsh
         run: |
