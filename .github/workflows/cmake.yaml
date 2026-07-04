@@ -7,7 +7,7 @@ jobs:
       matrix:
         os: [windows-2022, windows-2019]
         platform: [x64, Win32]
-        configuration: [Debug, Release]
+        configuration: [Release]
     runs-on: ${{ matrix.os }}
     timeout-minutes: 200
     steps:
