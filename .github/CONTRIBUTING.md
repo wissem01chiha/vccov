@@ -1,30 +1,37 @@
-# Vcov Contributaing Guide
+# Contribution Guidelines
 
+Vcov is a community driven effort, Currently almost all of the development for Vcov Project is done by Wissem alone in his spare time, your contributions are invaluable!
 
+## Issues
 
-vcov naming convetion :
+The easiest way to contribute is by reporting issues with `vcov.exe` tool 
 
-folder naming :lowercase with hyphens eg core , third-party
+## Pull Requests
 
-files :  PascalCase should match class name if the file contain declation or implentaion of a class 
+We are happy to accept pull requests for fixes, features
+and updates,  In order to avoid wasting your time, we highly encourage opening an issue to discuss whether the PR you're thinking about making will be acceptable.
 
-Function Names  camelCase omputeCoverageRate
+### Naming Style Conventions
 
-Classes/Types PascalCase CoverageRateComputer 
+- **Folder naming**:  PascalCase. Example: `Core`, `ThirdParty`
 
-Macros UPPERCASE_WITH_UNDERSCORES
+- **File naming**:  PascalCase. The filename should match the class name if the file contains its declaration or implementation.  Example: `CoverageAnalyzer.cpp`, `CoverageAnalyzer.h`
 
-Constants lowercase
+- **Function names**:  camelCase. Example: `computeCoverageRate`
 
-Member Variables camelCase with prefix or suffix
+- **Classes and types**:  PascalCase.  Example: `CoverageRateComputer`
 
+- **Macros**:  uppercase with underscores.  Example: `MAX_BUFFER_SIZE`
 
+- **Constants**: lowercase.  Example: `pi = 3.14159`
+
+- **Member variables**: camelCase with a suffix (`_`) or prefix (`m_`). Avoid inconsistent styles.  
+
+```cpp
 class CoverageAnalyzer {
 private:
-    int coverageRate_;                 
-    // or
-    int m_coverageRate;                
-    
-    int CoverageRate;                 // Avoid
-    int coverage_rate;                // Avoid 
-}; 
+    int coverageRate_;   // Preferred suffix style
+    int m_coverageRate;  // Alternative prefix style
+    int CoverageRate;    // Avoid: PascalCase for members
+    int coverage_rate;   // Avoid: snake_case for members
+};

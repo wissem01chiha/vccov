@@ -50,6 +50,8 @@ You can also have a look at [Command-line reference](https://github.com/OpenCppC
 
 ## Contribute
 
+vcov is an open source project, and is thus built with your contributions. Here are some ways you can contribute:
+
 * [Submit issues](https://github.com/wissem01chiha/vcov/issues)
 * [Submit fixes](https://github.com/wissem01chiha/vcov/pulls)
   
