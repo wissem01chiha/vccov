@@ -61,9 +61,8 @@ Please refer to our [maintainer guide](.github/CONTRIBUTING.md) for more details
 
 * Docs: [Wiki](https://github.com/wissem01chiha/vcov/wiki)
 * Source code: [vcov](../../releases)
-* Email: [Contact](chihawissem08@gmail.com)
+* Email: [Contact](mailto:chihawissem08@gmail.com)
 
 ## License
 
 The code in this repository is licensed under the GPL-3.0 License.
-

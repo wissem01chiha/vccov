@@ -1,10 +1,10 @@
 # Contribution Guidelines
 
-Vcov is a community driven effort, Currently almost all of the development for Vcov Project is done by Wissem alone in his spare time, your contributions are invaluable!
+Vcov is a community‑driven effort. Currently, almost all of the development for the Vcov Project is done by Wissem alone in his spare time, so your contributions are invaluable!
 
 ## Issues
 
-The easiest way to contribute is by reporting issues with `vcov.exe` tool 
+The easiest way to contribute is by reporting issues with `vcov.exe` tool.
 
 ## Pull Requests
 
@@ -13,19 +13,19 @@ and updates,  In order to avoid wasting your time, we highly encourage opening a
 
 ### Naming Style Conventions
 
-- **Folder naming**:  PascalCase. Example: `Core`, `ThirdParty`
+- Folder naming:  PascalCase. Example: `Core`, `ThirdParty`
 
-- **File naming**:  PascalCase. The filename should match the class name if the file contains its declaration or implementation.  Example: `CoverageAnalyzer.cpp`, `CoverageAnalyzer.h`
+- File naming:  PascalCase. The filename should match the class name if the file contains its declaration or implementation.  Example: `CoverageAnalyzer.cpp`, `CoverageAnalyzer.h`
 
-- **Function names**:  camelCase. Example: `computeCoverageRate`
+- Function names:  camelCase. Example: `computeCoverageRate`
 
-- **Classes and types**:  PascalCase.  Example: `CoverageRateComputer`
+- Classes and types:  PascalCase.  Example: `CoverageRateComputer`
 
-- **Macros**:  uppercase with underscores.  Example: `MAX_BUFFER_SIZE`
+- Macros:  uppercase with underscores.  Example: `MAX_BUFFER_SIZE`
 
-- **Constants**: lowercase.  Example: `pi = 3.14159`
+- Constants: lowercase.  Example: `pi = 3.14159`
 
-- **Member variables**: camelCase with a suffix (`_`) or prefix (`m_`). Avoid inconsistent styles.  
+- Member variables: camelCase with a suffix (`_`) or prefix (`m_`). Avoid inconsistent styles.  
 
 ```cpp
 class CoverageAnalyzer {
