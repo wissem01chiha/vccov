@@ -17,8 +17,7 @@
 #pragma once
 
 #include "PlatformExport.h"
-#include <Windows.h>
-#include <string>
+#include "PlatformPCH.h"
 
 namespace CppCoverage
 {

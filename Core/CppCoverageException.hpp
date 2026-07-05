@@ -18,7 +18,7 @@
 
 #include "CoreExport.h"
 #include "ExceptionBase.hpp"
-#include <string>
+#include "CorePCH.h"
 
 namespace CppCoverage
 {

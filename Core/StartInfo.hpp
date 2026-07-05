@@ -17,11 +17,8 @@
 #pragma once
 
 #include "CoreExport.h"
-#include <boost/optional.hpp>
-#include <filesystem>
+#include "CorePCH.h"
 #include <iosfwd>
-#include <string>
-#include <vector>
 
 namespace CppCoverage
 {

@@ -17,7 +17,7 @@
 #pragma once
 
 #include "CommonExport.h"
-#include <functional>
+#include "CommonPCH.h"
 
 namespace Tools
 {

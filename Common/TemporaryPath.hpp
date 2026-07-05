@@ -14,7 +14,29 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
+#pragma once
 
-// TODO: reference any additional headers you need in STDAFX.H
-// and not in this file
+#include "CommonExport.h"
+#include "CommonPCH.h"
+#include "TemporaryPathOption.hpp"
+
+namespace Testing
+{
+    class VCOV_COMMONEXPORT_DLL TemporaryPath
+    {
+      public:
+        explicit TemporaryPath(TemporaryPathOption = TemporaryPathOption::DoNotCreate);
+        ~TemporaryPath();
+
+        operator const std::filesystem::path&() const;
+        const std::filesystem::path& GetPath() const;
+        const std::filesystem::path* operator->() const;
+
+      private:
+        TemporaryPath(const TemporaryPath&)            = delete;
+        TemporaryPath& operator=(const TemporaryPath&) = delete;
+
+      private:
+        std::filesystem::path path_;
+    };
+} // namespace Testing

@@ -15,11 +15,8 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ExceptionHandler.hpp"
-#include "stdafx.h"
-// #include "ProgramOptions.hpp"
 #include "ScopedAction.hpp"
 #include "Tool.hpp"
-#include <vector>
 
 namespace CppCoverage
 {

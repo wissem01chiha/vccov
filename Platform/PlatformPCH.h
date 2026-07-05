@@ -16,27 +16,12 @@
 
 #pragma once
 
-#include "TemporaryPathOption.hpp"
-#include "TestingExport.hpp"
+// Windows Headers
+#include <windows.h>
+
+// STL Headers
 #include <filesystem>
+#include <vector>
 
-namespace Testing
-{
-    class VCOV_TESTINGEXPORT_DLL TemporaryPath
-    {
-      public:
-        explicit TemporaryPath(TemporaryPathOption = TemporaryPathOption::DoNotCreate);
-        ~TemporaryPath();
-
-        operator const std::filesystem::path&() const;
-        const std::filesystem::path& GetPath() const;
-        const std::filesystem::path* operator->() const;
-
-      private:
-        TemporaryPath(const TemporaryPath&)            = delete;
-        TemporaryPath& operator=(const TemporaryPath&) = delete;
-
-      private:
-        std::filesystem::path path_;
-    };
-} // namespace Testing
+// Boost Headers
+#include <boost/algorithm/string.hpp>

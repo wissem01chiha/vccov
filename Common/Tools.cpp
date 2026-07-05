@@ -17,12 +17,10 @@
 #pragma once
 
 #include "Tools.hpp"
-#include "stdafx.h"
+#include "Tool.hpp"
 #include <Poco/Pipe.h>
 #include <Poco/PipeStream.h>
 #include <Poco/Process.h>
-#include <boost/algorithm/string.hpp>
-#include <filesystem>
 #include <fstream>
 
 namespace fs = std::filesystem;

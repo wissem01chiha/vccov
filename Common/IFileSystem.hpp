@@ -17,9 +17,8 @@
 #pragma once
 
 #include "CommonExport.h"
-#include <boost/optional/optional_fwd.hpp>
+#include "CommonPCH.h"
 #include <ctime>
-#include <filesystem>
 
 namespace CppCoverage
 {

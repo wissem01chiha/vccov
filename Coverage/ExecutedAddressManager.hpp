@@ -17,12 +17,9 @@
 #pragma once
 
 #include "CoverageData.hpp"
+#include "CoveragePCH.h"
 #include "CoverageExport.h"
-#include <Windows.h>
-#include <boost/optional.hpp>
-#include <map>
-#include <set>
-#include <string>
+
 
 namespace CppCoverage
 {

@@ -17,9 +17,7 @@
 #pragma once
 
 #include "CommonExport.h"
-#include <boost/log/sources/global_logger_storage.hpp>
-#include <boost/log/trivial.hpp>
-#include <filesystem>
+#include "CommonPCH.h"
 #include <iosfwd>
 #include <set>
 

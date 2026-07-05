@@ -16,7 +16,6 @@
 
 #include "WarningManager.hpp"
 #include "Log.hpp"
-#include "stdafx.h"
 
 namespace Tools
 {

@@ -19,7 +19,6 @@
 #include "CppCoverageException.hpp"
 #include "Log.hpp"
 #include "ProcessMemory.hpp"
-#include "stdafx.h"
 
 namespace CppCoverage
 {

@@ -9,8 +9,8 @@ if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     CACHE PATH "Installation prefix" FORCE)
 endif()
 
-if(VCCOV_INSTALL)
+if(VCOV_INSTALL)
     install(FILES ${vccov_public_headers}
-      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vccov
+      DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/vcov
     )
 endif()

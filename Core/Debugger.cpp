@@ -21,7 +21,7 @@
 #include "Process.hpp"
 #include "ScopedAction.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
+#include "CorePCH.h"
 
 namespace CppCoverage
 {

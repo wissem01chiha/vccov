@@ -1,7 +1,7 @@
-# vcov_module_add_test_sources(Common
-# 	SOURCES
-# 		stdafx.cpp
-# 		ToolTest.cpp
-# 		ToolsTest.cpp
-# 		MappedFileTest.cpp
-# )
+vcov_module_add_test_sources(Common
+    SOURCES
+        stdafx.cpp
+        TestTool.cpp
+        TestTools.cpp
+        TestMappedFile.cpp
+)

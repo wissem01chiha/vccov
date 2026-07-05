@@ -15,12 +15,10 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "HandleInformation.hpp"
-#include "stdafx.h"
-// #include "CppCoverageException.hpp"
 #include "Handle.hpp"
 #include <Psapi.h>
-#include <boost/algorithm/string.hpp>
-#include <vector>
+
+const int PathBufferSize = 40 * 1000;
 
 namespace CppCoverage
 {
@@ -122,7 +120,7 @@ namespace CppCoverage
     {
         if (hfile == nullptr)
         {
-            THROW(L"OpenCppCoverage cannot find the name of the module.\n"
+            THROW(L"Vcov cannot find the name of the module.\n"
                   L"See "
                   L"https://github.com/OpenCppCoverage/OpenCppCoverage/wiki/"
                   L"FAQ#error-opencppcoverage-cannot-find-the-name-of-the-"

@@ -16,8 +16,7 @@
 
 #include "Wildcards.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <boost/algorithm/string.hpp>
+#include "CorePCH.h"
 
 namespace CppCoverage
 {

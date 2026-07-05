@@ -16,8 +16,16 @@
 
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN // Exclude rarely-used stuff from Windows headers
-// Windows Header Files:
-#include <windows.h>
+#include <filesystem>
 
-const int PathBufferSize = 40 * 1000;
+namespace TestCoverageConsole
+{
+    void SpecialLineInfo();
+
+    //-------------------------------------------------------------------------
+    inline std::filesystem::path GetSpecialLineInfoFilename()
+    {
+        return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
+    }
+    
+} // namespace TestCoverageConsole

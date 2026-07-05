@@ -12,8 +12,6 @@
 #  Dia_FOUND              - True if the DIA library was found.
 #==========================================================================]
 
-# by default DIA directories are not addded to system envirment variables 
-# this need to be run from a developper command prompet
 find_path(Dia_INCLUDE_DIR
     NAMES dia2.h
     PATHS "$ENV{VSINSTALLDIR}/DIA SDK/include"

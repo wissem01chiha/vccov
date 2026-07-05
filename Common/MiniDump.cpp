@@ -15,8 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "MiniDump.hpp"
-#include "stdafx.h"
-#include <iostream>
+
 #pragma warning(push)
 #pragma warning(disable : 4091) // 'typedef ': ignored on left of '' when no
                                 // variable is declared

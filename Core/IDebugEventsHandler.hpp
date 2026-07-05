@@ -17,7 +17,7 @@
 #pragma once
 
 #include "CoreExport.h"
-#include <Windows.h>
+#include "CorePCH.h"
 
 namespace CppCoverage
 {

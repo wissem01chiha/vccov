@@ -16,8 +16,7 @@
 
 #include "ExceptionBase.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <filesystem>
+#include "CommonPCH.h"
 
 namespace Tools
 {

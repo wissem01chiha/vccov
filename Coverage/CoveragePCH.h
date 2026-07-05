@@ -16,12 +16,17 @@
 
 #pragma once
 
-#include "VcovExport.h"
+// Windows Headers
+#include <windows.h>
 
-#ifdef VCOV_TESTINGEXPORT
-#define VCOV_TESTINGEXPORT_DLL __declspec(dllexport)
-#else
-#define VCOV_TESTINGEXPORT_DLL __declspec(dllimport)
-#endif
+// STL Headers
+#include <filesystem>
+#include <memory>
+#include <unordered_map>
+#include <vector>
+#include <string>
+#include <map>
+#include <set>
 
-#pragma warning(disable : 4251)
+// Boost Headers
+#include <boost/optional.hpp>

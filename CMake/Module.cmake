@@ -36,6 +36,12 @@ function (vcov_module_add_module name)
             ${Dia_LIBRARIES}
             DbgHelp.lib
         )
+        if(BUILD_SHARED_LIBS)
+            target_link_libraries(${name} PRIVATE Poco::Foundation)
+        endif()
+        if(VCOV_BUILD_TESTS)
+            target_link_libraries(${name} PUBLIC Testing)
+        endif()
     else()
         add_library(${name} INTERFACE)
         target_sources(${name} INTERFACE ${_vcov_HEADERS})
@@ -45,7 +51,11 @@ function (vcov_module_add_module name)
             ${CMAKE_BINARY_DIR}
             ${Dia_INCLUDE_DIRS}
         )
+        if(VCOV_BUILD_TESTS)
+            target_link_libraries(${name} PUBLIC Testing)
+        endif()
     endif()
+    target_precompile_headers(${name} PRIVATE ${name}PCH.h)
     add_library(vcov::${name} ALIAS ${name})
 endfunction()
 
@@ -123,11 +133,12 @@ function (vcov_module_add_test_sources module)
             target_include_directories(${_vcov_source_name}  PRIVATE 
                     ${module_includes} ${GTEST_INCLUDE_DIRS})
         endif()
-        if(module_deps)
-            target_link_libraries(${_vcov_source_name} PRIVATE 
-                    ${module_deps} GTest::gtest GTest::gtest_main)
-        endif()
-        add_dependencies(${_vcov_source_name}  ${module})
-        gtest_discover_tests(${_vcov_source_name})
+        target_link_libraries(${_vcov_source_name} PRIVATE 
+                ${module} ${module_deps} Testing 
+                GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main)
+        add_dependencies(${_vcov_source_name} ${module})
+        add_test(NAME ${_vcov_source_name} 
+                 COMMAND ${_vcov_source_name}
+                 WORKING_DIRECTORY "${CMAKE_BINARY_DIR}")
     endforeach()
 endfunction()

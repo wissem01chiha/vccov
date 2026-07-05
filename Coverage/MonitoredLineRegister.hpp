@@ -17,9 +17,7 @@
 #pragma once
 
 #include "DebugInformationEnumerator.hpp"
-#include <filesystem>
-#include <memory>
-#include <unordered_map>
+#include "CoveragePCH.h"
 
 namespace FileFilter
 {

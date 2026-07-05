@@ -15,10 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "CppCoverageException.hpp"
-#include "stdafx.h"
 #include <sstream>
-#include <string>
-#include <vector>
 
 namespace CppCoverage
 {

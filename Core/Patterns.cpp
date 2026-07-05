@@ -15,8 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Patterns.hpp"
-#include "stdafx.h"
-#include <iostream>
+#include "CorePCH.h"
 
 namespace CppCoverage
 {

@@ -15,7 +15,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "TemporaryPath.hpp"
-#include "stdafx.h"
+#include "Tool.hpp"
+#include "Tools.hpp"
+#include "Log.hpp"
 #include <random>
 #include <system_error>
 

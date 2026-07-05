@@ -17,10 +17,7 @@
 #pragma once
 
 #include "CommonExport.h"
-#include <boost/optional/optional_fwd.hpp>
-#include <filesystem>
-#include <functional>
-#include <string>
+#include "CommonPCH.h"
 
 namespace Tools
 {

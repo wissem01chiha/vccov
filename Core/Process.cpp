@@ -19,10 +19,6 @@
 #include "Log.hpp"
 #include "StartInfo.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <windows.h>
-#include <boost/optional.hpp>
-#include <vector>
 
 namespace CppCoverage
 {

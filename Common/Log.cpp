@@ -15,14 +15,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Log.hpp"
-#include "stdafx.h"
-#include <boost/locale.hpp>
-#include <boost/log/expressions.hpp>
-#include <boost/log/support/date_time.hpp>
-#include <boost/log/utility/setup/common_attributes.hpp>
-#include <boost/log/utility/setup/console.hpp>
-#include <boost/log/utility/setup/file.hpp>
-#include <filesystem>
 
 namespace logging  = boost::log;
 namespace sinks    = boost::log::sinks;

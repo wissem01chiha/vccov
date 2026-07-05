@@ -17,11 +17,11 @@
 #pragma once
 
 #include "CoverageExport.h"
+#include "CoveragePCH.h"
 #include "CoverageFilterSettings.hpp"
 #include "StartInfo.hpp"
 #include "SubstitutePdbSourcePath.hpp"
 #include "UnifiedDiffSettings.hpp"
-#include <vector>
 
 namespace CppCoverage
 {

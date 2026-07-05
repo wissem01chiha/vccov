@@ -16,5 +16,14 @@
 
 #pragma once
 
-#include <gmock/gmock.h>
-#include <gtest/gtest.h>
+#include "CommonExport.h"
+
+namespace Testing
+{
+    enum class VCOV_COMMONEXPORT_DLL TemporaryPathOption
+    {
+        DoNotCreate,
+        CreateAsFile,
+        CreateAsFolder
+    };
+};

@@ -21,12 +21,10 @@
 
 namespace ToolsTests
 {
-    namespace
-    {
         //---------------------------------------------------------------------
-        std::unique_ptr<TestHelper::TemporaryPath> CreateFile(const std::vector<std::string>& lines)
+        std::unique_ptr<Testing::TemporaryPath> CreateFile(const std::vector<std::string>& lines)
         {
-            auto          path = std::make_unique<TestHelper::TemporaryPath>();
+            auto          path = std::make_unique<Testing::TemporaryPath>();
             std::ofstream ofs(path->GetPath().string(), std::ios::binary);
 
             for (const auto& line : lines)
@@ -45,7 +43,6 @@ namespace ToolsTests
                 lines.push_back(line);
             return lines;
         }
-    } // namespace
 
     //---------------------------------------------------------------------
     TEST(MappedFileTest, GetLine)
@@ -59,7 +56,7 @@ namespace ToolsTests
     //---------------------------------------------------------------------
     TEST(MappedFileTest, EmptyFile)
     {
-        TestHelper::TemporaryPath path{ TestHelper::TemporaryPathOption::CreateAsFile };
+        Testing::TemporaryPath path{ Testing::TemporaryPathOption::CreateAsFile };
         ASSERT_EQ(nullptr, Tools::MappedFile::TryCreate(path.GetPath()));
     }
 

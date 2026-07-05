@@ -17,7 +17,7 @@
 #pragma once
 
 #include "CommonExport.h"
-#include <windows.h>
+#include "CommonPCH.h"
 #include <DbgHelp.h>
 
 namespace Tools

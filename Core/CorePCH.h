@@ -16,15 +16,19 @@
 
 #pragma once
 
+// Windows Header Files:
+#include <windows.h>
+
+// STL Headers
 #include <filesystem>
+#include <memory>
+#include <string>
+#include <vector>
+#include <iostream>
+#include <functional>
+#include <map>
+#include <unordered_map>
 
-namespace TestCoverageConsole
-{
-    void SpecialLineInfo();
-
-    //-------------------------------------------------------------------------
-    inline std::filesystem::path GetSpecialLineInfoFilename()
-    {
-        return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
-    }
-} // namespace TestCoverageConsole
+// Boost Headers
+#include <boost/algorithm/string.hpp>
+#include <boost/optional.hpp>

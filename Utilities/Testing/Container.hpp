@@ -34,6 +34,7 @@ namespace Testing
         const Container& container1, const Container& container2,
         const std::function<Key(const typename Container::value_type&)>& getKeyFct,
         const CompareFct&                                                compareFct);
+        
 } // namespace Testing
 
 #include "Container.inl"

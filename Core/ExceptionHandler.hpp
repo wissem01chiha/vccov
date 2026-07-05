@@ -17,11 +17,8 @@
 #pragma once
 
 #include "CoreExport.h"
-#include <Windows.h>
+#include "CorePCH.h"
 #include <iosfwd>
-#include <map>
-#include <string>
-#include <unordered_map>
 
 namespace CppCoverage
 {

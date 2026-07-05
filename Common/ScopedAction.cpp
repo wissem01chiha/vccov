@@ -17,8 +17,6 @@
 #include "ScopedAction.hpp"
 #include "Log.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <boost/optional/optional.hpp>
 
 namespace Tools
 {

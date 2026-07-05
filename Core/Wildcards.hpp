@@ -17,8 +17,8 @@
 #pragma once
 
 #include "CoreExport.h"
+#include "CorePCH.h"
 #include <regex>
-#include <string>
 
 namespace CppCoverage
 {

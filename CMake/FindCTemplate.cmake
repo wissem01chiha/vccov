@@ -37,9 +37,7 @@ find_path(CTemplate_INCLUDE_DIR ctemplate/template_annotator.h
                 /usr/local/include
 )
 
-
 set(CTemplate_NAMES ctemplate)
-
 
 if(CTemplate_LIBRARIES)
   # Converto to a list of library argments

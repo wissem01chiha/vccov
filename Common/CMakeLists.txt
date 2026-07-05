@@ -31,5 +31,16 @@ set(headers
     FileSystem.hpp
     CommonExport.h
 )
+if(VCOV_BUILD_TESTS)
+    list(APPEND classes
+        TemporaryPath.cpp
+        Tools.cpp
+    )
+    list(APPEND headers
+        TemporaryPath.hpp
+        TemporaryPathOption.hpp
+        Tools.hpp
+    )
+endif()
 vcov_module_add_module(Common CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_test(Common)

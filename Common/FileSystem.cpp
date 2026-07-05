@@ -15,8 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "FileSystem.hpp"
-#include "stdafx.h"
-#include <boost/optional/optional.hpp>
+#include "CommonPCH.h"
 #include <system_error>
 
 namespace CppCoverage

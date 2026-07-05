@@ -15,10 +15,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "UniquePath.hpp"
-#include "stdafx.h"
-
-#include <filesystem>
-#include <string>
 
 namespace Tools
 {

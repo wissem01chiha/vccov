@@ -17,8 +17,8 @@
 #pragma once
 
 #include "CoreExport.h"
+#include "CorePCH.h"
 #include "SubstitutePdbSourcePath.hpp"
-#include <filesystem>
 
 struct IDiaSession;
 struct IDiaLineNumber;

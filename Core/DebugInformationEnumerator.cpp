@@ -17,13 +17,9 @@
 #include "DebugInformationEnumerator.hpp"
 #include "CppCoverageException.hpp"
 #include "Log.hpp"
-#include "stdafx.h"
-#include <Windows.h>
 #include <atlbase.h>
-#include <boost/algorithm/string.hpp>
 #include <dia2.h>
 #include <diacreate.h>
-#include <filesystem>
 
 namespace CppCoverage
 {

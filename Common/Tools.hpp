@@ -16,26 +16,27 @@
 
 #pragma once
 
-#include "TestingExport.hpp"
-#include <filesystem>
-#include <functional>
+#include "CommonExport.h"
+#include "CommonPCH.h"
+
+#define TARGET_FILE_NAME std::filesystem::u8path("../../bin/Debug/OpenCppCoverage.exe");
 
 extern "C"
 {
-    void VCOV_TESTINGEXPORT_DLL TestUnloadDll();
+    void VCOV_COMMONEXPORT_DLL TestUnloadDll();
 }
 
 namespace Testing
 {
-    std::filesystem::path VCOV_TESTINGEXPORT_DLL GetTestUnloadDllFilename();
-    std::filesystem::path VCOV_TESTINGEXPORT_DLL GetOutputBinaryPath();
+    std::filesystem::path VCOV_COMMONEXPORT_DLL GetTestUnloadDllFilename();
+    std::filesystem::path VCOV_COMMONEXPORT_DLL GetOutputBinaryPath();
 
-    void VCOV_TESTINGEXPORT_DLL CreateEmptyFile(const std::filesystem::path&);
+    void VCOV_COMMONEXPORT_DLL CreateEmptyFile(const std::filesystem::path&);
 
-    std::string VCOV_TESTINGEXPORT_DLL RunProcess(const std::filesystem::path&    program,
+    std::string VCOV_COMMONEXPORT_DLL RunProcess(const std::filesystem::path&    program,
                                                   const std::vector<std::string>& args);
 
-    std::filesystem::path VCOV_TESTINGEXPORT_DLL GetVisualStudioPath();
+    std::filesystem::path VCOV_COMMONEXPORT_DLL GetVisualStudioPath();
 
     //-------------------------------------------------------------------------
     template <typename ExceptionType, typename Fct>

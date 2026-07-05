@@ -18,8 +18,7 @@
 
 #include "CoreExport.h"
 #include "StartInfo.hpp"
-#include <Windows.h>
-#include <boost/optional.hpp>
+#include "CorePCH.h"
 
 namespace CppCoverage
 {

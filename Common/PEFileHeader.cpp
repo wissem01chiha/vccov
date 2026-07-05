@@ -17,7 +17,6 @@
 #include "PEFileHeader.hpp"
 #include "ProcessMemory.hpp"
 #include "ToolsException.hpp"
-#include "stdafx.h"
 
 namespace Tools
 {

@@ -17,7 +17,6 @@
 #include "ProcessMemory.hpp"
 #include "Log.hpp"
 #include "ToolsException.hpp"
-#include "stdafx.h"
 
 namespace Tools
 {

@@ -17,10 +17,7 @@
 #include "Tool.hpp"
 #include "Log.hpp"
 #include "ToolsException.hpp"
-#include "stdafx.h"
-#include <boost/optional/optional.hpp>
 #include <codecvt>
-#include <filesystem>
 #include <system_error>
 
 namespace fs = std::filesystem;
