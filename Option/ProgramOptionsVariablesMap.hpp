@@ -19,7 +19,7 @@
 #include "CppCoverageException.hpp"
 #include "OptionExport.h"
 #include "Tool.hpp"
-#include <boost/program_options/variables_map.hpp>
+#include "OptionPCH.h"
 
 namespace CppCoverage
 {

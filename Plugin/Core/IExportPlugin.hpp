@@ -16,10 +16,8 @@
 
 #pragma once
 
+#include "PluginPCH.h"
 #include "PluginExport.h"
-#include <filesystem>
-#include <optional>
-#include <string>
 
 namespace Plugin
 {

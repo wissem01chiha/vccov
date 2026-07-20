@@ -16,7 +16,6 @@
 
 #include "CoverageData.hpp"
 #include "ModuleCoverage.hpp"
-#include "stdafx.h"
 
 namespace Plugin
 {

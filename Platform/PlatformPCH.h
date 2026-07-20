@@ -18,6 +18,7 @@
 
 // Windows Headers
 #include <windows.h>
+#include <Psapi.h>
 
 // STL Headers
 #include <filesystem>

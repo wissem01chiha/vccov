@@ -17,10 +17,7 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <filesystem>
-#include <memory>
-#include <set>
-#include <vector>
+#include "FilterPCH.h"
 
 namespace FileFilter
 {

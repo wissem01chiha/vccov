@@ -5,8 +5,8 @@ set(classes
     FileCoverage.cpp
     ModuleCoverage.cpp
     LineCoverage.cpp
-    stdafx.cpp
 )
+
 set(headers
     ExportPluginDescription.hpp
     InvalidOutputFileException.hpp
@@ -16,7 +16,7 @@ set(headers
     ModuleCoverage.hpp
     LineCoverage.hpp
     ExportExport.h
-    stdafx.h
 )
+
 vcov_module_add_module(Export CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_test(Export)

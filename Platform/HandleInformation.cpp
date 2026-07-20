@@ -16,7 +16,6 @@
 
 #include "HandleInformation.hpp"
 #include "Handle.hpp"
-#include <Psapi.h>
 
 const int PathBufferSize = 40 * 1000;
 

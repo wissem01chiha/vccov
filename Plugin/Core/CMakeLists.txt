@@ -1,7 +1,6 @@
 set(classes 
   ExporterPluginManager.cpp
   CoverageData.cpp
-  stdafx.cpp
 )
 set(headers
   ExporterPluginManager.hpp
@@ -11,7 +10,6 @@ set(headers
   IExportPlugin.hpp
   PluginExport.h
   CoverageData.hpp
-  stdafx.h
 )
 
 vcov_module_add_module(Plugin CLASSES ${classes} HEADERS ${headers})

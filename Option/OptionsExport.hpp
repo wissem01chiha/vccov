@@ -16,9 +16,8 @@
 
 #pragma once
 
+#include "OptionPCH.h"
 #include "OptionExport.h"
-#include <optional>
-#include <string>
 
 namespace CppCoverage
 {

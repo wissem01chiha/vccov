@@ -14,19 +14,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-
 #include "PathMatcher.hpp"
-#include <filesystem>
-
-#include <boost/algorithm/string.hpp>
-#include <boost/optional/optional.hpp>
-
-#include <map>
-#include <unordered_map>
-
 #include "AmbiguousPathException.hpp"
 #include "File.hpp"
+#include "FilterPCH.h"
 
 namespace fs = std::filesystem;
 

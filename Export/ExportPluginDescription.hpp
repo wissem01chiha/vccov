@@ -17,9 +17,7 @@
 #pragma once
 
 #include "ExportExport.h"
-#include <functional>
-#include <optional>
-#include <string>
+#include "ExportPCH.h"
 
 namespace CppCoverage
 {

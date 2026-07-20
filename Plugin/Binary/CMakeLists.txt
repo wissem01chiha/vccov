@@ -10,7 +10,6 @@ set(headers
     ${CMAKE_CURRENT_BINARY_DIR}/CoverageData.pb.h
     BinaryExporter.hpp
     CoverageDataDeserializer.hpp
-    ProtoBuff.hpp 
     BinaryExport.h
 )
 vcov_module_add_module(Binary CLASSES ${classes} HEADERS ${headers})

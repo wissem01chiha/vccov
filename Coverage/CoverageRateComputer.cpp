@@ -19,7 +19,6 @@
 #include "CoverageRate.hpp"
 #include "FileCoverage.hpp"
 #include "ModuleCoverage.hpp"
-#include "stdafx.h"
 
 namespace CppCoverage
 {

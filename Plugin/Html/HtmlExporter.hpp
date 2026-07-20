@@ -21,7 +21,7 @@
 #include "HtmlFileCoverageExporter.hpp"
 #include "IExporter.hpp"
 #include "TemplateHtmlExporter.hpp"
-#include <filesystem>
+#include "HtmlPCH.h"
 
 namespace Plugin
 {

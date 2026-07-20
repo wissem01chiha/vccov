@@ -17,9 +17,6 @@
 #include "BinaryExporter.hpp"
 #include "CoverageDataSerializer.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <filesystem>
-#include <fstream>
 
 namespace Exporter
 {

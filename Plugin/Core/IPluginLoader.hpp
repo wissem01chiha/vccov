@@ -16,9 +16,7 @@
 
 #pragma once
 
-#include <filesystem>
-#include <memory>
-#include <stdexcept>
+#include "PluginPCH.h"
 
 namespace Exporter
 {

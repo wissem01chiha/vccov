@@ -17,11 +17,6 @@
 #include "HtmlFileCoverageExporter.hpp"
 #include "ExporterException.hpp"
 #include "FileCoverage.hpp"
-#include "stdafx.h"
-#include <boost/spirit/include/classic.hpp>
-#include <boost/spirit/include/classic_tree_to_xml.hpp>
-#include <filesystem>
-#include <fstream>
 
 namespace fs = std::filesystem;
 

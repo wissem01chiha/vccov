@@ -15,9 +15,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "OptionsExport.hpp"
-#include "stdafx.h"
-#include <iostream>
-#include <map>
 
 namespace CppCoverage
 {

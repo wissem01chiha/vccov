@@ -17,7 +17,8 @@
 #pragma once
 
 #include "OptionExport.h"
-#include <stdexcept>
+#include "OptionPCH.h"
+
 
 namespace Plugin
 {

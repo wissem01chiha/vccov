@@ -20,8 +20,6 @@
 #include "OptionsParserException.hpp"
 #include "ProgramOptionsVariablesMap.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <boost/program_options/options_description.hpp>
 
 namespace CppCoverage
 {

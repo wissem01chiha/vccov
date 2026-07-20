@@ -16,8 +16,7 @@
 
 #pragma once
 
-#include <memory>
-
+#include "FilterPCH.h"
 #include "FilterExport.h"
 #include "ICoverageFilterManager.hpp"
 #include "LineFilter.hpp"

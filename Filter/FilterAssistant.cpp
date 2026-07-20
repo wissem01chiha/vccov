@@ -18,9 +18,7 @@
 #include "IFileSystem.hpp"
 #include "ProgramOptions.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <boost/optional/optional.hpp>
-#include <ctime>
+
 #include <filesystem>
 #include <memory>
 

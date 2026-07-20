@@ -19,8 +19,8 @@
 #include "IPluginLoader.hpp"
 #include "LoadedPlugin.hpp"
 #include "PluginExport.h"
+#include "PluginPCH.h"
 #include "Tool.hpp"
-#include <Windows.h>
 
 namespace Exporter
 {

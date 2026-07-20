@@ -18,7 +18,7 @@
 
 #include "CoverageExport.h"
 #include "CoverageRate.hpp"
-#include <unordered_map>
+#include "CoveragePCH.h"
 
 namespace Plugin
 {

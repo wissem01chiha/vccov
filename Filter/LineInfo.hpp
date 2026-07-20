@@ -16,8 +16,7 @@
 
 #pragma once
 
-#include <windows.h>
-#include <vector>
+#include "FilterPCH.h"
 
 namespace FileFilter
 {

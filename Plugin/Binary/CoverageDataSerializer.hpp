@@ -17,7 +17,7 @@
 #pragma once
 
 #include "BinaryExport.h"
-#include <filesystem>
+#include "BinaryPCH.h"
 
 namespace Plugin
 {

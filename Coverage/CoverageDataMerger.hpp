@@ -17,7 +17,7 @@
 #pragma once
 
 #include "CoverageExport.h"
-#include <vector>
+#include "CoveragePCH.h"
 
 namespace Plugin
 {

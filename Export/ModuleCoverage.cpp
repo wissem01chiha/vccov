@@ -17,8 +17,6 @@
 #include "ModuleCoverage.hpp"
 #include "FileCoverage.hpp"
 #include "LineCoverage.hpp"
-#include "stdafx.h"
-#include <vector>
 
 namespace Plugin
 {

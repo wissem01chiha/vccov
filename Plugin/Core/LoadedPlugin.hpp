@@ -18,7 +18,7 @@
 
 #include "ExporterException.hpp"
 #include "PluginExport.h"
-#include <Windows.h>
+#include "PluginPCH.h"
 
 namespace Exporter
 {

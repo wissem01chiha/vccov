@@ -32,9 +32,6 @@
 #include "StartInfo.hpp"
 #include "Tool.hpp"
 #include "WarningManager.hpp"
-#include "stdafx.h"
-#include <boost/optional.hpp>
-#include <sstream>
 
 namespace CppCoverage
 {

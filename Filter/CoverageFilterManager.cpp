@@ -14,9 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "stdafx.h"
-
-#include <boost/algorithm/string.hpp>
 
 #include "CoverageFilterManager.hpp"
 #include "FileInfo.hpp"

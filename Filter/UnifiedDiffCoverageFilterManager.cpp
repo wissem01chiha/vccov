@@ -22,8 +22,6 @@
 #include "Tool.hpp"
 #include "UnifiedDiffCoverageFilter.hpp"
 #include "UnifiedDiffSettings.hpp"
-#include "stdafx.h"
-#include <sstream>
 
 namespace CppCoverage
 {

@@ -19,8 +19,6 @@
 #include "FileCoverage.hpp"
 #include "LineCoverage.hpp"
 #include "ModuleCoverage.hpp"
-#include "stdafx.h"
-#include <functional>
 
 namespace fs = std::filesystem;
 

@@ -18,9 +18,7 @@
 
 #include "FilterExport.h"
 #include "PathMatcher.hpp"
-#include <boost/optional/optional_fwd.hpp>
-#include <filesystem>
-#include <vector>
+#include "FilterPCH.h"
 
 namespace FileFilter
 {

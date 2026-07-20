@@ -15,13 +15,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "UnifiedDiffParser.hpp"
-#include "stdafx.h"
-
-#include <boost/algorithm/string.hpp>
-#include <filesystem>
-#include <regex>
-#include <sstream>
-
 #include "File.hpp"
 #include "FileFilterException.hpp"
 #include "Log.hpp"

@@ -17,10 +17,7 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <boost/optional/optional_fwd.hpp>
-#include <filesystem>
-#include <memory>
-#include <vector>
+#include "FilterPCH.h"
 
 namespace FileFilter
 {

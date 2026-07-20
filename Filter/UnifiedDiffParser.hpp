@@ -17,7 +17,7 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <filesystem>
+#include "FilterPCH.h"
 
 namespace FileFilter
 {

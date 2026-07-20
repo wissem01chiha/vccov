@@ -18,6 +18,7 @@
 
 #include "BinaryExport.h"
 #include "IExporter.hpp"
+#include "BinaryPCH.h"
 
 namespace Exporter
 {

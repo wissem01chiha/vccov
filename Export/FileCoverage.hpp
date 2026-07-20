@@ -17,9 +17,8 @@
 #pragma once
 
 #include "ExportExport.h"
+#include "ExportPCH.h"
 #include "LineCoverage.hpp"
-#include <filesystem>
-#include <map>
 
 namespace Plugin
 {

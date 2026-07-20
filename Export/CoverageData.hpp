@@ -17,10 +17,7 @@
 #pragma once
 
 #include "ExportExport.h"
-#include <filesystem>
-#include <memory>
-#include <string>
-#include <vector>
+#include "ExportPCH.h"
 
 namespace Plugin
 {

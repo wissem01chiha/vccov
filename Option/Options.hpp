@@ -19,11 +19,10 @@
 #include "OptionExport.h"
 #include "OptionsExport.hpp"
 #include "Patterns.hpp"
+#include "OptionPCH.h"
 #include "StartInfo.hpp"
 #include "SubstitutePdbSourcePath.hpp"
 #include "UnifiedDiffSettings.hpp"
-#include <boost/optional.hpp>
-#include <filesystem>
 
 namespace CppCoverage
 {

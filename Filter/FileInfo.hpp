@@ -17,9 +17,7 @@
 #pragma once
 
 #include "LineInfo.hpp"
-#include <filesystem>
-#include <vector>
-#include <windows.h>
+#include "FilterPCH.h"
 
 namespace FileFilter
 {

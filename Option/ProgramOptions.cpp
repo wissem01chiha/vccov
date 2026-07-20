@@ -20,7 +20,6 @@
 #include "OpenCppCoverageVersion.hpp"
 #include "OptionsParser.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
 
 namespace po = boost::program_options;
 

@@ -17,7 +17,7 @@
 #pragma once
 
 #include "OptionExport.h"
-#include <boost/program_options.hpp>
+#include "OptionPCH.h"
 
 namespace CppCoverage
 {

@@ -17,11 +17,7 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <filesystem>
-#include <memory>
-#include <windows.h>
-#include <unordered_map>
-#include <unordered_set>
+#include "FilterPCH.h"
 
 namespace FileFilter
 {

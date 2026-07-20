@@ -21,7 +21,6 @@
 #include "Log.hpp"
 #include "ModuleInfo.hpp"
 #include "RelocationsExtractor.hpp"
-#include "stdafx.h"
 
 namespace FileFilter
 {

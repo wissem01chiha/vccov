@@ -26,14 +26,6 @@
 #include "ProgramOptionsVariablesMap.hpp"
 #include "Tool.hpp"
 #include "WarningManager.hpp"
-#include "stdafx.h"
-#include <boost/algorithm/string/classification.hpp>
-#include <boost/algorithm/string/split.hpp>
-#include <filesystem>
-#include <fstream>
-#include <sstream>
-#include <string>
-#include <vector>
 
 namespace po  = boost::program_options;
 namespace cov = CppCoverage;

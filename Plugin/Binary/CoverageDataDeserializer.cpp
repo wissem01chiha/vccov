@@ -21,10 +21,7 @@
 #include "ExporterException.hpp"
 #include "FileCoverage.hpp"
 #include "ModuleCoverage.hpp"
-#include "ProtoBuff.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <fstream>
 
 namespace Exporter
 {

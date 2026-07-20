@@ -20,11 +20,6 @@
 #include "ExporterException.hpp"
 #include "OpenCppCoverageVersion.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <boost/algorithm/string.hpp>
-#include <boost/uuid/uuid_io.hpp>
-#include <filesystem>
-#include <fstream>
 
 namespace cov = CppCoverage;
 namespace fs  = std::filesystem;

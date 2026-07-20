@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+
 #include "CoverageDataSerializer.hpp"
 #include "CoverageData.hpp"
 #include "CoverageData.pb.hpp"
@@ -22,10 +23,7 @@
 #include "InvalidOutputFileException.hpp"
 #include "LineCoverage.hpp"
 #include "ModuleCoverage.hpp"
-#include "ProtoBuff.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <fstream>
 
 namespace Exporter
 {

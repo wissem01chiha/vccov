@@ -19,8 +19,8 @@
 #include "ExportPluginDescription.hpp"
 #include "IOptionParser.hpp"
 #include "OptionExport.h"
+#include "OptionPCH.h"
 #include "OptionsExport.hpp"
-#include <map>
 
 namespace CppCoverage
 {

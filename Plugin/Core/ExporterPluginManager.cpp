@@ -21,8 +21,7 @@
 #include "LoadedPlugin.hpp"
 #include "OptionsParserException.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <optional>
+
 
 namespace Exporter
 {

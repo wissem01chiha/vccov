@@ -20,7 +20,6 @@
 #include "Log.hpp"
 #include "MappedFile.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
 
 namespace FileFilter
 {

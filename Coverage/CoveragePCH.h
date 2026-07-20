@@ -27,6 +27,9 @@
 #include <string>
 #include <map>
 #include <set>
+#include <functional>
+#include <sstream>
 
 // Boost Headers
 #include <boost/optional.hpp>
+#include <boost/container/small_vector.hpp>

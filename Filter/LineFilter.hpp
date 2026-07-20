@@ -17,10 +17,8 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <filesystem>
-#include <regex>
-#include <string>
-#include <vector>
+#include "FilterPCH.h"
+
 
 namespace Tools
 {

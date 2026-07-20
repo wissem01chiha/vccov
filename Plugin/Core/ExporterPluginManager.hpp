@@ -17,13 +17,8 @@
 #pragma once
 
 #include "ExportPluginDescription.hpp"
+#include "PluginPCH.h"
 #include "PluginExport.h"
-#include <filesystem>
-#include <memory>
-#include <optional>
-#include <string>
-#include <unordered_map>
-#include <vector>
 
 namespace Plugin
 {

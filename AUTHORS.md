@@ -1,0 +1,9 @@
+- OpenCppCoverage <OpenCppCoverage@gmail.com>
+- Olivier <Olivier@email.com>
+- Wissem Chiha <chihawissem08@gmail.com>
+- Marvin Wunderlich <opidopiopi@gmail.com>
+- Patan Amrulla Khan <pamrulla@gmail.com>
+- Wolfgang Kleinschmit <wolfgang@kleinschmit.info>
+- Zoltan Demeter <demeter@volumegraphics.com>
+- amai2012 <amai2012@users.noreply.github.com>
+- jkoppenw <jkoppenw@hotmail.com>

@@ -18,8 +18,7 @@
 
 #include "FilterExport.h"
 #include "Patterns.hpp"
-#include <string>
-#include <vector>
+#include "FilterPCH.h"
 
 namespace CppCoverage
 {

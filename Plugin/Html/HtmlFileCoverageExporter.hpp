@@ -17,8 +17,7 @@
 #pragma once
 
 #include "HtmlExport.h"
-#include <iosfwd>
-#include <string>
+#include "HtmlPCH.h"
 
 namespace Plugin
 {

@@ -17,10 +17,7 @@
 #pragma once
 
 #include "OptionExport.h"
-#include <boost/optional.hpp>
-#include <iosfwd>
-#include <map>
-#include <memory>
+#include "OptionPCH.h"
 
 namespace Tools
 {

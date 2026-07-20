@@ -15,13 +15,7 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "WildcardCoverageFilter.hpp"
-#include "stdafx.h"
-
-#include <boost/regex.hpp>
-#include <sstream>
-
 #include "Log.hpp"
-
 #include "CoverageFilterSettings.hpp"
 #include "Patterns.hpp"
 #include "Wildcards.hpp"

@@ -26,10 +26,7 @@
 #include "ModuleCoverage.hpp"
 #include "TemplateHtmlExporter.hpp"
 #include "Tool.hpp"
-#include "stdafx.h"
-#include <boost/optional/optional.hpp>
-#include <iomanip>
-#include <sstream>
+
 
 namespace cov = CppCoverage;
 

@@ -15,7 +15,6 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "HtmlFile.hpp"
-#include "stdafx.h"
 
 namespace Exporter
 {

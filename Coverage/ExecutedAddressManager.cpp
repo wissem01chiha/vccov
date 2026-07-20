@@ -20,9 +20,6 @@
 #include "FileCoverage.hpp"
 #include "Log.hpp"
 #include "ModuleCoverage.hpp"
-#include "stdafx.h"
-#include <boost/container/small_vector.hpp>
-#include <unordered_map>
 
 namespace CppCoverage
 {

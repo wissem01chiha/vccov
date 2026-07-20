@@ -19,10 +19,6 @@
 #include "File.hpp"
 #include "Log.hpp"
 #include "UnifiedDiffParser.hpp"
-#include "stdafx.h"
-#include <boost/optional/optional.hpp>
-#include <fstream>
-#include <sstream>
 
 namespace FileFilter
 {

@@ -16,10 +16,9 @@
 
 #include "RelocationsExtractor.hpp"
 #include "FileFilterException.hpp"
+#include "FilterPCH.h"
 #include "PEFileHeader.hpp"
 #include "ProcessMemory.hpp"
-#include "stdafx.h"
-#include <memory>
 
 namespace FileFilter
 {

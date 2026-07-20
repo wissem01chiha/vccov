@@ -16,10 +16,9 @@
 
 #pragma once
 
+#include "FilterPCH.h"
 #include "FilterExport.h"
 #include "IRelocationsExtractor.hpp"
-#include <unordered_set>
-#include <windows.h>
 
 namespace FileFilter
 {

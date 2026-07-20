@@ -16,8 +16,6 @@
 
 #include "FileCoverage.hpp"
 #include "LineCoverage.hpp"
-#include <string>
-#include <vector>
 
 namespace Plugin
 {

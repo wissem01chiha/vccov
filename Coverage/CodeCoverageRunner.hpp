@@ -18,8 +18,8 @@
 
 #include "CoverageData.hpp"
 #include "CoverageExport.h"
+#include "CoveragePCH.h"
 #include "IDebugEventsHandler.hpp"
-#include <memory>
 
 namespace Tools
 {

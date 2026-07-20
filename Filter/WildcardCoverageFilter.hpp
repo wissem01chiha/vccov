@@ -17,9 +17,7 @@
 #pragma once
 
 #include "FilterExport.h"
-#include <memory>
-#include <string>
-#include <vector>
+#include "FilterPCH.h"
 
 namespace CppCoverage
 {
