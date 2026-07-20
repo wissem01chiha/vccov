@@ -15,9 +15,9 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
-#define NOMINMAX
+
+#include "ConsolePCH.h"
 #include "ConsoleExport.h"
-#include <iosfwd>
 
 namespace OpenCppCoverage
 {

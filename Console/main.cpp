@@ -19,9 +19,8 @@
 
 #include "Log.hpp"
 #include "MiniDump.hpp"
+#include "ConsolePCH.h"
 #include "OpenCppCoverage.hpp"
-#include "stdafx.h"
-#include <iostream>
 
 //-----------------------------------------------------------------------------
 int main(int argc, const char* argv[])

@@ -34,8 +34,6 @@
 #include "RunCoverageSettings.hpp"
 #include "Tool.hpp"
 #include "WarningManager.hpp"
-#include "stdafx.h"
-#include <iostream>
 
 namespace cov     = CppCoverage;
 namespace logging = boost::log;

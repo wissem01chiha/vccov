@@ -14,7 +14,6 @@ set(headers
     CTemplate.hpp
     HtmlFile.hpp
     HtmlExport.h
-    stdafx.h
 )
 vcov_module_add_module(Html CLASSES ${classes} HEADERS ${headers})
 vcov_module_add_dependencies(Html

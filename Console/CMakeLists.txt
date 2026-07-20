@@ -4,7 +4,6 @@ set(classes
 set(headers
     OpenCppCoverage.hpp
     ConsoleExport.h
-    stdafx.h
 )
 
 vcov_module_add_module(Console CLASSES ${classes} HEADERS ${headers})
