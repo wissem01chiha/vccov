@@ -18,7 +18,6 @@
 
 #include "HtmlPCH.h"
 
-
 // Disable: This header is deprecated. Use <boost/integer/integer_log2.hpp>
 // instead.
 #define BOOST_ALLOW_DEPRECATED_HEADERS

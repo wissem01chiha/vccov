@@ -19,7 +19,6 @@
 #include "OptionExport.h"
 #include "OptionPCH.h"
 
-
 namespace CppCoverage
 {
     class VCOV_OPTIONEXPORT_DLL UnifiedDiffSettings

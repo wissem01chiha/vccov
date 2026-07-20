@@ -14,7 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 #include "CoverageDataSerializer.hpp"
 #include "CoverageData.hpp"
 #include "CoverageData.pb.hpp"

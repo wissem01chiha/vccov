@@ -19,7 +19,6 @@
 #include "OptionExport.h"
 #include "OptionPCH.h"
 
-
 namespace Plugin
 {
     //---------------------------------------------------------------------

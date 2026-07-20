@@ -27,7 +27,6 @@
 #include "TemplateHtmlExporter.hpp"
 #include "Tool.hpp"
 
-
 namespace cov = CppCoverage;
 
 namespace Exporter

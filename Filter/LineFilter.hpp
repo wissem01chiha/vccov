@@ -19,7 +19,6 @@
 #include "FilterExport.h"
 #include "FilterPCH.h"
 
-
 namespace Tools
 {
     class MappedFile;

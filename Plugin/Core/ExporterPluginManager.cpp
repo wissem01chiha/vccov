@@ -22,7 +22,6 @@
 #include "OptionsParserException.hpp"
 #include "Tool.hpp"
 
-
 namespace Exporter
 {
     //---------------------------------------------------------------------

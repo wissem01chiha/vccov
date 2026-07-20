@@ -20,7 +20,6 @@
 #include "CoveragePCH.h"
 #include "CoverageExport.h"
 
-
 namespace CppCoverage
 {
     class FileCoverage;

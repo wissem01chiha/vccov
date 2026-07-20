@@ -42,4 +42,4 @@ namespace Tools
     {
         ASSERT_EQ(L"���", Tools::Utf8ToWString(Tools::ToUtf8String(L"���")));
     }
-} // namespace ToolsTests
+} // namespace Tools

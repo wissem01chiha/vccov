@@ -19,7 +19,7 @@
 namespace Testing
 {
     //-------------------------------------------------------------------------
-    template <typename Value, typename CloseAction> class  AutoClose
+    template <typename Value, typename CloseAction> class AutoClose
     {
       public:
         //---------------------------------------------------------------------

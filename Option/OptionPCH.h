@@ -16,11 +16,11 @@
 
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN 
+#define WIN32_LEAN_AND_MEAN
 // Windows Headers
 #include <windows.h>
 
-// STL Headers 
+// STL Headers
 #include <map>
 #include <filesystem>
 #include <iostream>

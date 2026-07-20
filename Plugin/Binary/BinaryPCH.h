@@ -16,17 +16,15 @@
 
 #pragma once
 
-#define WIN32_LEAN_AND_MEAN 
+#define WIN32_LEAN_AND_MEAN
 // Windows Headers
 #include <windows.h>
 
-
-// STL Headers 
+// STL Headers
 #include <filesystem>
 #include <fstream>
 
 // Boost Headers
-
 
 // Protobuf Headers
 #include <google/protobuf/io/coded_stream.h>

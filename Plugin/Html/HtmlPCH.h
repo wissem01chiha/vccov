@@ -27,10 +27,8 @@
 #include <iomanip>
 #include <sstream>
 
-
 #include <boost/spirit/include/classic.hpp>
 #include <boost/spirit/include/classic_tree_to_xml.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/algorithm/string.hpp>
 #include <boost/uuid/uuid_io.hpp>
-

@@ -34,7 +34,7 @@ namespace Testing
     void VCOV_COMMONEXPORT_DLL CreateEmptyFile(const std::filesystem::path&);
 
     std::string VCOV_COMMONEXPORT_DLL RunProcess(const std::filesystem::path&    program,
-                                                  const std::vector<std::string>& args);
+                                                 const std::vector<std::string>& args);
 
     std::filesystem::path VCOV_COMMONEXPORT_DLL GetVisualStudioPath();
 

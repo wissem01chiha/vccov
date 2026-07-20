@@ -21,28 +21,28 @@
 
 namespace ToolsTests
 {
-        //---------------------------------------------------------------------
-        std::unique_ptr<Testing::TemporaryPath> CreateFile(const std::vector<std::string>& lines)
-        {
-            auto          path = std::make_unique<Testing::TemporaryPath>();
-            std::ofstream ofs(path->GetPath().string(), std::ios::binary);
+    //---------------------------------------------------------------------
+    std::unique_ptr<Testing::TemporaryPath> CreateFile(const std::vector<std::string>& lines)
+    {
+        auto          path = std::make_unique<Testing::TemporaryPath>();
+        std::ofstream ofs(path->GetPath().string(), std::ios::binary);
 
-            for (const auto& line : lines)
-                ofs.write(line.c_str(), line.size());
-            return path;
-        }
+        for (const auto& line : lines)
+            ofs.write(line.c_str(), line.size());
+        return path;
+    }
 
-        //---------------------------------------------------------------------
-        std::vector<std::string> GetLines(const std::filesystem::path& path)
-        {
-            std::ifstream            ifs(path.wstring());
-            std::vector<std::string> lines;
-            std::string              line;
+    //---------------------------------------------------------------------
+    std::vector<std::string> GetLines(const std::filesystem::path& path)
+    {
+        std::ifstream            ifs(path.wstring());
+        std::vector<std::string> lines;
+        std::string              line;
 
-            while (std::getline(ifs, line))
-                lines.push_back(line);
-            return lines;
-        }
+        while (std::getline(ifs, line))
+            lines.push_back(line);
+        return lines;
+    }
 
     //---------------------------------------------------------------------
     TEST(MappedFileTest, GetLine)

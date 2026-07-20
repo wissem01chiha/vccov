@@ -27,5 +27,5 @@ namespace TestCoverageConsole
     {
         return std::filesystem::path(__FILE__).replace_extension("cpp").filename();
     }
-    
+
 } // namespace TestCoverageConsole
